@@ -691,3 +691,68 @@ is recorded as `platform_limited` rather than counted as a packaging defect.
   == 0` across 89 replayed trajectories — v2 never once decided differently from v1. The
   gate passes its frozen criterion (`v2_FPR <= v1_FPR`) legitimately, but no report may
   describe v2 as an improvement, and none does.
+
+### G8 and G9 — 10 / 10
+
+```
+G0 PASS  G1 PASS  G2 PASS  G3 PASS  G4 PASS
+G5 PASS  G6 PASS  G7 PASS  G8 PASS  G9 PASS
+
+FLAGSHIP_GPU_FREE_COMPLETE     = YES
+POST_SUCCESS_AUDIT             = PASS
+READY_FOR_USER_REVIEW_AND_PUSH = YES
+```
+
+Budget closed at **24 / 30** trajectories. No GPU training. No remote push.
+
+**G8.** `scripts/build_final_metrics_summary.py` regenerates every headline metric from raw
+trajectories and gate artifacts, then cross-checks against `FROZEN_PHASE1_MANIFEST.json`
+*after* computing — `agrees: true`, an independent confirmation of the Phase 1 numbers.
+Digest `e3ceaace…` pinned in the report.
+
+**G9 A–E, all clean.**
+- **A** — three claim restrictions found. The load-bearing one: **verifier v2 is
+  unexercised**. `v1_v2_disagreements == 0` across 89 replayed trajectories, so G2 passes
+  its frozen criterion legitimately while demonstrating nothing about hardening. No report
+  claims otherwise.
+- **B** — 45 values recomputed with independently written arithmetic. No mismatches.
+- **C** — twelve samples read end to end. The sharpest: two failed episodes scored
+  **naive 1.0 with an empty diff**. Visible-only grading gives full marks for changing
+  nothing.
+- **D** — **8 mutations, 0 survivors**, all restored byte-for-byte, post-restore suite green.
+- **E** — acceptance exits 0 in a fresh clone; no module or `sys.path` entry resolves back
+  into `E:\RL`.
+
+**Three defects found in the audit itself**, all by reasoning about what *should* turn red
+rather than by watching a run finish:
+
+1. `trusted_comparator_boundary` would have "survived" while disabling nothing — re-adding
+   the `/grader` mount does not put the oracle into the probe's process.
+2. **`repo_contract_return_types` was dead coverage.** No task planted a return-type defect
+   and no test called it, so both v2 contract checks could have been deleted with the suite
+   still green. R11's shape one level up: not a check that always passes, but a check never
+   asked anything. `tests/test_contract_checks.py` (8 tests) closes it.
+3. The harness restored files with `write_text`, rewriting LF as CRLF. Bytes changed,
+   `grading.py`'s hash changed, and **G1's staleness guard correctly rejected the evidence**.
+   The guard was right; the harness now round-trips bytes.
+
+Host suite is now **248 passed, 16 skipped**.
+
+## RESUME HERE (current)
+
+Nothing is outstanding. `scripts/final_acceptance.py` computes 10/10 from artifacts.
+
+If work resumes, the honest starting points are the limitations, not the gates:
+
+- **19 of 23 predicates are forgeable** (`predicates.FORGEABLE`). R16 stops the candidate
+  *deciding* its verdict; it does not make an untrusted process's self-report true. Only
+  the four gold-backed checks are unforgeable.
+- **G2 is unexercised**, per A1 above.
+- **Tier S n=4 per task.** The s1/s2 versus s3 split (8/8 against 1/4) is large and
+  uninterpreted; no significance claim is made.
+- **The s1 symptom names the attention subsystem**, which narrows the search space. Noticed
+  after the freeze and disclosed rather than retuned.
+- `test_trusted_comparator_never_imports_candidate_code_static` is **alias-blind** (A5).
+
+The `READY_FOR_USER_REVIEW_AND_PUSH = YES` flag is the gate's verdict, not an instruction.
+Nothing has been pushed anywhere; the git remote is unset by design.

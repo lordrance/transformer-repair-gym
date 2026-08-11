@@ -30,7 +30,8 @@
       "Bash(./.venv/Scripts/python.exe scripts/build_final_metrics_summary.py)",
       "Bash(./.venv/Scripts/python.exe scripts/post_success_result_audit.py)",
       "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py)",
-      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python scripts/v1_runtime_evidence.py)"
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python scripts/v1_runtime_evidence.py)",
+      "Bash(./.venv/Scripts/python.exe scripts/fresh_clone_repro.py)"
     ]
   }
 }
