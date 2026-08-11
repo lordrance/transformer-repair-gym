@@ -35,10 +35,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "artifacts" / "fresh_clone_run.json"
 
-# Modules whose provenance is interrogated inside the clone. `environments` is included
-# because it is the public path the v1 CLI imports by its top-level name.
+# Modules whose provenance is interrogated inside the clone.
 PROBE_MODULES = ("trgym", "trgym.repo.predicates", "trgym.repo.obs_protocol",
                  "trgym.harness.sandbox", "environments.transformer_repair.grading")
+
+# `environments.transformer_repair` pulls in `verifiers.v1`, which imports `fcntl` and
+# therefore cannot load on Windows at all. Its import failure in a Windows clone is the
+# documented platform limitation, not a packaging defect, so it is recorded rather than
+# treated as a leak -- and it is still probed, because if it ever DID import here it
+# would mean something had gone wrong with the isolation.
+PLATFORM_LIMITED = {"environments.transformer_repair.grading"}
 
 REPRO_RE = re.compile(
     r"<!--\s*REPRO-BEGIN.*?-->\s*```(?:bash|powershell)?\n(.*?)```", re.S
@@ -154,6 +160,11 @@ def main() -> int:
             == commands,
             "steps": steps,
             "module_files": {k: v for k, v in module_files.items() if k != "sys.path"},
+            "platform_limited_modules": sorted(PLATFORM_LIMITED),
+            "modules_importable_in_clone": sorted(
+                k for k, v in module_files.items()
+                if k != "sys.path" and v and not str(v).startswith("IMPORT FAILED")
+            ),
             "sys_path_entries_into_original_tree": path_leaks,
             "modules_resolving_into_original_tree": leaked,
             "pushed_anywhere": False,

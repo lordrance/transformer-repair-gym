@@ -22,6 +22,14 @@ classifiers = [
 
 dependencies = [
     "torch>=2.2",
+    # Required, not optional. `obs_protocol` moves tensors across the trusted boundary as
+    # raw buffers via `tensor.numpy().tobytes()`, and torch degrades to "Numpy is not
+    # available" without it rather than failing at import. This was missing from the first
+    # version of this file and the whole project still worked locally, because the original
+    # .venv was built with --system-site-packages and inherited numpy from the system
+    # interpreter. The G7 fresh clone is what exposed it: in a clean environment nine tests
+    # failed and the sandbox could not grade gold.
+    "numpy>=1.26",
 ]
 
 [project.optional-dependencies]

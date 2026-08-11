@@ -19,7 +19,9 @@
       "Bash(./.venv/Scripts/python.exe -m pytest tests/test_repo_tasks.py tests/test_check_surfaces_agree.py -q -p no:cacheprovider)",
       "Bash(./.venv/Scripts/python.exe scripts/tier_s_report.py)",
       "Bash(./.venv/Scripts/python.exe scripts/tier_s_recompute_patch_metrics.py)",
-      "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py)"
+      "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py)",
+      "Bash(./.venv/Scripts/python.exe scripts/fresh_clone_repro.py)",
+      "Bash(./.venv/Scripts/python.exe scripts/post_success_spotcheck.py)"
     ]
   }
 }

@@ -1,0 +1,73 @@
+{
+  "acceptance_in_clone_exit_code": 1,
+  "clean_room_acceptance_passed": false,
+  "clone_path": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym",
+  "commands_from_readme": [
+    "uv sync --extra dev",
+    "uv run python scripts/build_sandbox.py",
+    "uv run python -m pytest -q",
+    "uv run python scripts/final_acceptance.py"
+  ],
+  "commands_match_readme": true,
+  "commit": "05ce9d2be7ad3131d138909fd4c73926426623d2",
+  "exit_code": 1,
+  "module_files": {
+    "environments.transformer_repair.grading": "IMPORT FAILED: ModuleNotFoundError: No module named 'pydantic'",
+    "trgym": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\trgym\\__init__.py",
+    "trgym.harness.sandbox": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\trgym\\harness\\sandbox.py",
+    "trgym.repo.obs_protocol": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\trgym\\repo\\obs_protocol.py",
+    "trgym.repo.predicates": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\trgym\\repo\\predicates.py"
+  },
+  "modules_resolving_into_original_tree": {},
+  "origin": "E:\\RL",
+  "pushed_anywhere": false,
+  "steps": [
+    {
+      "cmd": "git clone --quiet E:\\RL C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym",
+      "exit_code": 0,
+      "seconds": 1.13,
+      "stderr_tail": "",
+      "stdout_tail": ""
+    },
+    {
+      "advisory": false,
+      "cmd": "uv sync --extra dev",
+      "exit_code": 0,
+      "seconds": 27.64,
+      "stderr_tail": "Using CPython 3.13.13\nCreating virtual environment at: .venv\nResolved 135 packages in 26ms\n   Building transformer-repair-gym @ file:///C:/Users/rance/AppData/Local/Temp/trgym_freshclone_oab4p0ni/transformer-repair-gym\nDownloading sympy (6.0MiB)\nDownloading networkx (2.0MiB)\nDownloading torch (116.4MiB)\n Downloaded networkx\n Downloaded sympy\n      Built transformer-repair-gym @ file:///C:/Users/rance/AppData/Local/Temp/trgym_freshclone_oab4p0ni/transformer-repair-gym\n Downloaded torch\nPrepared 13 packages in 12.47s\nInstalled 17 packages in 14.06s\n + colorama==0.4.6\n + filelock==3.32.2\n + fsspec==2026.6.0\n + iniconfig==2.3.0\n + jinja2==3.1.6\n + markupsafe==3.0.3\n + mpmath==1.3.0\n + networkx==3.6.1\n + packaging==26.3\n + pluggy==1.6.0\n + pygments==2.20.0\n + pytest==9.1.1\n + setuptools==84.0.0\n + sympy==1.14.0\n + torch==2.13.0\n + transformer-repair-gym==0.1.0 (from file:///C:/Users/rance/AppData/Local/Temp/trgym_freshclone_oab4p0ni/transformer-repair-gym)\n + typing-extensions==4.16.0\n",
+      "stdout_tail": ""
+    },
+    {
+      "advisory": false,
+      "cmd": "uv run python scripts/build_sandbox.py",
+      "exit_code": 1,
+      "seconds": 6.78,
+      "stderr_tail": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\.venv\\Lib\\site-packages\\torch\\_subclasses\\functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at C:\\actions-runner\\_work\\pytorch\\pytorch\\torch\\csrc\\utils\\tensor_numpy.cpp:84.)\n  cpu = _conversion_method_template(device=torch.device(\"cpu\"))\n",
+      "stdout_tail": "docker available: True\nimage present: True\ngold   backend=docker ok=False 0.0s failed=['repo_strict_causality', 'repo_matches_gold_logits', 'repo_padding_keys_masked', 'repo_training_converges']\n   stderr: Numpy is not available\nbuggy  backend=docker ok=False 0.0s failed=['repo_strict_causality', 'repo_matches_gold_logits', 'repo_padding_keys_masked', 'repo_training_converges']\n   stderr: Numpy is not available\n\nSANDBOX NEEDS WORK\n"
+    },
+    {
+      "advisory": false,
+      "cmd": "uv run python -m pytest -q",
+      "exit_code": 1,
+      "seconds": 128.22,
+      "stderr_tail": "",
+      "stdout_tail": "packages\\torch\\_subclasses\\functional_tensor.py:368\n  C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\.venv\\Lib\\site-packages\\torch\\_subclasses\\functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at C:\\actions-runner\\_work\\pytorch\\pytorch\\torch\\csrc\\utils\\tensor_numpy.cpp:84.)\n    cpu = _conversion_method_template(device=torch.device(\"cpu\"))\n\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[m4_schedule_accumulation]\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[m4_schedule_accumulation]\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[m4_schedule_accumulation]\n  C:\\Users\\rance\\AppData\\Local\\Temp\\pytest-of-rance\\pytest-246\\test_buggy_fails_hidden_but_pa3\\bug\\tinygpt\\train.py:61: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate\n    scheduler.step()\n\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[h4_schedule_triple_defect]\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[h4_schedule_triple_defect]\ntests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[h4_schedule_triple_defect]\n  C:\\Users\\rance\\AppData\\Local\\Temp\\pytest-of-rance\\pytest-246\\test_buggy_fails_hidden_but_pa8\\bug\\tinygpt\\train.py:61: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate\n    scheduler.step()\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nFAILED tests/test_grading_isolation.py::test_untrusted_grade_runs_in_a_container\nFAILED tests/test_obs_protocol.py::test_tensor_round_trips_exactly[tensor0]\nFAILED tests/test_obs_protocol.py::test_tensor_round_trips_exactly[tensor1]\nFAILED tests/test_obs_protocol.py::test_tensor_round_trips_exactly[tensor2]\nFAILED tests/test_obs_protocol.py::test_tensor_round_trips_exactly[tensor3]\nFAILED tests/test_obs_protocol.py::test_tensor_round_trips_exactly[tensor4]\nFAILED tests/test_obs_protocol.py::test_shape_and_data_length_must_agree - Ru...\nFAILED tests/test_obs_protocol.py::test_truncated_data_is_rejected - RuntimeE...\nFAILED tests/test_obs_protocol.py::test_extra_tensor_fields_are_rejected - Ru...\n9 failed, 207 passed, 17 skipped, 7 warnings in 126.48s (0:02:06)\n"
+    },
+    {
+      "advisory": true,
+      "cmd": "uv run python scripts/final_acceptance.py",
+      "exit_code": 1,
+      "seconds": 0.31,
+      "stderr_tail": "",
+      "stdout_tail": "========================================================================\nFINAL ACCEPTANCE\n========================================================================\nG0 PASS               Evidence preservation\nG1 FAIL               verifiers.v1 migration\n      FAIL  evidence is for this grading.py (hash match)  --  stale evidence must not close the gate\nG2 PASS               Hardened verifier v2 + replay\nG3 PASS               Turn-budget ablation\nG4 PASS               Tier S localization\nG5 PASS               Grader scalability + isolation\nG6 PASS               Heuristic gate FP audit\nG7 FAIL               Packaging / CI / fresh clone\n      FAIL  fresh-clone log artifact parses\nG8 FAIL               Final scientific synthesis\n      FAIL  FINAL_FLAGSHIP_RESEARCH_REPORT.md present\nG9 FAIL               Post-success red team\n      FAIL  G0-G8 all PASS before G9 runs  --  G9 is only meaningful after G0-G8 are green\n------------------------------------------------------------------------\nFLAGSHIP_GPU_FREE_COMPLETE = NO\nPOST_SUCCESS_AUDIT        = NOT REACHED\nREADY_FOR_USER_REVIEW_AND_PUSH = NO\n========================================================================\nwrote artifacts/final_acceptance.json\n"
+    },
+    {
+      "cmd": "uv run python -c import json, importlib, sys\nout = {}\nfor name in ['trgym', 'trgym.repo.predicates', 'trgym.repo.obs_protocol', 'trgym.harness.sandbox', 'environments.transformer_repair.grading']:\n    try:\n        out[name] = getattr(importlib.import_module(name), '__file__', None)\n    except Exception as exc:\n        out[name] = f'IMPORT FAILED: {type(exc).__name__}: {exc}'\nout['sys.path'] = [p for p in sys.path if p]\nprint('<<<PROBE>>>' + json.dumps(out))\n",
+      "exit_code": 0,
+      "seconds": 4.26,
+      "stderr_tail": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_oab4p0ni\\transformer-repair-gym\\.venv\\Lib\\site-packages\\torch\\_subclasses\\functional_tensor.py:368: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at C:\\actions-runner\\_work\\pytorch\\pytorch\\torch\\csrc\\utils\\tensor_numpy.cpp:84.)\n  cpu = _conversion_method_template(device=torch.device(\"cpu\"))\n",
+      "stdout_tail": "<<<PROBE>>>{\"trgym\": \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\trgym\\\\__init__.py\", \"trgym.repo.predicates\": \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\trgym\\\\repo\\\\predicates.py\", \"trgym.repo.obs_protocol\": \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\trgym\\\\repo\\\\obs_protocol.py\", \"trgym.harness.sandbox\": \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\trgym\\\\harness\\\\sandbox.py\", \"environments.transformer_repair.grading\": \"IMPORT FAILED: ModuleNotFoundError: No module named 'pydantic'\", \"sys.path\": [\"C:\\\\Users\\\\rance\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\python313.zip\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\DLLs\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\\\\Lib\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Roaming\\\\uv\\\\python\\\\cpython-3.13-windows-x86_64-none\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\.venv\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\\\\.venv\\\\Lib\\\\site-packages\", \"C:\\\\Users\\\\rance\\\\AppData\\\\Local\\\\Temp\\\\trgym_freshclone_oab4p0ni\\\\transformer-repair-gym\"]}\n"
+    }
+  ],
+  "sys_path_entries_into_original_tree": []
+}
