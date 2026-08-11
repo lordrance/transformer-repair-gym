@@ -110,18 +110,29 @@ anywhere that the reward is sound.
 
 ## Reproduce
 
-```powershell
-python -m venv --system-site-packages .venv
-.\.venv\Scripts\python.exe -m pip install "verifiers==0.3.0" pytest tiktoken
-python scripts/build_sandbox.py            # builds the Docker image, verifies isolation
+Dependencies are pinned in `uv.lock`. These four commands are exactly what
+`scripts/fresh_clone_repro.py` executes against a clean clone, and
+`artifacts/fresh_clone_run.json` records the result — so this block is verified rather
+than merely documented.
 
-.\.venv\Scripts\python.exe -m pytest tests -q      # 148 passed
-python scripts/audit_tasks.py                      # Tier E gold/buggy discrimination
-python scripts/audit_repo_tasks.py                 # Tier M
-python scripts/audit_repo_tasks_h.py               # Tier H
-python scripts/audit_cheats.py                     # 7/7 constructed exploits caught
-.\.venv\Scripts\python.exe scripts/fuzz_verifier.py            # 13-probe fuzz audit
-.\.venv\Scripts\python.exe scripts/source_alignment_audit.py   # 15 tasks x 4 gates
+<!-- REPRO-BEGIN (parsed by scripts/fresh_clone_repro.py; keep one command per line) -->
+```bash
+uv sync --extra dev
+uv run python scripts/build_sandbox.py
+uv run python -m pytest -q
+uv run python scripts/final_acceptance.py
+```
+<!-- REPRO-END -->
+
+`pytest -q` collects `tests/` and `tests_v1/`. On Windows the 16 `tests_v1` tests skip —
+`verifiers.v1` imports `fcntl` — and that skip is deliberately left visible rather than
+excluded, because a suite that silently shrinks is worse than one that reports what it
+did not run. In Linux/Docker they execute:
+
+```bash
+docker run --rm -v "$PWD:/w" -w /w -e PYTHONPATH="/w:/w/environments" \
+  -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp \
+  trgym-v1:latest python -m pytest tests_v1/ -q
 ```
 
 Real-model evaluation needs `DEEPSEEK_API_KEY` **in the shell** (never in a file).

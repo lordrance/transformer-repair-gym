@@ -148,11 +148,21 @@ def build_gold(spec: RepoTaskSpec, dest: Path) -> Path:
 
 
 def repo_fingerprint(workspace: Path) -> dict[str, str]:
-    """Hash every editable module, for tamper detection and patch metrics."""
+    """Hash every editable module, for tamper detection and patch metrics.
+
+    `rglob`, not `glob`. The top-level-only version was correct for Tier E/M, where the
+    package is flat, and silently wrong for Tier S, where the implementation lives in
+    subpackages: an edit to `tinygpt/_ops/masking.py` was invisible, so every Tier S
+    episode reported `files_edited_by_model` containing at most a facade and
+    `edited_a_relevant_file` was structurally always False -- including for the nine
+    episodes that demonstrably repaired the defect. The rewards were never affected
+    (those come from real grading); only the patch metrics were. See PROTOCOL_CHANGELOG R17.
+    """
     out: dict[str, str] = {}
     pkg = Path(workspace) / "tinygpt"
-    for path in sorted(pkg.glob("*.py")):
-        out[f"tinygpt/{path.name}"] = _sha256(path.read_text(encoding="utf-8"))
+    for path in sorted(pkg.rglob("*.py")):
+        rel = path.relative_to(pkg).as_posix()
+        out[f"tinygpt/{rel}"] = _sha256(path.read_text(encoding="utf-8"))
     return out
 
 

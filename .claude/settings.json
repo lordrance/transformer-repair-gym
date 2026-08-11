@@ -9,7 +9,17 @@
       "Bash(git --version)",
       "Bash(uv lock *)",
       "Bash(git init *)",
-      "Bash(git -c core.quotepath=false status --porcelain)"
+      "Bash(git -c core.quotepath=false status --porcelain)",
+      "Bash(./.venv/Scripts/python.exe -c \"import json;d=json.load\\(open\\('artifacts/freeze_manifest.json'\\)\\);print\\(list\\(d.keys\\(\\)\\)\\);print\\(json.dumps\\(d.get\\('regenerated_headline_metrics',{}\\),indent=1\\)[:900]\\)\")",
+      "Bash(./.venv/Scripts/python.exe -c ' *)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(./.venv/Scripts/python.exe scripts/build_final_metrics_summary.py)",
+      "Bash(./.venv/Scripts/python.exe -m pytest tests/test_check_surfaces_agree.py -q)",
+      "Bash(./.venv/Scripts/python.exe scripts/post_success_mutation_test.py --dry-run)",
+      "Bash(./.venv/Scripts/python.exe -m pytest tests/test_repo_tasks.py tests/test_check_surfaces_agree.py -q -p no:cacheprovider)",
+      "Bash(./.venv/Scripts/python.exe scripts/tier_s_report.py)",
+      "Bash(./.venv/Scripts/python.exe scripts/tier_s_recompute_patch_metrics.py)",
+      "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py)"
     ]
   }
 }

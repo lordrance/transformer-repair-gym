@@ -1,0 +1,13 @@
+task_id,episode_id,model,n_turns,submitted,end_reason,n_files_in_repo,n_files_inspected,fraction_repo_inspected,located_relevant_file,edited_a_relevant_file,files_expected,files_edited_by_model,relevant_files_inspected,naive_reward,hardened_reward,hidden_failed,prompt_tokens,completion_tokens,api_errors
+s1_causal_mask_offbyone,0,deepseek-chat,24,True,submitted,48,13,0.2708,True,True,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,1.0,1.0,,225255,6532,[]
+s1_causal_mask_offbyone,1,deepseek-chat,18,True,submitted,48,5,0.1042,True,True,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,1.0,1.0,,99442,2847,[]
+s1_causal_mask_offbyone,2,deepseek-chat,10,True,submitted,48,4,0.0833,True,True,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,1.0,1.0,,41929,1531,[]
+s1_causal_mask_offbyone,3,deepseek-chat,18,True,submitted,48,6,0.125,True,True,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,tinygpt/_ops/masking.py,1.0,1.0,,133542,5260,[]
+s2_padding_supervised_as_labels,0,deepseek-chat,16,True,submitted,48,9,0.1875,True,True,tinygpt/_data/collate.py,tinygpt/_data/collate.py,tinygpt/_data/collate.py,1.0,1.0,,99762,3394,[]
+s2_padding_supervised_as_labels,1,deepseek-chat,16,True,submitted,48,10,0.2083,True,True,tinygpt/_data/collate.py,tinygpt/_data/collate.py,tinygpt/_data/collate.py,1.0,1.0,,99514,3375,[]
+s2_padding_supervised_as_labels,2,deepseek-chat,17,True,submitted,48,12,0.25,True,True,tinygpt/_data/collate.py,tinygpt/_data/collate.py,tinygpt/_data/collate.py,1.0,1.0,,106099,2968,[]
+s2_padding_supervised_as_labels,3,deepseek-chat,19,True,submitted,48,9,0.1875,True,True,tinygpt/_data/collate.py,tinygpt/_data/collate.py,tinygpt/_data/collate.py,1.0,1.0,,133709,2941,[]
+s3_warmup_offbyone,0,deepseek-chat,24,False,turn budget exhausted (24),48,10,0.2083,True,True,tinygpt/_optim/schedule.py,tinygpt/_optim/schedule.py,tinygpt/_optim/schedule.py,1.0,1.0,,423736,28116,[]
+s3_warmup_offbyone,1,deepseek-chat,22,True,submitted,48,6,0.125,True,False,tinygpt/_optim/schedule.py,tinygpt/_train/loop.py,tinygpt/_optim/schedule.py,1.0,0.0,repo_lr_schedule_matches_gold,311168,20089,[]
+s3_warmup_offbyone,2,deepseek-chat,24,True,submitted,48,8,0.1667,True,False,tinygpt/_optim/schedule.py,tinygpt/_train/loop.py,tinygpt/_optim/schedule.py,1.0,0.0,repo_lr_schedule_matches_gold,441691,31233,[]
+s3_warmup_offbyone,3,deepseek-chat,24,False,turn budget exhausted (24),48,12,0.25,True,False,tinygpt/_optim/schedule.py,,tinygpt/_optim/schedule.py,1.0,0.0,repo_lr_schedule_matches_gold,314291,23677,[]

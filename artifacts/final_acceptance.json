@@ -376,26 +376,116 @@
         {
           "check": "artifact LOCALIZATION_SCALE_REPORT.md",
           "detail": "",
-          "ok": false
+          "ok": true
         },
         {
           "check": "artifact artifacts/tier_s_primary.jsonl",
           "detail": "",
-          "ok": false
+          "ok": true
         },
         {
           "check": "artifact TIER_S_REAL_MODEL_AUDIT.csv",
           "detail": "",
-          "ok": false
+          "ok": true
         },
         {
           "check": "frozen Tier S spec present",
           "detail": "",
-          "ok": false
+          "ok": true
+        },
+        {
+          "check": "exactly 3 tasks",
+          "detail": "n=3",
+          "ok": true
+        },
+        {
+          "check": "s1_causal_mask_offbyone: 20 <= files <= 50",
+          "detail": "n_files=48",
+          "ok": true
+        },
+        {
+          "check": "s1_causal_mask_offbyone: relevant files <= 3",
+          "detail": "n_relevant=1",
+          "ok": true
+        },
+        {
+          "check": "s1_causal_mask_offbyone: every non-relevant file is referenced",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s1_causal_mask_offbyone: gold passes",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s1_causal_mask_offbyone: no-op fails",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s2_padding_supervised_as_labels: 20 <= files <= 50",
+          "detail": "n_files=48",
+          "ok": true
+        },
+        {
+          "check": "s2_padding_supervised_as_labels: relevant files <= 3",
+          "detail": "n_relevant=1",
+          "ok": true
+        },
+        {
+          "check": "s2_padding_supervised_as_labels: every non-relevant file is referenced",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s2_padding_supervised_as_labels: gold passes",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s2_padding_supervised_as_labels: no-op fails",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s3_warmup_offbyone: 20 <= files <= 50",
+          "detail": "n_files=48",
+          "ok": true
+        },
+        {
+          "check": "s3_warmup_offbyone: relevant files <= 3",
+          "detail": "n_relevant=1",
+          "ok": true
+        },
+        {
+          "check": "s3_warmup_offbyone: every non-relevant file is referenced",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s3_warmup_offbyone: gold passes",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "s3_warmup_offbyone: no-op fails",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "12 precommitted trajectories",
+          "detail": "n=12",
+          "ok": true
+        },
+        {
+          "check": "fraction_repo_inspected < 1.0 for every episode",
+          "detail": "0 episodes inspected the whole repo",
+          "ok": true
         }
       ],
       "gate": "G4",
-      "status": "FAIL",
+      "status": "PASS",
       "title": "Tier S localization"
     },
     {
@@ -557,7 +647,7 @@
         {
           "check": "artifact FINAL_TEST_RUN.log",
           "detail": "",
-          "ok": false
+          "ok": true
         },
         {
           "check": "artifact .github/workflows/ci.yml",
@@ -572,7 +662,7 @@
         {
           "check": "artifact uv.lock",
           "detail": "",
-          "ok": false
+          "ok": true
         },
         {
           "check": "artifact LICENSE",

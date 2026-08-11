@@ -1,0 +1,147 @@
+{
+  "budget": {
+    "contract_breakdown": {
+      "G1_v1_smokes": 2,
+      "G3_tier_h_24turn": 10,
+      "G4_tier_s": 12
+    },
+    "contract_trajectories_used": 24,
+    "contract_trajectory_cap": 30,
+    "lifetime_trajectories_phase05_phase1": 112,
+    "lifetime_usd_phase05_phase1": 1.2986,
+    "note": "contract_trajectories_used counts THIS contract's ledger: the G3 24-turn arm, the two v1 smokes, and the G4 Tier S run. The lifetime figures are the Phase-0.5 + Phase-1 total and are a different accounting."
+  },
+  "families": {
+    "tier_h": {
+      "budget_exhausted": 20,
+      "full_fix": 8,
+      "full_fix_rate": 0.4,
+      "hardened_FNR": 0.0,
+      "hardened_FPR": 0.0,
+      "hardened_pass": 8,
+      "mean_turns": 14,
+      "n": 20,
+      "naive_FPR": 0.6,
+      "naive_pass": 20,
+      "submitted": 0
+    },
+    "tier_h_24turn": {
+      "budget_exhausted": 2,
+      "full_fix": 8,
+      "full_fix_rate": 0.8,
+      "hardened_FNR": 0.0,
+      "hardened_FPR": 0.0,
+      "hardened_pass": 8,
+      "mean_turns": 21.1,
+      "n": 10,
+      "naive_FPR": 0.2,
+      "naive_pass": 10,
+      "submitted": 8
+    },
+    "tier_m": {
+      "budget_exhausted": 19,
+      "full_fix": 18,
+      "full_fix_rate": 0.9,
+      "hardened_FNR": 0.0,
+      "hardened_FPR": 0.0,
+      "hardened_pass": 18,
+      "mean_turns": 14,
+      "n": 20,
+      "naive_FPR": 0.1,
+      "naive_pass": 20,
+      "submitted": 1
+    },
+    "tier_m_pro": {
+      "budget_exhausted": 7,
+      "full_fix": 8,
+      "full_fix_rate": 0.8,
+      "hardened_FNR": 0.0,
+      "hardened_FPR": 0.0,
+      "hardened_pass": 8,
+      "mean_turns": 13.6,
+      "n": 10,
+      "naive_FPR": 0.2,
+      "naive_pass": 10,
+      "submitted": 3
+    },
+    "tier_s": {
+      "budget_exhausted": 2,
+      "edited_a_relevant_file": 9,
+      "every_episode_inspected_less_than_all": true,
+      "full_fix": 9,
+      "full_fix_rate": 0.75,
+      "hardened_FNR": 0.0,
+      "hardened_FPR": 0.0,
+      "hardened_pass": 9,
+      "located_relevant_file": 12,
+      "located_relevant_rate": 1.0,
+      "max_fraction_repo_inspected": 0.2708,
+      "mean_fraction_repo_inspected": 0.1805,
+      "mean_turns": 19.33,
+      "n": 12,
+      "n_files_in_repo": 48,
+      "naive_FPR": 0.25,
+      "naive_pass": 12,
+      "submitted": 10
+    }
+  },
+  "gates": {
+    "G2_verifier_v2": {
+      "replay_coverage": 0.9889,
+      "v1_FP_rate": 0.2778,
+      "v2_FN_count": 0,
+      "v2_FP_rate": 0.2778
+    },
+    "G4_tier_s_freeze": {
+      "all_gold_pass": true,
+      "all_noop_fail": true,
+      "frozen": true,
+      "n_files_per_task": [
+        48,
+        48,
+        48
+      ],
+      "n_tasks": 3,
+      "orphan_files": 0
+    },
+    "G5_isolation": {
+      "candidate_path_executed": 17,
+      "candidate_path_leaked": 0,
+      "candidate_path_probes": 17,
+      "candidate_path_refused_before_execution": 0,
+      "control_leaked": 12,
+      "control_probes": 17,
+      "unmeasured_channels": []
+    },
+    "G5_throughput": {
+      "cold_mean_s": 5.3251,
+      "final_mean_s": 5.2285,
+      "final_p95_s": 5.5862,
+      "in_process_reference_mean_s": 0.6452,
+      "isolation_overhead_ratio": 8.1,
+      "n_failures": 0,
+      "n_jobs": 30
+    },
+    "G6_heuristic_fp": {
+      "n_samples": 32,
+      "submission_level_fp_count": 0,
+      "submission_level_fp_rate": 0.0
+    }
+  },
+  "manifest_crosscheck": {
+    "agrees": true,
+    "families_compared": [
+      "tier_h",
+      "tier_m",
+      "tier_m_pro"
+    ],
+    "mismatches": []
+  },
+  "provenance": {
+    "tier_h": "artifacts/tier_h_primary.jsonl",
+    "tier_h_24turn": "artifacts/tier_h_24turn.jsonl",
+    "tier_m": "artifacts/tier_m_primary.jsonl",
+    "tier_m_pro": "artifacts/tier_m_confirmatory_pro.jsonl",
+    "tier_s": "artifacts/tier_s_primary.jsonl"
+  }
+}
