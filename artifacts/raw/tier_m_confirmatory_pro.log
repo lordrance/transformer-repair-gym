@@ -1,0 +1,15 @@
+﻿  m1_attention_regression    e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/attention.py']
+  m1_attention_regression    e1  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/attention.py']
+  m2_position_encoding       e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/positional.py']
+  m2_position_encoding       e1  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/positional.py']
+  m3_gradient_lifecycle      e0  naive=1 hardened=1 turns=12 end=submitted edited=['tinygpt/train.py']
+  m3_gradient_lifecycle      e1  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/train.py']
+  m4_schedule_accumulation   e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  m4_schedule_accumulation   e1  naive=1 hardened=1 turns=14 end=submitted edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  m5_masking_interaction     e0  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/data.py']
+  m5_masking_interaction     e1  naive=1 hardened=0 turns=12 end=submitted edited=['tinygpt/data.py']
+
+10 episodes
+prompt tokens     875,915
+completion tokens 95,449
+wrote artifacts\tier_m_confirmatory_pro.jsonl

@@ -1,0 +1,36 @@
+{
+  "model": "Qwen/Qwen3.5-4B",
+  "context_window": 65536,
+  "renderers": {
+    "qwen3_5": {
+      "thinking": true,
+      "stop_sequences": [
+        248046
+      ],
+      "prompt_tokens_per_task": {
+        "t1_causal_mask_off_by_one": 3110,
+        "t2_rope_pairing_convention": 3089,
+        "t3_rmsnorm_missing_upcast": 3034,
+        "t4_grad_accum_normalization": 958,
+        "t5_loss_ignore_index_dropped": 3108
+      },
+      "prompt_tokens_total": 13299,
+      "max_prompt_tokens": 3110
+    },
+    "qwen3_5_disable_thinking": {
+      "thinking": false,
+      "stop_sequences": [
+        248046
+      ],
+      "prompt_tokens_per_task": {
+        "t1_causal_mask_off_by_one": 3112,
+        "t2_rope_pairing_convention": 3091,
+        "t3_rmsnorm_missing_upcast": 3036,
+        "t4_grad_accum_normalization": 960,
+        "t5_loss_ignore_index_dropped": 3110
+      },
+      "prompt_tokens_total": 13309,
+      "max_prompt_tokens": 3112
+    }
+  }
+}

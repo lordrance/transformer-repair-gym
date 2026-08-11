@@ -1,0 +1,53 @@
+{
+  "buggy_failed_checks": [
+    "repo_matches_gold_logits",
+    "repo_strict_causality"
+  ],
+  "buggy_reward": 0.0,
+  "generated_utc": "2026-08-11T18:31:33Z",
+  "gold_checks": {
+    "checks": {
+      "repo_contract_public_api": true,
+      "repo_contract_return_types": true,
+      "repo_matches_gold_logits": true,
+      "repo_padding_keys_masked": true,
+      "repo_strict_causality": true,
+      "repo_training_converges": true
+    },
+    "errors": {},
+    "n_passed": 6,
+    "n_total": 6
+  },
+  "gold_grade_seconds": 5.954,
+  "gold_reward": 1.0,
+  "grading_backend": "sandboxed container (grade_workspace default)",
+  "grading_sha256": "8d50df1e7d1b90b8b9c6f245a5dc1c43364620b69d69283912036a97bc63eee8",
+  "loader": "verifiers.v1.utils.loaders.load_taskset",
+  "n_tasks": 10,
+  "platform": "linux",
+  "python": "3.12.13",
+  "task_ids": [
+    "h1_attention_double_defect",
+    "h2_position_double_defect",
+    "h3_accumulation_and_clipping",
+    "h4_schedule_triple_defect",
+    "h5_masking_triple_defect",
+    "m1_attention_regression",
+    "m2_position_encoding",
+    "m3_gradient_lifecycle",
+    "m4_schedule_accumulation",
+    "m5_masking_interaction"
+  ],
+  "task_sha256": "a5ccfa3c79f3aa8a7444a86f65b3f20879d32b9ac9c5eaf2af09feccc1b2fc75",
+  "taskdata_carries_no_gold": false,
+  "taskdata_immutable": true,
+  "tests_v1_exit_code": 0,
+  "tests_v1_failed": 0,
+  "tests_v1_passed": 16,
+  "tests_v1_tail": "................                                                         [100%]\n16 passed in 66.40s (0:01:06)\n",
+  "v1_import_ok": true,
+  "validate_exit_code": 0,
+  "validate_tail": "taskset  transformer_repair  \u00b7  docker runtime\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 1/1 \u00b7 6s \u00b7 valid 1 \u00b7 invalid 0 \u00b7 error 0 \u00b7     \n                                timeout 0                                       \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[valid  ] task name=m1_attention_regression                           valid \u00b7 6sresults: outputs/transformer_repair--validate/4d9ae172-8c89-4852-80e8-357a2adf61ab\n{\n  \"checks\": {\n    \"gold\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    },\n    \"setup\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    }\n  },\n  \"mode\": \"all\",\n  \"outcomes\": {\n    \"error\": 0,\n    \"invalid\": 0,\n    \"missing\": 0,\n    \"timeout\": 0,\n    \"valid\": 1\n  },\n  \"owed\": 0,\n  \"recorded\": 1,\n  \"terminal\": 1,\n  \"total\": 1,\n  \"valid_rate\": 1.0\n}\n",
+  "validate_valid_rate": 1.0,
+  "verifiers_version": "0.3.0"
+}

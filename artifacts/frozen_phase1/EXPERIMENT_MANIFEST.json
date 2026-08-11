@@ -1,0 +1,232 @@
+{
+  "label": "tier_m_primary_v1",
+  "timestamp_utc": "2026-08-10T07:22:11+00:00",
+  "git": {
+    "repo": "not a git repository",
+    "note": "hashes are the only provenance"
+  },
+  "python": "3.12.4",
+  "torch": "2.9.1+cpu",
+  "verifiers_pin": "0.3.0",
+  "file_hashes": {
+    "trgym/tasks/spec.py": "69ff75de06cf655b435d039ab0ca7562ab2ea96c569154dffe806aa45746effd",
+    "trgym/tasks/registry.py": "66badf9880e61fdaf94d1d38e2402ef9595fea0d5dafb557344c06108f9fc65f",
+    "trgym/tasks/repo_specs.py": "21b099026fb4b755dde1af1c2b42ba564b1d7dae791fb9948de68fe4723ff509",
+    "trgym/reference/tiny_gpt.py": "32e4299f7336955706d2e344bb9a2c1213e41a8a7fbf38bc12761bd1d6384769",
+    "trgym/reference/train_loop.py": "825743e9b8f6b2653d0272f052d7a78fc8f0c8792cc970d4dfccbfda32b53840",
+    "trgym/repo_template/tinygpt/config.py": "bc4c6f3d0768e8c852d37c3e0ff4edd76924ca0da89830ff1863ed6e05e68930",
+    "trgym/repo_template/tinygpt/norm.py": "12d7b7555dd6e96658ddec944177df9f772d6b8484edd6b91bd3f15c3376cd80",
+    "trgym/repo_template/tinygpt/positional.py": "636b69022111106a4c7236f7979ee0515917d7575ab2f1bd4c454ffd29f46b5e",
+    "trgym/repo_template/tinygpt/attention.py": "747caf01187ba64a1920f35bf1a034f7ec60ae14bee0d602f80b1367a15338a5",
+    "trgym/repo_template/tinygpt/model.py": "d06b6d68b9bb86c0278f666ce3f6e40d6975b254b3f348aefaa13abbab1295eb",
+    "trgym/repo_template/tinygpt/data.py": "d11b4861376124f66b91c660b3d50e1973925e4fc25c7e0b5075198e989e205d",
+    "trgym/repo_template/tinygpt/optim.py": "7d68ac04382474992639e69fe5a5b8b041e58fa65f2279c4ee1c507ff4cda277",
+    "trgym/repo_template/tinygpt/train.py": "e0392b25d3bb9c5a6fe87ebe76339fd4a1283538f859a59f8a88fae986acaaf6",
+    "trgym/tasks/build.py": "0e80eef130a5978e9704cc9d97c3ae3a6a12f29ee42f7e98e8ca553016bae7e9",
+    "trgym/repo/build.py": "d0ff8ea6c0fb2486ee4255e1d5f9a8fe03db75211da6ebd3a2e19cc8de7758de",
+    "trgym/verifier/visible.py": "2600ef48ec494af25647fe286fbd3a6e9b9f834098396ecd5b0d01fc14f88771",
+    "trgym/verifier/hidden.py": "df463e576d72b3631b5fe0c8d911ab21f7b75c1b282b1821a1cb4ebdd63232bd",
+    "trgym/verifier/anticheat.py": "4bea95a271279e86ff7c41e6dbc89dceb59bb4a11ed3328fa6281128acdf087d",
+    "trgym/verifier/reward.py": "5e32349541587b9ffb30f22a5bc0100ee45dc650a99b596e0ec90e17b64e876c",
+    "trgym/repo/checks.py": "a02bee34ebe6461372030a0ec784ae4d94771dc5a5bc33d585c1f6bebf9f7397",
+    "trgym/harness/tools.py": "55a37edb7bb8e9c35809ee272ca214c8ec60f5b8024c62351885172a8e4e192b",
+    "trgym/harness/session.py": "f0bb42226f51bf06fe6f20f7aa60fdf9d800bc76ccbae176d8638388aa58b45e",
+    "trgym/harness/sandbox.py": "12dd87dd8eeb7b34ec9aed6b12f38d6fec16b87af8f8e319bbda0098dfd34104",
+    "trgym/patching.py": "e0e3ffdc0b1f8f41c9a72ff0c991ebe8f257382f59e33c117585a45644f13b22",
+    "docker/Dockerfile": "806b22d2c86772e1f3131d7770b6ffd131f8e84ec8e692f65b108c9252831752",
+    "scripts/run_deepseek_repo_eval.py": "5491f158df9a84f01a7ac5901de7a49565a299f7d6ab39641629129695463a32",
+    "trgym/cheats/catalog.py": "f7d67703f68a2aa595b92ea3293b63472b0b7c6c14aa3b4a63dd7d559161597b"
+  },
+  "missing_files": [],
+  "tasks": {
+    "tier_E": [
+      "t1_causal_mask_off_by_one",
+      "t2_rope_pairing_convention",
+      "t3_rmsnorm_missing_upcast",
+      "t4_grad_accum_normalization",
+      "t5_loss_ignore_index_dropped"
+    ],
+    "tier_M": [
+      {
+        "task_id": "m1_attention_regression",
+        "family_id": "F1",
+        "provenance": "REAL-DERIVED",
+        "files_mutated": [
+          "tinygpt/attention.py"
+        ],
+        "requires_training_run": false,
+        "visible_checks": [
+          "repo_visible_smoke",
+          "repo_visible_single_token_attention"
+        ],
+        "hidden_checks": [
+          "repo_strict_causality",
+          "repo_matches_gold_logits",
+          "repo_padding_keys_masked",
+          "repo_training_converges"
+        ]
+      },
+      {
+        "task_id": "m2_position_encoding",
+        "family_id": "F2",
+        "provenance": "REAL-DERIVED",
+        "files_mutated": [
+          "tinygpt/positional.py"
+        ],
+        "requires_training_run": false,
+        "visible_checks": [
+          "repo_visible_smoke",
+          "repo_visible_rope_position_zero"
+        ],
+        "hidden_checks": [
+          "repo_rope_relative_property",
+          "repo_rope_norm_preserved",
+          "repo_matches_gold_logits",
+          "repo_training_converges"
+        ]
+      },
+      {
+        "task_id": "m3_gradient_lifecycle",
+        "family_id": "F6",
+        "provenance": "REAL-DERIVED",
+        "files_mutated": [
+          "tinygpt/train.py"
+        ],
+        "requires_training_run": true,
+        "visible_checks": [
+          "repo_visible_smoke",
+          "repo_visible_short_train_runs"
+        ],
+        "hidden_checks": [
+          "repo_gradients_reach_optimizer",
+          "repo_training_converges",
+          "repo_clipping_is_effective",
+          "repo_matches_gold_logits"
+        ]
+      },
+      {
+        "task_id": "m4_schedule_accumulation",
+        "family_id": "F4",
+        "provenance": "REAL",
+        "files_mutated": [
+          "tinygpt/optim.py",
+          "tinygpt/train.py"
+        ],
+        "requires_training_run": true,
+        "visible_checks": [
+          "repo_visible_smoke",
+          "repo_visible_short_train_runs"
+        ],
+        "hidden_checks": [
+          "repo_lr_schedule_matches_gold",
+          "repo_weight_decay_excludes_gains",
+          "repo_training_converges"
+        ]
+      },
+      {
+        "task_id": "m5_masking_interaction",
+        "family_id": "F5",
+        "provenance": "REAL-DERIVED",
+        "files_mutated": [
+          "tinygpt/data.py",
+          "tinygpt/model.py"
+        ],
+        "requires_training_run": false,
+        "visible_checks": [
+          "repo_visible_smoke",
+          "repo_visible_loss_is_finite"
+        ],
+        "hidden_checks": [
+          "repo_padding_does_not_change_loss",
+          "repo_supervised_token_count",
+          "repo_no_pad_probability_mass",
+          "repo_training_converges"
+        ]
+      }
+    ]
+  },
+  "verifier": {
+    "repo_checks": [
+      "repo_clipping_is_effective",
+      "repo_gradients_reach_optimizer",
+      "repo_lr_schedule_matches_gold",
+      "repo_matches_gold_logits",
+      "repo_no_pad_probability_mass",
+      "repo_padding_does_not_change_loss",
+      "repo_padding_keys_masked",
+      "repo_rope_norm_preserved",
+      "repo_rope_relative_property",
+      "repo_strict_causality",
+      "repo_supervised_token_count",
+      "repo_training_converges",
+      "repo_training_stays_finite",
+      "repo_visible_loss_is_finite",
+      "repo_visible_rope_position_zero",
+      "repo_visible_short_train_runs",
+      "repo_visible_single_token_attention",
+      "repo_visible_smoke",
+      "repo_weight_decay_excludes_gains"
+    ],
+    "repo_check_levels": {
+      "repo_visible_smoke": 1,
+      "repo_visible_loss_is_finite": 1,
+      "repo_visible_single_token_attention": 1,
+      "repo_visible_rope_position_zero": 1,
+      "repo_visible_short_train_runs": 3,
+      "repo_matches_gold_logits": 2,
+      "repo_strict_causality": 2,
+      "repo_padding_keys_masked": 2,
+      "repo_rope_relative_property": 2,
+      "repo_rope_norm_preserved": 2,
+      "repo_supervised_token_count": 2,
+      "repo_padding_does_not_change_loss": 2,
+      "repo_no_pad_probability_mass": 3,
+      "repo_training_stays_finite": 3,
+      "repo_training_converges": 3,
+      "repo_lr_schedule_matches_gold": 3,
+      "repo_weight_decay_excludes_gains": 2,
+      "repo_clipping_is_effective": 3,
+      "repo_gradients_reach_optimizer": 3
+    },
+    "anticheat_gates": [
+      "gate_no_reference_import",
+      "gate_no_dynamic_execution",
+      "gate_public_api_preserved",
+      "gate_no_shape_special_casing",
+      "gate_no_silent_exception_swallowing",
+      "gate_no_hardcoded_tensors",
+      "gate_grader_files_untouched",
+      "gate_support_files_untouched"
+    ]
+  },
+  "harness": {
+    "allowed_commands": [
+      "run_training",
+      "run_training_json",
+      "run_training_short",
+      "run_visible_tests"
+    ],
+    "max_turns": 14,
+    "max_commands": 24,
+    "max_wall_s": 900.0,
+    "max_command_s": 180
+  },
+  "sandbox": {
+    "image": "trgym-sandbox:latest",
+    "image_present": true,
+    "memory": "2g",
+    "cpus": "2.0",
+    "pids_limit": 256,
+    "network": "none",
+    "read_only_rootfs": true
+  },
+  "model_config": {
+    "provider": "deepseek",
+    "base_url": "https://api.deepseek.com",
+    "system_prompt_sha256": "5acad427074e80bf4f1f0dc0c4549f460ef1439e63ebf32ecba271763da99450",
+    "system_prompt": "You are debugging a small PyTorch Transformer project that trains on CPU.\n\nSomething in the `tinygpt/` package is wrong. You are not told which file.\n\nWork like an engineer: look at the repository, read the code you suspect, run the\ntraining loop or the tests to observe the actual behaviour, then make a minimal\nfix and verify it. Use the tools provided; do not guess at file contents.\n\nWhen you are confident, call `submit`. Keep public function and class names,\nsignatures and return types unchanged.",
+    "temperature": 1.0,
+    "max_tokens": 16000,
+    "note": "model id recorded per-trajectory in the JSONL"
+  }
+}

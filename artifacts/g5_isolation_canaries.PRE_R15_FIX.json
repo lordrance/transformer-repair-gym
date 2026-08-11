@@ -1,0 +1,272 @@
+{
+  "results": {
+    "in_process_UNSAFE_CONTROL": [
+      {
+        "canary": "grader_secret",
+        "channel": "grader secret",
+        "env_leaked": false,
+        "evidence_files": [
+          "grader_secret.txt"
+        ],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code read a secret held only by the grading process?"
+      },
+      {
+        "canary": "gold_oracle_import",
+        "channel": "module global",
+        "env_leaked": false,
+        "evidence_files": [
+          "gold_attention.py"
+        ],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code import the hidden checks and build the gold repo?"
+      },
+      {
+        "canary": "host_file_read",
+        "channel": "file",
+        "env_leaked": false,
+        "evidence_files": [
+          "host_file.txt"
+        ],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code read arbitrary host files (the repo source tree)?"
+      },
+      {
+        "canary": "env_var_write",
+        "channel": "env var",
+        "env_leaked": true,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code mutate the grading process environment?"
+      },
+      {
+        "canary": "module_global_write",
+        "channel": "module global",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": true,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": true,
+        "payload_witnessed": true,
+        "question": "can candidate code mutate an already-imported grader module?"
+      },
+      {
+        "canary": "child_process",
+        "channel": "child process",
+        "env_leaked": false,
+        "evidence_files": [
+          "child.txt"
+        ],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code spawn a child process on the grading host?"
+      },
+      {
+        "canary": "temp_dir_persistence",
+        "channel": "temp dir",
+        "env_leaked": false,
+        "evidence_files": [
+          "persist.txt"
+        ],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "does a file written by one grading job survive into the next?"
+      },
+      {
+        "canary": "verdict_tamper_tolerance",
+        "channel": "verdict integrity",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": true,
+        "grader_error": null,
+        "kind": "verdict_integrity",
+        "leaked": true,
+        "module_global_leaked": true,
+        "payload_witnessed": true,
+        "question": "can candidate code loosen the grader's tolerance so a buggy tree passes?"
+      },
+      {
+        "canary": "verdict_forge_protocol",
+        "channel": "verdict integrity",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "verdict_integrity",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": true,
+        "question": "can candidate code forge the grader's result protocol on stdout?"
+      }
+    ],
+    "sandboxed_container": [
+      {
+        "canary": "grader_secret",
+        "channel": "grader secret",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code read a secret held only by the grading process?"
+      },
+      {
+        "canary": "gold_oracle_import",
+        "channel": "module global",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code import the hidden checks and build the gold repo?"
+      },
+      {
+        "canary": "host_file_read",
+        "channel": "file",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code read arbitrary host files (the repo source tree)?"
+      },
+      {
+        "canary": "env_var_write",
+        "channel": "env var",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code mutate the grading process environment?"
+      },
+      {
+        "canary": "module_global_write",
+        "channel": "module global",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": true,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code mutate an already-imported grader module?"
+      },
+      {
+        "canary": "child_process",
+        "channel": "child process",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code spawn a child process on the grading host?"
+      },
+      {
+        "canary": "temp_dir_persistence",
+        "channel": "temp dir",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": false,
+        "grader_error": null,
+        "kind": "containment",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "does a file written by one grading job survive into the next?"
+      },
+      {
+        "canary": "verdict_tamper_tolerance",
+        "channel": "verdict integrity",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": true,
+        "grader_error": null,
+        "kind": "verdict_integrity",
+        "leaked": true,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code loosen the grader's tolerance so a buggy tree passes?"
+      },
+      {
+        "canary": "verdict_forge_protocol",
+        "channel": "verdict integrity",
+        "env_leaked": false,
+        "evidence_files": [],
+        "graded_passed": null,
+        "grader_error": "JSONDecodeError: Extra data: line 1 column 340 (char 339)",
+        "kind": "verdict_integrity",
+        "leaked": false,
+        "module_global_leaked": false,
+        "payload_witnessed": false,
+        "question": "can candidate code forge the grader's result protocol on stdout?"
+      }
+    ]
+  },
+  "summary": {
+    "in_process_UNSAFE_CONTROL": {
+      "all_contained": false,
+      "all_payloads_ran": true,
+      "n_canaries": 9,
+      "n_contained": 1,
+      "n_leaked": 8,
+      "n_payloads_witnessed": 9,
+      "n_unavailable": 0
+    },
+    "sandboxed_container": {
+      "all_contained": false,
+      "all_payloads_ran": false,
+      "n_canaries": 9,
+      "n_contained": 8,
+      "n_leaked": 1,
+      "n_payloads_witnessed": 0,
+      "n_unavailable": 0
+    }
+  }
+}

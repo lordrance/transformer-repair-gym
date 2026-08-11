@@ -1,0 +1,60 @@
+{
+  "cold": {
+    "backends_observed": [
+      "docker"
+    ],
+    "failures": [],
+    "max_s": 5.9777,
+    "mean_s": 5.3251,
+    "min_s": 4.5955,
+    "n": 30,
+    "n_failures": 0,
+    "p50_s": 5.4335,
+    "p95_s": 5.7893,
+    "percentile_method": "nearest-rank",
+    "stdev_s": 0.3798
+  },
+  "decision": {
+    "contract_option": "B",
+    "rationale": "The official isolated sandbox is used per grading job. No custom persistent grader is retained: R14 established that candidate-touched trees must not be graded in a process holding gold, and the contract fails G5 outright if isolation is traded for speed. Option A would require a persistent grader that passes the full canary suite; none is shipped, so there is no custom optimization to delete."
+  },
+  "final": {
+    "backends_observed": [
+      "docker"
+    ],
+    "failures": [],
+    "max_s": 5.8317,
+    "mean_s": 5.2285,
+    "min_s": 4.6639,
+    "n": 30,
+    "n_failures": 0,
+    "p50_s": 5.2599,
+    "p95_s": 5.5862,
+    "percentile_method": "nearest-rank",
+    "stdev_s": 0.293
+  },
+  "in_process_reference": {
+    "backends_observed": [
+      "in_process"
+    ],
+    "failures": [],
+    "max_s": 1.2533,
+    "mean_s": 0.6452,
+    "min_s": 0.5232,
+    "n": 30,
+    "n_failures": 0,
+    "p50_s": 0.6266,
+    "p95_s": 0.7138,
+    "percentile_method": "nearest-rank",
+    "stdev_s": 0.1227
+  },
+  "isolation_evidence": "artifacts/g5_isolation_canaries.json",
+  "n_checks_per_job": 6,
+  "n_jobs": 30,
+  "overhead": {
+    "isolation_overhead_ratio": 8.1,
+    "isolation_overhead_s": 4.5833,
+    "note": "the measured price of R14's inbound boundary, per grading job"
+  },
+  "task_id": "m1_attention_regression"
+}

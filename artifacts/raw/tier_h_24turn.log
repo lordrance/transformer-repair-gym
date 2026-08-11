@@ -1,0 +1,15 @@
+﻿  h1_attention_double_defect e0  naive=1 hardened=1 turns=19 end=submitted edited=['tinygpt/attention.py']
+  h1_attention_double_defect e1  naive=1 hardened=1 turns=20 end=submitted edited=['tinygpt/attention.py']
+  h2_position_double_defect  e0  naive=1 hardened=0 turns=19 end=too many unusable actions edited=[]
+  h2_position_double_defect  e1  naive=1 hardened=0 turns=17 end=too many unusable actions edited=[]
+  h3_accumulation_and_clipping e0  naive=1 hardened=1 turns=22 end=submitted edited=['tinygpt/train.py']
+  h3_accumulation_and_clipping e1  naive=1 hardened=1 turns=23 end=submitted edited=['tinygpt/train.py']
+  h4_schedule_triple_defect  e0  naive=1 hardened=1 turns=22 end=submitted edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h4_schedule_triple_defect  e1  naive=1 hardened=1 turns=21 end=submitted edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h5_masking_triple_defect   e0  naive=1 hardened=1 turns=24 end=submitted edited=['tinygpt/data.py', 'tinygpt/model.py', 'tinygpt/train.py']
+  h5_masking_triple_defect   e1  naive=1 hardened=1 turns=24 end=submitted edited=['tinygpt/data.py', 'tinygpt/model.py', 'tinygpt/train.py']
+
+10 episodes
+prompt tokens     1,964,208
+completion tokens 365,319
+wrote artifacts\tier_h_24turn.jsonl

@@ -1,0 +1,182 @@
+{
+  "discovered_signals": {
+    "discovered_by": "/usr/local/lib/python3.12/site-packages/verifiers/v1/utils/decorators.py",
+    "metrics": [
+      {
+        "marked": true,
+        "name": "files_changed"
+      },
+      {
+        "marked": true,
+        "name": "hit_turn_limit"
+      },
+      {
+        "marked": true,
+        "name": "infra_error"
+      },
+      {
+        "marked": true,
+        "name": "touched_the_defective_files"
+      }
+    ],
+    "rewards": [
+      {
+        "marked": true,
+        "name": "semantic_repair",
+        "weight": 1.0
+      }
+    ]
+  },
+  "legacy_v0_env_modules_loaded": [],
+  "n_v1_modules_loaded": 95,
+  "plugin_resolution": {
+    "config_type": "TransformerRepairConfig",
+    "n_tasks_enumerated": 1,
+    "resolved_class": "transformer_repair.taskset.TransformerRepairTaskset",
+    "resolved_from": "/work/environments/transformer_repair/taskset.py",
+    "taskset_id": "transformer_repair"
+  },
+  "score_is_inherited": {
+    "is_base_function": true,
+    "overridden_in_subclass": false,
+    "score_defined_in": "/usr/local/lib/python3.12/site-packages/verifiers/v1/task.py"
+  },
+  "scored_rollout": {
+    "gold_validate_passed": true,
+    "grading_side": "host",
+    "hidden_grading": {
+      "checks": {
+        "repo_contract_public_api": true,
+        "repo_contract_return_types": true,
+        "repo_matches_gold_logits": false,
+        "repo_padding_keys_masked": true,
+        "repo_strict_causality": false,
+        "repo_training_converges": true
+      },
+      "errors": {
+        "repo_matches_gold_logits": "logits differ from the reference by 4.690e-01 at batch=1, seq=9",
+        "repo_strict_causality": "changing token 1 of a length-5 sequence moved earlier positions by 5.136e-01: the model can see the future"
+      },
+      "n_passed": 4,
+      "n_total": 6
+    },
+    "metrics": {
+      "files_changed": 0.0,
+      "hit_turn_limit": 0.0,
+      "infra_error": 0.0,
+      "touched_the_defective_files": 0.0
+    },
+    "rewards": {
+      "semantic_repair": {
+        "score": 0.0,
+        "weight": 1.0
+      }
+    },
+    "runtime_class_file": "/usr/local/lib/python3.12/site-packages/verifiers/v1/runtimes/docker/__init__.py",
+    "runtime_type": "docker",
+    "suite": "v2"
+  },
+  "v0_modules_forced_by_library": [
+    "verifiers.parsers",
+    "verifiers.parsers.maybe_think_parser",
+    "verifiers.parsers.parser",
+    "verifiers.parsers.think_parser",
+    "verifiers.parsers.xml_parser",
+    "verifiers.rubrics",
+    "verifiers.rubrics.rubric",
+    "verifiers.rubrics.rubric_group"
+  ],
+  "v1_bases": {
+    "DockerRuntime": {
+      "file": "/usr/local/lib/python3.12/site-packages/verifiers/v1/runtimes/docker/__init__.py",
+      "module": "verifiers.v1.runtimes.docker",
+      "under_site_packages": true
+    },
+    "Task": {
+      "file": "/usr/local/lib/python3.12/site-packages/verifiers/v1/task.py",
+      "module": "verifiers.v1.task",
+      "under_site_packages": true
+    },
+    "Taskset": {
+      "file": "/usr/local/lib/python3.12/site-packages/verifiers/v1/taskset.py",
+      "module": "verifiers.v1.taskset",
+      "under_site_packages": true
+    },
+    "Trace": {
+      "file": "/usr/local/lib/python3.12/site-packages/verifiers/v1/trace.py",
+      "module": "verifiers.v1.trace",
+      "under_site_packages": true
+    }
+  },
+  "v1_modules_loaded": [
+    "verifiers.v1",
+    "verifiers.v1.acp",
+    "verifiers.v1.agent",
+    "verifiers.v1.clients",
+    "verifiers.v1.clients.base",
+    "verifiers.v1.clients.client",
+    "verifiers.v1.clients.eval",
+    "verifiers.v1.clients.train",
+    "verifiers.v1.configs",
+    "verifiers.v1.configs.agent",
+    "verifiers.v1.configs.cli",
+    "verifiers.v1.configs.cli.debug",
+    "verifiers.v1.configs.cli.env",
+    "verifiers.v1.configs.cli.eval",
+    "verifiers.v1.configs.cli.init",
+    "verifiers.v1.configs.cli.validate",
+    "verifiers.v1.configs.client",
+    "verifiers.v1.configs.env",
+    "verifiers.v1.configs.harness",
+    "verifiers.v1.configs.judge",
+    "verifiers.v1.configs.legacy",
+    "verifiers.v1.configs.retries",
+    "verifiers.v1.configs.serve",
+    "verifiers.v1.configs.task",
+    "verifiers.v1.configs.taskset",
+    "verifiers.v1.dialects",
+    "verifiers.v1.dialects.anthropic",
+    "verifiers.v1.dialects.base",
+    "verifiers.v1.dialects.chat",
+    "verifiers.v1.dialects.responses",
+    "verifiers.v1.env",
+    "verifiers.v1.envs",
+    "verifiers.v1.envs.single_agent",
+    "verifiers.v1.envs.single_agent.env",
+    "verifiers.v1.episode",
+    "verifiers.v1.errors",
+    "verifiers.v1.graph",
+    "verifiers.v1.harness",
+    "verifiers.v1.interception",
+    "verifiers.v1.interception.base",
+    "verifiers.v1.interception.pool",
+    "verifiers.v1.interception.server",
+    "verifiers.v1.interception.tunnel",
+    "verifiers.v1.interception.tunnel.base",
+    "verifiers.v1.interception.tunnel.custom",
+    "verifiers.v1.interception.tunnel.prime",
+    "verifiers.v1.judge",
+    "verifiers.v1.judges",
+    "verifiers.v1.judges.reference",
+    "verifiers.v1.judges.rubric",
+    "verifiers.v1.mcp",
+    "verifiers.v1.mcp.launch",
+    "verifiers.v1.mcp.server",
+    "verifiers.v1.mcp.toolset",
+    "verifiers.v1.rollout",
+    "verifiers.v1.runtimes",
+    "verifiers.v1.runtimes.base",
+    "verifiers.v1.runtimes.docker",
+    "verifiers.v1.runtimes.docker.egress",
+    "verifiers.v1.runtimes.limiters"
+  ],
+  "verdict": {
+    "PASS": true,
+    "all_bases_installed": true,
+    "buggy_scores_zero": true,
+    "no_v0_execution_path": true,
+    "reward_discovered_by_v1": true,
+    "score_not_overridden": true
+  },
+  "verifiers_version": "0.3.0"
+}

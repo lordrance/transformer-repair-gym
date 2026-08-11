@@ -1,0 +1,25 @@
+﻿  h1_attention_double_defect e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/attention.py']
+  h1_attention_double_defect e1  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=[]
+  h1_attention_double_defect e2  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=[]
+  h1_attention_double_defect e3  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/attention.py']
+  h2_position_double_defect  e0  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/positional.py']
+  h2_position_double_defect  e1  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=[]
+  h2_position_double_defect  e2  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/positional.py']
+  h2_position_double_defect  e3  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/positional.py']
+  h3_accumulation_and_clipping e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/train.py']
+  h3_accumulation_and_clipping e1  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=[]
+  h3_accumulation_and_clipping e2  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/train.py']
+  h3_accumulation_and_clipping e3  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/train.py']
+  h4_schedule_triple_defect  e0  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h4_schedule_triple_defect  e1  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h4_schedule_triple_defect  e2  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h4_schedule_triple_defect  e3  naive=1 hardened=1 turns=14 end=turn budget exhausted (14) edited=['tinygpt/optim.py', 'tinygpt/train.py']
+  h5_masking_triple_defect   e0  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/data.py']
+  h5_masking_triple_defect   e1  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/data.py']
+  h5_masking_triple_defect   e2  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=[]
+  h5_masking_triple_defect   e3  naive=1 hardened=0 turns=14 end=turn budget exhausted (14) edited=['tinygpt/data.py']
+
+20 episodes
+prompt tokens     1,988,037
+completion tokens 379,927
+wrote artifacts\tier_h_primary.jsonl

@@ -1,0 +1,632 @@
+{
+  "FLAGSHIP_GPU_FREE_COMPLETE": "NO",
+  "POST_SUCCESS_AUDIT": "NOT REACHED",
+  "READY_FOR_USER_REVIEW_AND_PUSH": "NO",
+  "gates": [
+    {
+      "checks": [
+        {
+          "check": "FROZEN_PHASE1_MANIFEST.json parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "manifest verdict is PASS",
+          "detail": "PASS",
+          "ok": true
+        },
+        {
+          "check": "no missing artifacts",
+          "detail": "n_missing=0",
+          "ok": true
+        },
+        {
+          "check": "no unparseable artifacts",
+          "detail": "n_unparseable=0",
+          "ok": true
+        },
+        {
+          "check": "at least 6 headline metrics regenerated",
+          "detail": "n_metrics=53 across 6 families",
+          "ok": true
+        },
+        {
+          "check": "every regenerated metric family has a claimed counterpart",
+          "detail": "regenerated=['fuzz', 'fuzz_v1_artifact', 'source_alignment', 'tier_h', 'tier_m', 'tier_m_pro'] claimed=['fuzz', 'fuzz_v1_artifact', 'source_alignment', 'tier_h', 'tier_m', 'tier_m_pro']",
+          "ok": true
+        },
+        {
+          "check": "zero metric mismatches",
+          "detail": "[]",
+          "ok": true
+        },
+        {
+          "check": "frozen copies present",
+          "detail": "",
+          "ok": true
+        }
+      ],
+      "gate": "G0",
+      "status": "PASS",
+      "title": "Evidence preservation"
+    },
+    {
+      "checks": [
+        {
+          "check": "artifact VERIFIERS_V1_MIGRATION_AUDIT.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact VERIFIERS_V1_MIGRATION_REPORT.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact VERIFIERS_VERSION_SNAPSHOT.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact environments/transformer_repair",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "no legacy v0 API on the public path",
+          "detail": "[]",
+          "ok": true
+        },
+        {
+          "check": "grading.py present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "grading defaults to sandboxed (R14)",
+          "detail": "default must be False",
+          "ok": true
+        },
+        {
+          "check": "sandbox called without fallback (R14)",
+          "detail": "fallback=True would restore the defect",
+          "ok": true
+        },
+        {
+          "check": "a tampered run is discarded rather than believed (R15)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "no pattern denylist over candidate sources (R16)",
+          "detail": "a source-pattern gate hides the boundary from measurement",
+          "ok": true
+        },
+        {
+          "check": "sandbox.py present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "candidate container mounts no repository (R16)",
+          "detail": "mounting the repo is what exposed the oracle and gold",
+          "ok": true
+        },
+        {
+          "check": "candidate container gets only workspace + probe (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "sandbox keeps --network=none",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "sandbox keeps --cap-drop=ALL",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "sandbox keeps --security-opt=no-new-privileges",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "sandbox keeps --read-only",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "observation protocol is nonced per job (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "candidate_probe.py present (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "probe imports no part of the grader (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "probe emits observations, never a verdict (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "obs_protocol.py present (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "candidate output is never unpickled (R16)",
+          "detail": "candidate bytes must not reach an unpickler",
+          "ok": true
+        },
+        {
+          "check": "tensors decoded as validated raw buffers (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "the last nonced block wins (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "predicates.py present (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "trusted comparator imports only gold, never the candidate (R16)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "reward path never grades in-process (R14)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "v1 provenance artifact parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "provenance verdict PASS",
+          "detail": "{'PASS': True, 'all_bases_installed': True, 'buggy_scores_zero': True, 'no_v0_execution_path': True, 'reward_discovered_by_v1': True, 'score_not_overridden': True}",
+          "ok": true
+        },
+        {
+          "check": "v1 modules actually loaded",
+          "detail": "n=95",
+          "ok": true
+        },
+        {
+          "check": "no v0 execution path",
+          "detail": "[]",
+          "ok": true
+        },
+        {
+          "check": "live v1 smoke trace present",
+          "detail": "['traces.jsonl', 'traces.jsonl']",
+          "ok": true
+        },
+        {
+          "check": "a live smoke episode scored semantic_repair 1.0",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "v1 runtime evidence artifact parses (written by the Linux run)",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "evidence records a v1 import",
+          "detail": "None",
+          "ok": true
+        },
+        {
+          "check": "taskset loads and enumerates via the official loader",
+          "detail": "n_tasks=10",
+          "ok": true
+        },
+        {
+          "check": "TaskData is immutable",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "official validate CLI dry run at valid_rate 1.0",
+          "detail": "valid_rate=1.0",
+          "ok": true
+        },
+        {
+          "check": "tests_v1 suite green in Linux",
+          "detail": "passed=16 failed=0",
+          "ok": true
+        },
+        {
+          "check": "gold PASS vs planted-bug FAIL separation re-measured",
+          "detail": "gold=1.0 buggy=0.0",
+          "ok": true
+        },
+        {
+          "check": "evidence is for this grading.py (hash match)",
+          "detail": "stale evidence must not close the gate",
+          "ok": true
+        }
+      ],
+      "gate": "G1",
+      "status": "PASS",
+      "title": "verifiers.v1 migration"
+    },
+    {
+      "checks": [
+        {
+          "check": "VERIFIER_V2_PROTOCOL.md present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "VERIFIER_V2_REPLAY.csv present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "replay has rows",
+          "detail": "n=90",
+          "ok": true
+        },
+        {
+          "check": "replay summary artifact present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "replay coverage >= 90%",
+          "detail": "replay_coverage=0.9889",
+          "ok": true
+        },
+        {
+          "check": ">= 45 of the 50 multi-turn trajectories replayed",
+          "detail": "multi_turn_replayed=50",
+          "ok": true
+        },
+        {
+          "check": "v2_FPR <= v1_FPR",
+          "detail": "v1_FP_rate=0.2778 v2_FP_rate=0.2778",
+          "ok": true
+        },
+        {
+          "check": "v2_FNR == 0 on FULL_FIX",
+          "detail": "v2_FN_count=0",
+          "ok": true
+        },
+        {
+          "check": "FP not reduced by blanket rejection",
+          "detail": "{'c2_gold_all_pass': 'checked by scripts/check_v2_contract.py', 'c4_no_new_full_fix_rejection': True, 'c6_coverage_ge_90pct': True, 'c7_fp_not_reduced_by_over_rejecting': True}",
+          "ok": true
+        },
+        {
+          "check": "no new FULL_FIX rejection",
+          "detail": "{'c2_gold_all_pass': 'checked by scripts/check_v2_contract.py', 'c4_no_new_full_fix_rejection': True, 'c6_coverage_ge_90pct': True, 'c7_fp_not_reduced_by_over_rejecting': True}",
+          "ok": true
+        },
+        {
+          "check": "fuzz audit artifact present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "v2 rejects every contract-edge probe",
+          "detail": "3/3",
+          "ok": true
+        },
+        {
+          "check": "v2 rejects no FULL_FIX probe",
+          "detail": "0",
+          "ok": true
+        }
+      ],
+      "gate": "G2",
+      "status": "PASS",
+      "title": "Hardened verifier v2 + replay"
+    },
+    {
+      "checks": [
+        {
+          "check": "protocol frozen first",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "report present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "both budgets present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "stated verdict token",
+          "detail": "BUDGET-SENSITIVE",
+          "ok": true
+        },
+        {
+          "check": "24-turn raw trajectories present",
+          "detail": "",
+          "ok": true
+        }
+      ],
+      "gate": "G3",
+      "status": "PASS",
+      "title": "Turn-budget ablation"
+    },
+    {
+      "checks": [
+        {
+          "check": "artifact LOCALIZATION_SCALE_REPORT.md",
+          "detail": "",
+          "ok": false
+        },
+        {
+          "check": "artifact artifacts/tier_s_primary.jsonl",
+          "detail": "",
+          "ok": false
+        },
+        {
+          "check": "artifact TIER_S_REAL_MODEL_AUDIT.csv",
+          "detail": "",
+          "ok": false
+        },
+        {
+          "check": "frozen Tier S spec present",
+          "detail": "",
+          "ok": false
+        }
+      ],
+      "gate": "G4",
+      "status": "FAIL",
+      "title": "Tier S localization"
+    },
+    {
+      "checks": [
+        {
+          "check": "VERIFIER_SCALABILITY_REPORT.md present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "isolation canary artifact parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: file",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: env var",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: module global",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: child process",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: temp dir",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canary channel covered: grader secret",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "verdict-integrity canaries present",
+          "detail": "a contained process can still return a forged verdict",
+          "ok": true
+        },
+        {
+          "check": "final path contains every canary",
+          "detail": "leaked=[]",
+          "ok": true
+        },
+        {
+          "check": "every canary either executed or was refused before execution",
+          "detail": "never_ran=[]",
+          "ok": true
+        },
+        {
+          "check": "unsafe in-process control DOES leak (positive control)",
+          "detail": "control_leaks=['grader_secret', 'gold_oracle_import', 'host_file_read', 'env_var_write', 'module_global_write', 'child_process', 'temp_dir_persistence', 'verdict_tamper_tolerance', 'verdict_tamper_tolerance_evasive', 'gold_oracle_import_evasive', 'reference_bundle_unreachable', 'module_global_write_evasive']",
+          "ok": true
+        },
+        {
+          "check": "benchmark artifact parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": ">= 30 sequential grading jobs",
+          "detail": "n=30",
+          "ok": true
+        },
+        {
+          "check": "cold.mean_s recorded",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "ok": true
+        },
+        {
+          "check": "cold.p50_s recorded",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "ok": true
+        },
+        {
+          "check": "cold.p95_s recorded",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "ok": true
+        },
+        {
+          "check": "final.mean_s recorded",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "ok": true
+        },
+        {
+          "check": "final.p50_s recorded",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "ok": true
+        },
+        {
+          "check": "final.p95_s recorded",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "ok": true
+        }
+      ],
+      "gate": "G5",
+      "status": "PASS",
+      "title": "Grader scalability + isolation"
+    },
+    {
+      "checks": [
+        {
+          "check": "HEURISTIC_GATE_FP_AUDIT.md present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "FP audit artifact parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": ">= 20 benign samples",
+          "detail": "n=32",
+          "ok": true
+        },
+        {
+          "check": "every sample records source/version/license",
+          "detail": "32/32",
+          "ok": true
+        },
+        {
+          "check": "gate decisions tabulated",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "exploit suite still catches all cheats",
+          "detail": "7/7",
+          "ok": true
+        },
+        {
+          "check": "exploit suite has 7 cheats",
+          "detail": "n=7",
+          "ok": true
+        }
+      ],
+      "gate": "G6",
+      "status": "PASS",
+      "title": "Heuristic gate FP audit"
+    },
+    {
+      "checks": [
+        {
+          "check": "artifact REPRODUCIBILITY.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact FINAL_TEST_RUN.log",
+          "detail": "",
+          "ok": false
+        },
+        {
+          "check": "artifact .github/workflows/ci.yml",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact pyproject.toml",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact uv.lock",
+          "detail": "",
+          "ok": false
+        },
+        {
+          "check": "artifact LICENSE",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact CITATION.cff",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact SECURITY_MODEL.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact LIMITATIONS.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "fresh-clone log artifact parses",
+          "detail": "",
+          "ok": false
+        }
+      ],
+      "gate": "G7",
+      "status": "FAIL",
+      "title": "Packaging / CI / fresh clone"
+    },
+    {
+      "checks": [
+        {
+          "check": "FINAL_FLAGSHIP_RESEARCH_REPORT.md present",
+          "detail": "",
+          "ok": false
+        }
+      ],
+      "gate": "G8",
+      "status": "FAIL",
+      "title": "Final scientific synthesis"
+    },
+    {
+      "checks": [
+        {
+          "check": "G0-G8 all PASS before G9 runs",
+          "detail": "G9 is only meaningful after G0-G8 are green",
+          "ok": false
+        }
+      ],
+      "gate": "G9",
+      "status": "FAIL",
+      "title": "Post-success red team"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# Virtual environments -- never committed. A fresh clone must build its own, or the
+# "fresh clone" reproduction is just running the original tree from a different path.
+.venv/
+venv/
+env/
+
+# Byte-code and caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Per-run scratch. These are disposable workspaces created by the harness and the
+# sandbox; they are outputs of a run, not inputs to one.
+.sandbox_work*/
+.tier_s_work*/
+trgym_gold_*/
+trgym_probe_*/
+
+# Generated candidate templates are committed on purpose (they are task definitions,
+# and G0 hashes them), so they are NOT listed here.
+
+# OS noise
+Thumbs.db
+.DS_Store

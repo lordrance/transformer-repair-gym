@@ -1,0 +1,56 @@
+[
+  {
+    "label": "tier_h_primary",
+    "n": 20,
+    "per_label": {
+      "FULL_FIX": {
+        "n": 8,
+        "mean_reads": 10.5,
+        "mean_runs": 1.88,
+        "mean_patches": 1.5,
+        "mean_distinct_files_read": 9.5,
+        "mean_first_patch_turn": 13.12,
+        "mean_prompt_tokens": 100090.12,
+        "ran_training_frac": 0.88
+      },
+      "PARTIAL_FIX": {
+        "n": 4,
+        "mean_reads": 10.5,
+        "mean_runs": 2,
+        "mean_patches": 1.5,
+        "mean_distinct_files_read": 9,
+        "mean_first_patch_turn": 13.25,
+        "mean_prompt_tokens": 102476.25,
+        "ran_training_frac": 1.0
+      },
+      "WRONG": {
+        "n": 8,
+        "mean_reads": 10.5,
+        "mean_runs": 2.5,
+        "mean_patches": 0.5,
+        "mean_distinct_files_read": 9.5,
+        "mean_first_patch_turn": 13.67,
+        "mean_prompt_tokens": 97176.38,
+        "ran_training_frac": 0.88
+      }
+    },
+    "command_usage": {
+      "run_visible_tests": 17,
+      "run_training": 8,
+      "run_training_short": 12,
+      "run_training_json": 6
+    },
+    "mean_turns": 14,
+    "mean_reads": 10.5,
+    "mean_runs": 2.15,
+    "mean_patches": 1.1,
+    "failed_patch_total": 3,
+    "noop_total": 5,
+    "ran_training_frac": 0.9,
+    "ran_tests_frac": 0.65,
+    "submitted_frac": 0.0,
+    "budget_exhausted_frac": 1.0,
+    "prompt_tokens_total": 1988037,
+    "prompt_tokens_per_turn": 7100
+  }
+]

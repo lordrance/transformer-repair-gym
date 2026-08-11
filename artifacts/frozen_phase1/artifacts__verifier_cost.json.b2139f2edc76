@@ -1,0 +1,105 @@
+{
+  "per_task": [
+    {
+      "label": "m1_attention_regression",
+      "repeats": 2,
+      "wall_s_mean": 1.207,
+      "wall_s_max": 1.755,
+      "cpu_s_mean": 8.977,
+      "n_checks": 4,
+      "requires_training_run": false,
+      "s_per_check": 0.302
+    },
+    {
+      "label": "m2_position_encoding",
+      "repeats": 2,
+      "wall_s_mean": 0.608,
+      "wall_s_max": 0.669,
+      "cpu_s_mean": 7.25,
+      "n_checks": 4,
+      "requires_training_run": false,
+      "s_per_check": 0.152
+    },
+    {
+      "label": "m3_gradient_lifecycle",
+      "repeats": 2,
+      "wall_s_mean": 0.738,
+      "wall_s_max": 0.763,
+      "cpu_s_mean": 8.672,
+      "n_checks": 4,
+      "requires_training_run": true,
+      "s_per_check": 0.184
+    },
+    {
+      "label": "m4_schedule_accumulation",
+      "repeats": 2,
+      "wall_s_mean": 1.002,
+      "wall_s_max": 1.015,
+      "cpu_s_mean": 11.867,
+      "n_checks": 3,
+      "requires_training_run": true,
+      "s_per_check": 0.334
+    },
+    {
+      "label": "m5_masking_interaction",
+      "repeats": 2,
+      "wall_s_mean": 0.727,
+      "wall_s_max": 0.733,
+      "cpu_s_mean": 8.758,
+      "n_checks": 4,
+      "requires_training_run": false,
+      "s_per_check": 0.182
+    }
+  ],
+  "per_level": [
+    {
+      "label": "L1",
+      "repeats": 2,
+      "wall_s_mean": 0.045,
+      "wall_s_max": 0.047,
+      "cpu_s_mean": 0.461,
+      "n_checks": 4,
+      "s_per_check": 0.011
+    },
+    {
+      "label": "L2",
+      "repeats": 2,
+      "wall_s_mean": 0.137,
+      "wall_s_max": 0.138,
+      "cpu_s_mean": 1.562,
+      "n_checks": 8,
+      "s_per_check": 0.017
+    },
+    {
+      "label": "L3",
+      "repeats": 2,
+      "wall_s_mean": 1.948,
+      "wall_s_max": 1.981,
+      "cpu_s_mean": 22.883,
+      "n_checks": 7,
+      "s_per_check": 0.278
+    }
+  ],
+  "backends": [
+    {
+      "label": "in-process",
+      "repeats": 2,
+      "wall_s_mean": 0.54,
+      "wall_s_max": 0.552,
+      "cpu_s_mean": 6.398
+    },
+    {
+      "label": "docker",
+      "repeats": 2,
+      "wall_s_mean": 8.783,
+      "wall_s_max": 9.012,
+      "cpu_s_mean": 0.016
+    }
+  ],
+  "container_overhead_s": 8.243,
+  "totals": {
+    "hidden_suite_wall_s_mean_across_tasks": 0.856,
+    "slowest_task": "m1_attention_regression",
+    "training_tasks_vs_static_ratio": 1.03
+  }
+}

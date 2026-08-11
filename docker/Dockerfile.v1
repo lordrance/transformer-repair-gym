@@ -1,0 +1,36 @@
+# Linux image for the G1 verifiers.v1 migration.
+#
+# Serves two roles:
+#   1. the rollout host -- runs verifiers.v1, the transformer_repair Taskset/Task,
+#      and HOST-SIDE grading (the hidden checks execute here, never in a candidate)
+#   2. the candidate image referenced by TaskData.image -- needs torch so the
+#      candidate can run its own visible tests
+#
+# Windows cannot import verifiers.v1 at all (verifiers/v1/runtimes/limiters.py imports
+# POSIX-only fcntl for its CreationLimiter). Linux is mandatory, not a convenience.
+FROM python:3.12-slim
+
+# torch CPU wheels only; there is no GPU in this project by construction.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+      --index-url https://download.pytorch.org/whl/cpu \
+      "torch==2.5.1" \
+ && pip install --no-cache-dir --root-user-action=ignore \
+      "verifiers==0.3.0" "pytest==8.3.4" "uv"
+
+# numpy is deliberately UNPINNED here. verifiers 0.3.0 requires numpy>=2, which
+# conflicts with the numpy<2 the host venv carries. That is not cosmetic: the E2
+# contract probe turns on numpy.float64 subclassing float, so the container resolving
+# a different major numpy is exactly the sort of drift the checks must survive.
+# `type(x) is float` (not isinstance) holds under both majors -- see PROTOCOL_CHANGELOG R6.
+
+# verifiers.v1's DockerRuntime shells out to the `docker` CLI (it does not use the
+# Python SDK), so the rollout role needs the client binary. Client only -- no daemon;
+# it talks to the host daemon over the mounted socket.
+ADD https://download.docker.com/linux/static/stable/x86_64/docker-27.0.3.tgz /tmp/d.tgz
+RUN tar -xzf /tmp/d.tgz -C /tmp && mv /tmp/docker/docker /usr/local/bin/docker \
+ && rm -rf /tmp/d.tgz /tmp/docker && docker --version
+
+# A non-root user for the candidate role. Grading never runs as this user.
+RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin candidate
+
+WORKDIR /workspace

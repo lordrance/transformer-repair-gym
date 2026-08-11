@@ -1,0 +1,24 @@
+[
+  {
+    "file": "deepseek_baseline.jsonl",
+    "model": "deepseek-v4-pro",
+    "n": 20,
+    "invalid": 1,
+    "invalid_truncated": 0,
+    "prompt_tokens": 53776,
+    "completion_tokens": 43025,
+    "reasoning_tokens": 38772,
+    "visible_answer_tokens": 4253
+  },
+  {
+    "file": "deepseek_flash_baseline.jsonl",
+    "model": "deepseek-v4-flash",
+    "n": 20,
+    "invalid": 0,
+    "invalid_truncated": 0,
+    "prompt_tokens": 55356,
+    "completion_tokens": 138044,
+    "reasoning_tokens": 134144,
+    "visible_answer_tokens": 3900
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "task_id": "t1_causal_mask_off_by_one",
+    "family_id": "F1",
+    "provenance": "REAL-DERIVED",
+    "gold_naive": 1.0,
+    "gold_hardened": 1.0,
+    "buggy_naive": 0.0,
+    "buggy_hardened": 0.0,
+    "buggy_caught_by": [
+      "strict_causality",
+      "matches_reference_forward"
+    ],
+    "buggy_is_naive_exploit_gap": false,
+    "gold_hidden_wall_time_s": 1.854,
+    "verdict": "OK"
+  },
+  {
+    "task_id": "t2_rope_pairing_convention",
+    "family_id": "F2",
+    "provenance": "REAL-DERIVED",
+    "gold_naive": 1.0,
+    "gold_hardened": 1.0,
+    "buggy_naive": 0.0,
+    "buggy_hardened": 0.0,
+    "buggy_caught_by": [
+      "rope_norm_preserved",
+      "rope_relative_property",
+      "matches_reference_forward"
+    ],
+    "buggy_is_naive_exploit_gap": false,
+    "gold_hidden_wall_time_s": 1.882,
+    "verdict": "OK"
+  },
+  {
+    "task_id": "t3_rmsnorm_missing_upcast",
+    "family_id": "F3",
+    "provenance": "REAL-DERIVED",
+    "gold_naive": 1.0,
+    "gold_hardened": 1.0,
+    "buggy_naive": 0.0,
+    "buggy_hardened": 0.0,
+    "buggy_caught_by": [
+      "rms_norm_float16_no_collapse",
+      "rms_norm_matches_reference_fp16"
+    ],
+    "buggy_is_naive_exploit_gap": false,
+    "gold_hidden_wall_time_s": 2.14,
+    "verdict": "OK"
+  },
+  {
+    "task_id": "t4_grad_accum_normalization",
+    "family_id": "F4",
+    "provenance": "REAL",
+    "gold_naive": 1.0,
+    "gold_hardened": 1.0,
+    "buggy_naive": 0.0,
+    "buggy_hardened": 0.0,
+    "buggy_caught_by": [
+      "grad_accum_matches_full_batch_uneven"
+    ],
+    "buggy_is_naive_exploit_gap": false,
+    "gold_hidden_wall_time_s": 1.898,
+    "verdict": "OK"
+  },
+  {
+    "task_id": "t5_loss_ignore_index_dropped",
+    "family_id": "F5",
+    "provenance": "REAL-DERIVED",
+    "gold_naive": 1.0,
+    "gold_hardened": 1.0,
+    "buggy_naive": 0.0,
+    "buggy_hardened": 0.0,
+    "buggy_caught_by": [
+      "ignore_index_excluded_from_count",
+      "padding_does_not_change_loss"
+    ],
+    "buggy_is_naive_exploit_gap": false,
+    "gold_hidden_wall_time_s": 1.952,
+    "verdict": "OK"
+  }
+]

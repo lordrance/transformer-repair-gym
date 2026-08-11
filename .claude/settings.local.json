@@ -1,0 +1,30 @@
+﻿{
+  "permissions": {
+    "allow": [
+      "Bash(./.venv/Scripts/python.exe -m pytest -q)",
+      "Bash(./.venv/Scripts/python.exe -m pytest tests/*)",
+      "Bash(./.venv/Scripts/python.exe -m pytest tests_v1/*)",
+
+      "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/g5_isolation_canaries.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/g5_scalability_bench.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/v1_runtime_evidence.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/freeze_historical_artifacts.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/verifier_v2_replay.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/heuristic_gate_fp_audit.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/fuzz_verifier.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/compute_metrics.py *)",
+      "Bash(./.venv/Scripts/python.exe scripts/build_sandbox.py *)",
+
+      "Bash(MSYS_NO_PATHCONV=1 docker build -f docker/Dockerfile.v1 -t trgym-v1:latest docker)",
+
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python scripts/g5_isolation_canaries.py *)",
+
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python scripts/g5_scalability_bench.py *)",
+
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python scripts/v1_runtime_evidence.py *)",
+
+      "Bash(MSYS_NO_PATHCONV=1 docker run --rm -v \"e:/RL:/run/desktop/mnt/host/e/RL\" -w /run/desktop/mnt/host/e/RL -e PYTHONPATH=\"/run/desktop/mnt/host/e/RL:/run/desktop/mnt/host/e/RL/environments\" -v \"/var/run/docker.sock:/var/run/docker.sock\" -v \"/tmp:/tmp\" trgym-v1:latest python -m pytest tests_v1/*)"
+    ]
+  }
+}

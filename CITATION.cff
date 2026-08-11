@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this environment or its findings, please cite it as below."
+title: "transformer-repair-gym: a GPU-free RL environment for multi-file transformer debugging"
+abstract: >-
+  A verifiable reinforcement-learning environment in which a policy must localize and
+  repair real defects in a small transformer training repository. Grading is
+  execution-based and runs behind a trusted-comparator boundary: the container that
+  executes candidate code holds no reference implementation, no hidden checks and no
+  serialized reference data, and returns observations rather than verdicts. The
+  accompanying evidence records the three successive isolation failures (R14, R15, R16)
+  that produced that design, including the measurements that falsified the first two.
+authors:
+  - name: "Rance"
+license: MIT
+type: software
+repository-code: "https://github.com/rance/transformer-repair-gym"
+keywords:
+  - reinforcement learning
+  - verifiable rewards
+  - reward hacking
+  - program repair
+  - transformers
+  - evaluation

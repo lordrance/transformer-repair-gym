@@ -1,0 +1,90 @@
+name: CI
+
+# Two jobs, because this project has two execution environments and conflating them is
+# how the isolation claims got over-stated twice. `host` runs everything that works
+# without Docker. `sandboxed` builds the grading image and runs the tests and canaries
+# that are only meaningful against a real container -- on Windows the v1 package cannot
+# import at all, and every containment probe reports a false clean.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  host:
+    name: host suite (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e ".[dev]"
+      - name: Lint
+        run: |
+          python -m pip install ruff
+          ruff check .
+      - name: Host regression suite
+        run: python -m pytest -q --strict-markers
+      - name: Grading isolation (static half)
+        run: python -m pytest tests/test_grading_isolation.py tests/test_obs_protocol.py -q -rs
+
+  sandboxed:
+    name: sandboxed grading + isolation canaries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e ".[dev]"
+      - name: Build the grading sandbox image
+        run: python scripts/build_sandbox.py
+      - name: Isolation canaries
+        # The gating result for G5. Both columns matter: the candidate path must leak
+        # nothing, AND the deliberately unsafe in-process control must still leak. A
+        # clean control means the probes are broken, not that the grader is safe.
+        run: python scripts/g5_isolation_canaries.py
+      - name: Assert the canary artifact is clean and non-vacuous
+        run: |
+          python - <<'PY'
+          import json, sys
+          d = json.load(open("artifacts/g5_isolation_canaries.json"))
+          s = d["summary"]
+          final, control = s["sandboxed_container"], s["in_process_UNSAFE_CONTROL"]
+          problems = []
+          if final["n_leaked"]:
+              problems.append(f"candidate path leaked {final['n_leaked']}")
+          if final["channels_without_an_executing_probe"]:
+              problems.append(
+                  f"unmeasured channels {final['channels_without_an_executing_probe']}"
+              )
+          vacuous = [k for k, v in final["contained_by"].items()
+                     if v == "probe_did_not_execute"]
+          if vacuous:
+              problems.append(f"probes that never ran: {vacuous}")
+          if control["n_leaked"] < 5:
+              problems.append(
+                  f"control only leaked {control['n_leaked']}; the probes are broken"
+              )
+          print("\n".join(problems) if problems else "canaries clean and non-vacuous")
+          sys.exit(1 if problems else 0)
+          PY
+      - name: Acceptance gate
+        # Never `|| true`. A gate whose failure is swallowed is decoration.
+        run: python scripts/final_acceptance.py

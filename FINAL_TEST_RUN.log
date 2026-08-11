@@ -1,0 +1,51 @@
+FINAL_TEST_RUN
+==============
+
+Captured from the host regression suite after the R16 trusted-comparator refactor.
+Command, verbatim:
+
+    ./.venv/Scripts/python.exe -m pytest -q
+
+Platform: Windows 11, Python 3.12, CPU-only torch. Docker Desktop running (the two
+`needs_docker` tests in tests/test_grading_isolation.py execute against a real
+container rather than skipping).
+
+--- output ---
+
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+....................................................................ssss [ 94%]
+ssssssssssss                                                             [100%]
+============================== warnings summary ===============================
+tests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[m4_schedule_accumulation]
+tests/test_repo_tasks.py::test_buggy_fails_hidden_but_passes_visible[h4_schedule_triple_defect]
+  C:\Users\rance\AppData\Roaming\Python\Python312\site-packages\torch\optim\lr_scheduler.py:192: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+212 passed, 16 skipped, 2 warnings in 235.35s (0:03:55)
+
+--- reading of this run ---
+
+212 passed, 16 skipped.
+
+The 16 skips are the whole of `tests_v1/`, which cannot run on Windows: `verifiers.v1`
+imports `fcntl`. They are skipped *visibly* and that is deliberate. An earlier version of
+`pyproject.toml` written in this same session set `testpaths = ["tests"]`, which dropped
+`tests_v1` from collection altogether and turned this line into a clean-looking
+"212 passed" with no mention of the v1 suite at all. That was caught by comparing against
+the previous baseline and reverted; the skips are evidence, not noise.
+
+`tests_v1` was run separately, inside the Linux image, where it does execute:
+
+    docker run --rm -v "e:/RL:/run/desktop/mnt/host/e/RL" ... \
+      trgym-v1:latest python -m pytest tests_v1/ -q
+    -> 16 passed in 71.00s
+
+The two PyTorch warnings are emitted by the *deliberately buggy* task fixtures
+`m4_schedule_accumulation` and `h4_schedule_triple_defect`, whose planted defect is
+precisely a scheduler/optimizer ordering error. The warning is the defect announcing
+itself and is expected.
+
+No `PytestUnknownMarkWarning` appears: `needs_docker` is registered in `pyproject.toml`,
+so `--strict-markers` in CI will not turn these tests into a collection error.

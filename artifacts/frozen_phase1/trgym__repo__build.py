@@ -1,0 +1,146 @@
+"""Materialize a repo-level task workspace from the pristine template.
+
+Layout handed to the candidate:
+
+    workspace/
+      tinygpt/          <- editable package, one module mutated (or two)
+      tests/
+        test_visible.py <- the weak visible suite, replaced before grading
+      SYMPTOM.md        <- what the user reported; no file named, no root cause
+
+The gold repo is never placed inside the workspace. It is materialized in a
+separate directory that the candidate's container cannot see, which is what makes
+oracle tampering impossible rather than merely detectable.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import shutil
+from pathlib import Path
+
+from trgym.tasks.repo_specs import RepoTaskSpec
+
+TEMPLATE_DIR = Path(__file__).resolve().parents[1] / "repo_template"
+
+VISIBLE_TEST = '''"""Visible tests. Replaced before grading -- editing this file does not help."""
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from trgym_visible_checks import run_visible  # noqa: E402
+
+
+def test_visible() -> None:
+    failures = run_visible()
+    assert not failures, "visible checks failed: " + ", ".join(failures)
+'''
+
+VISIBLE_RUNNER = '''"""Runner for the visible subset of checks. Do not edit."""
+
+from pathlib import Path
+
+from trgym.repo.checks import run_repo_checks
+
+WORKSPACE = Path(__file__).resolve().parent
+VISIBLE = {visible!r}
+
+
+def run_visible():
+    results = run_repo_checks(WORKSPACE, {task_id!r}, VISIBLE)
+    return [name for name, ok, _ in results if not ok]
+
+
+if __name__ == "__main__":
+    failed = run_visible()
+    if failed:
+        print("FAIL:", ", ".join(failed))
+        raise SystemExit(1)
+    print("all visible checks passed")
+'''
+
+SYMPTOM = """# Bug report
+
+## What we are seeing
+
+{symptom}
+
+## What you have
+
+The `tinygpt/` package below trains a small decoder-only Transformer on CPU.
+It runs, it does not raise, and the visible tests pass. Something in it is
+wrong.
+
+We have not narrowed down which module is responsible.
+
+## Things you can do
+
+```
+python -m pytest tests/test_visible.py -q     # the tests we already had
+python -m tinygpt.train --steps 40            # a short training run
+python -m tinygpt.train --steps 40 --json     # ... as machine-readable history
+```
+
+## Rules
+
+- You may edit anything under `tinygpt/`.
+- Do not change public function or class names, signatures, or return types.
+- `tests/` and the files it imports are replaced before grading, so editing them
+  has no effect on your score.
+- Grading runs a larger hidden suite than the visible tests, against a reference
+  implementation you do not have access to.
+"""
+
+
+def _sha256(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def build_repo(spec: RepoTaskSpec, dest: Path, *, gold: bool = False) -> Path:
+    """Create the workspace for `spec`. `gold=True` skips the mutations."""
+    dest = Path(dest)
+    if dest.exists():
+        shutil.rmtree(dest)
+    dest.mkdir(parents=True)
+
+    shutil.copytree(TEMPLATE_DIR / "tinygpt", dest / "tinygpt")
+    (dest / "tests").mkdir()
+    (dest / "tests" / "__init__.py").write_text("", encoding="utf-8")
+
+    if not gold:
+        for rel_path, mutations in spec.mutations.items():
+            target = dest / rel_path
+            source = target.read_text(encoding="utf-8")
+            for mutation in mutations:
+                source = mutation.apply(source)
+            target.write_text(source, encoding="utf-8")
+
+    (dest / "SYMPTOM.md").write_text(SYMPTOM.format(symptom=spec.symptom), encoding="utf-8")
+    (dest / "tests" / "test_visible.py").write_text(VISIBLE_TEST, encoding="utf-8")
+    (dest / "trgym_visible_checks.py").write_text(
+        VISIBLE_RUNNER.format(visible=list(spec.visible_checks), task_id=spec.task_id),
+        encoding="utf-8",
+    )
+    return dest
+
+
+def build_gold(spec: RepoTaskSpec, dest: Path) -> Path:
+    """Materialize the untouched reference repo, for use as the protected oracle."""
+    return build_repo(spec, dest, gold=True)
+
+
+def repo_fingerprint(workspace: Path) -> dict[str, str]:
+    """Hash every editable module, for tamper detection and patch metrics."""
+    out: dict[str, str] = {}
+    pkg = Path(workspace) / "tinygpt"
+    for path in sorted(pkg.glob("*.py")):
+        out[f"tinygpt/{path.name}"] = _sha256(path.read_text(encoding="utf-8"))
+    return out
+
+
+def changed_files(workspace: Path, gold: Path) -> list[str]:
+    """Which editable modules differ from the reference."""
+    a, b = repo_fingerprint(workspace), repo_fingerprint(gold)
+    return sorted(k for k in b if a.get(k) != b[k])

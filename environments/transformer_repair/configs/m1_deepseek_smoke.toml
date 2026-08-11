@@ -1,0 +1,54 @@
+# G1's live smoke: one real DeepSeek episode through the native v1 lifecycle.
+#
+#   /usr/local/bin/eval transformer_repair @ environments/transformer_repair/configs/m1_deepseek_smoke.toml
+#
+# Invoked by absolute path because the v1 console script is named `eval`, which collides
+# with the shell builtin. `vf-eval` is the LEGACY v0 CLI and is NOT this path.
+#
+# The API key is NEVER in this file. `api_key_var` names an environment variable that
+# the v1 client resolves at run time.
+#
+# Layout follows EvalConfig: `model`/`client`/`sampling` are top level, the taskset
+# lives under `[env.taskset]`, and the single policy seat SingleAgentEnv exposes is
+# named `agent`, so its runtime/harness/budget live under `[env.agent.*]`.
+
+model = "deepseek-chat"
+
+[client]
+# ClientConfig is a discriminated union on `type`; "eval" is the inference-only
+# client, "train" is the training one. This project never uses "train".
+type = "eval"
+base_url = "https://api.deepseek.com/v1"
+api_key_var = "DEEPSEEK_API_KEY"
+
+[sampling]
+max_tokens = 4096
+
+[env.taskset]
+id = "transformer_repair"
+task_ids = ["m1_attention_regression"]
+
+[env.agent]
+# 24, not the frozen protocol's 14. G3 established this environment is BUDGET-SENSITIVE:
+# at 14 turns voluntary submission was 0/20 and budget exhaustion 20/20. A 14-turn smoke
+# therefore cannot distinguish "the environment is broken" from "it ran out of turns",
+# which is the one question a smoke exists to answer. This is an integration check, not
+# a measurement, so it gets the budget that makes it informative.
+max_turns = 24
+
+[env.agent.runtime]
+type = "docker"
+
+[env.agent.harness]
+# A built-in harness, deliberately: G1 forbids a bespoke harness that would let the
+# legacy loop keep doing the real work behind a v1 facade.
+id = "bash"
+
+[env.agent.harness.env]
+# The harness program is launched with ONLY `config.resolved_env` (v1 isolates secrets
+# from the agent's subprocesses), and its `bash` tool inherits that env. Without PATH,
+# a bare `python` is not found and the model burns turns hunting for the interpreter --
+# which is exactly what happened in the first smoke: 5 of 14 turns went to
+# `which python3` / `/usr/local/bin/python3`. This is the supported knob for it.
+PATH = "/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin"
+PYTHONDONTWRITEBYTECODE = "1"

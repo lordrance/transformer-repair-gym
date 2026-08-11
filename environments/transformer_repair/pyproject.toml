@@ -1,0 +1,20 @@
+[project]
+name = "transformer-repair"
+description = "RL environment: repair real-world Transformer training-code bugs, with a naive/hardened reward A/B"
+tags = ["train", "eval", "code", "transformer", "reward-design", "single-turn"]
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    # Pinned exactly: verifiers 0.2.x -> 0.3.x was a rewrite and the API is
+    # still moving. Phase 0 targets one known-good version on purpose.
+    "verifiers==0.3.0",
+    "torch>=2.5",
+    "datasets>=3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["transformer_repair.py"]

@@ -1,0 +1,624 @@
+{
+  "concrete_implementations": {
+    "Harness": [
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "BashHarness",
+        "module": "verifiers.v1.harnesses.bash.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "BrowserUseHarness",
+        "module": "verifiers.v1.harnesses.browser_use.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "ClaudeCodeHarness",
+        "module": "verifiers.v1.harnesses.claude_code.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "CodexHarness",
+        "module": "verifiers.v1.harnesses.codex.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "HermesAgentHarness",
+        "module": "verifiers.v1.harnesses.hermes_agent.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "KimiCodeHarness",
+        "module": "verifiers.v1.harnesses.kimi_code.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "MiniSWEAgentHarness",
+        "module": "verifiers.v1.harnesses.mini_swe_agent.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "NullHarness",
+        "module": "verifiers.v1.harnesses.null.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "OpenClawHarness",
+        "module": "verifiers.v1.harnesses.openclaw.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "PiHarness",
+        "module": "verifiers.v1.harnesses.pi.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "PoolHarness",
+        "module": "verifiers.v1.harnesses.pool.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "RLMHarness",
+        "module": "verifiers.v1.harnesses.rlm.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "Terminus2Harness",
+        "module": "verifiers.v1.harnesses.terminus_2.harness",
+        "mro": [
+          "Harness",
+          "ABC",
+          "Generic"
+        ]
+      }
+    ],
+    "Runtime": [
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "DockerRuntime",
+        "module": "verifiers.v1.runtimes.docker",
+        "mro": [
+          "Runtime",
+          "ABC",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "ModalRuntime",
+        "module": "verifiers.v1.runtimes.modal",
+        "mro": [
+          "Runtime",
+          "ABC",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "PrimeRuntime",
+        "module": "verifiers.v1.runtimes.prime",
+        "mro": [
+          "Runtime",
+          "ABC",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "SubprocessRuntime",
+        "module": "verifiers.v1.runtimes.subprocess",
+        "mro": [
+          "Runtime",
+          "ABC",
+          "object"
+        ]
+      }
+    ],
+    "Task": [
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "JudgeTask",
+        "module": "verifiers.v1.envs.agentic_judge.env",
+        "mro": [
+          "Task",
+          "Generic",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "HarborTask",
+        "module": "verifiers.v1.tasksets.harbor.taskset",
+        "mro": [
+          "Task",
+          "Generic",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "LeanTask",
+        "module": "verifiers.v1.tasksets.lean.taskset",
+        "mro": [
+          "Task",
+          "Generic",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "NeMoGymTask",
+        "module": "verifiers.v1.tasksets.nemo_gym.taskset",
+        "mro": [
+          "Task",
+          "Generic",
+          "object"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "OpenEnvTask",
+        "module": "verifiers.v1.tasksets.openenv.taskset",
+        "mro": [
+          "Task",
+          "Generic",
+          "object"
+        ]
+      }
+    ],
+    "Taskset": [
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "HarborTaskset",
+        "module": "verifiers.v1.tasksets.harbor.taskset",
+        "mro": [
+          "Taskset",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "LeanTaskset",
+        "module": "verifiers.v1.tasksets.lean.taskset",
+        "mro": [
+          "Taskset",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "NeMoGymTaskset",
+        "module": "verifiers.v1.tasksets.nemo_gym.taskset",
+        "mro": [
+          "Taskset",
+          "ABC",
+          "Generic"
+        ]
+      },
+      {
+        "abstract": false,
+        "abstract_methods": [],
+        "class": "OpenEnvTaskset",
+        "module": "verifiers.v1.tasksets.openenv.taskset",
+        "mro": [
+          "Taskset",
+          "ABC",
+          "Generic"
+        ]
+      }
+    ]
+  },
+  "limiters_public": [
+    "CACHE_DIR",
+    "CreationLimiter",
+    "LIMITER_DIR",
+    "Self",
+    "asyncio",
+    "creation_limiter",
+    "fcntl",
+    "os",
+    "time"
+  ],
+  "needle_hits": {
+    "INFINITE": [
+      "cli/debug.py",
+      "cli/eval/runner.py",
+      "cli/validate.py",
+      "taskset.py",
+      "tasksets/textarena/taskset.py"
+    ],
+    "_vf_weight": [
+      "task.py",
+      "utils/decorators.py"
+    ],
+    "def load": [
+      "cli/eval/resume.py",
+      "cli/init.py",
+      "cli/validate.py",
+      "interception/server.py",
+      "judges/rubric.py",
+      "taskset.py",
+      "tasksets/harbor/taskset.py",
+      "tasksets/lean/taskset.py",
+      "tasksets/nemo_gym/taskset.py",
+      "tasksets/openenv/taskset.py",
+      "tasksets/textarena/taskset.py",
+      "utils/loaders.py"
+    ],
+    "record_reward": [
+      "env.py",
+      "envs/agentic_judge/env.py",
+      "task.py",
+      "tasksets/harbor/env.py",
+      "tasksets/openenv/taskset.py",
+      "tasksets/textarena/taskset.py",
+      "trace.py"
+    ],
+    "reward": [
+      "__init__.py",
+      "agent.py",
+      "cli/dashboard/eval.py",
+      "cli/gepa.py",
+      "cli/init.py",
+      "cli/replay.py",
+      "configs/client.py",
+      "configs/judge.py",
+      "configs/task.py",
+      "env.py",
+      "envs/agentic_judge/env.py",
+      "envs/best_of_n/env.py",
+      "envs/user_sim/env.py",
+      "errors.py",
+      "gepa/adapter.py",
+      "graph.py",
+      "judge.py",
+      "judges/rubric.py",
+      "legacy.py",
+      "rollout.py",
+      "task.py",
+      "tasksets/harbor/env.py",
+      "tasksets/harbor/taskset.py",
+      "tasksets/lean/scoring.py",
+      "tasksets/lean/taskset.py",
+      "tasksets/nemo_gym/taskset.py",
+      "tasksets/openenv/taskset.py",
+      "tasksets/textarena/taskset.py",
+      "trace.py",
+      "utils/decorators.py",
+      "utils/format.py",
+      "utils/git.py",
+      "utils/platform.py"
+    ],
+    "reward_priority": [
+      "utils/decorators.py"
+    ],
+    "toolsets": [
+      "agent.py",
+      "cli/init.py",
+      "env.py",
+      "mcp/launch.py",
+      "rollout.py",
+      "task.py",
+      "taskset.py",
+      "tasksets/nemo_gym/taskset.py"
+    ]
+  },
+  "reward_marker_attrs": {
+    "_vf_weight": "2.0",
+    "reward": "True",
+    "reward_priority": "3"
+  },
+  "shipped_examples_and_tests": [
+    "/usr/local/lib/python3.12/site-packages/verifiers/envs/experimental/composable/tasksets/cp/test_utils.py",
+    "/usr/local/lib/python3.12/site-packages/verifiers/envs/experimental/composable/tasksets/swe/shared/test_patch.py"
+  ],
+  "submodule_import_errors": {
+    "verifiers.v1.acp.runner": "ModuleNotFoundError: No module named 'acp'",
+    "verifiers.v1.harnesses.hermes_agent.program": "ModuleNotFoundError: No module named 'acp_adapter'",
+    "verifiers.v1.harnesses.mini_swe_agent.program": "ModuleNotFoundError: No module named 'minisweagent'",
+    "verifiers.v1.harnesses.terminus_2.program": "ModuleNotFoundError: No module named 'harbor'",
+    "verifiers.v1.tasksets.nemo_gym.server": "ModuleNotFoundError: No module named 'nemo_gym'",
+    "verifiers.v1.tasksets.textarena": "ImportError: textarena requires nltk and textarena. Install with: uv add 'verifiers[ta]'"
+  },
+  "taskdata_fields": [
+    "artifacts",
+    "description",
+    "idx",
+    "image",
+    "name",
+    "network_allow",
+    "network_block",
+    "prompt",
+    "resources",
+    "system_prompt",
+    "timeout",
+    "workdir"
+  ],
+  "trace_fields": [
+    "agent",
+    "calls",
+    "errors",
+    "extra_usage",
+    "id",
+    "info",
+    "is_completed",
+    "metrics",
+    "nodes",
+    "ok",
+    "rewards",
+    "run",
+    "state",
+    "stop_condition",
+    "task",
+    "timing",
+    "tools",
+    "verifiers",
+    "version"
+  ],
+  "v1_files": [
+    "__init__.py",
+    "acp/__init__.py",
+    "acp/runner.py",
+    "agent.py",
+    "cli/__init__.py",
+    "cli/dashboard/__init__.py",
+    "cli/dashboard/base.py",
+    "cli/dashboard/eval.py",
+    "cli/dashboard/replay.py",
+    "cli/dashboard/validate.py",
+    "cli/debug.py",
+    "cli/eval/__init__.py",
+    "cli/eval/main.py",
+    "cli/eval/resume.py",
+    "cli/eval/runner.py",
+    "cli/gepa.py",
+    "cli/init.py",
+    "cli/output.py",
+    "cli/replay.py",
+    "cli/resolve.py",
+    "cli/resume.py",
+    "cli/validate.py",
+    "clients/__init__.py",
+    "clients/base.py",
+    "clients/client.py",
+    "clients/eval.py",
+    "clients/train.py",
+    "configs/__init__.py",
+    "configs/agent.py",
+    "configs/cli/__init__.py",
+    "configs/cli/debug.py",
+    "configs/cli/env.py",
+    "configs/cli/eval.py",
+    "configs/cli/init.py",
+    "configs/cli/replay.py",
+    "configs/cli/validate.py",
+    "configs/client.py",
+    "configs/env.py",
+    "configs/harness.py",
+    "configs/judge.py",
+    "configs/legacy.py",
+    "configs/retries.py",
+    "configs/serve.py",
+    "configs/task.py",
+    "configs/taskset.py",
+    "dialects/__init__.py",
+    "dialects/anthropic.py",
+    "dialects/base.py",
+    "dialects/chat.py",
+    "dialects/responses.py",
+    "env.py",
+    "envs/__init__.py",
+    "envs/agentic_judge/__init__.py",
+    "envs/agentic_judge/env.py",
+    "envs/best_of_n/__init__.py",
+    "envs/best_of_n/env.py",
+    "envs/shared_agentic_judge/__init__.py",
+    "envs/single_agent/__init__.py",
+    "envs/single_agent/env.py",
+    "envs/user_sim/__init__.py",
+    "envs/user_sim/env.py",
+    "episode.py",
+    "errors.py",
+    "gepa/__init__.py",
+    "gepa/adapter.py",
+    "gepa/config.py",
+    "gepa/dataset.py",
+    "gepa/reflection.py",
+    "gepa/runner.py",
+    "graph.py",
+    "harness.py",
+    "harnesses/__init__.py",
+    "harnesses/bash/__init__.py",
+    "harnesses/bash/harness.py",
+    "harnesses/bash/program.py",
+    "harnesses/browser_use/__init__.py",
+    "harnesses/browser_use/harness.py",
+    "harnesses/browser_use/program.py",
+    "harnesses/claude_code/__init__.py",
+    "harnesses/claude_code/harness.py",
+    "harnesses/codex/__init__.py",
+    "harnesses/codex/harness.py",
+    "harnesses/hermes_agent/__init__.py",
+    "harnesses/hermes_agent/harness.py",
+    "harnesses/hermes_agent/program.py",
+    "harnesses/kimi_code/__init__.py",
+    "harnesses/kimi_code/harness.py",
+    "harnesses/mini_swe_agent/__init__.py",
+    "harnesses/mini_swe_agent/harness.py",
+    "harnesses/mini_swe_agent/program.py",
+    "harnesses/node.py",
+    "harnesses/null/__init__.py",
+    "harnesses/null/harness.py",
+    "harnesses/null/program.py",
+    "harnesses/openclaw/__init__.py",
+    "harnesses/openclaw/harness.py",
+    "harnesses/pi/__init__.py",
+    "harnesses/pi/harness.py",
+    "harnesses/pool/__init__.py",
+    "harnesses/pool/harness.py",
+    "harnesses/rlm/__init__.py",
+    "harnesses/rlm/harness.py",
+    "harnesses/terminus_2/__init__.py",
+    "harnesses/terminus_2/harness.py",
+    "harnesses/terminus_2/program.py",
+    "interception/__init__.py",
+    "interception/base.py",
+    "interception/pool.py",
+    "interception/server.py",
+    "interception/tunnel/__init__.py",
+    "interception/tunnel/base.py",
+    "interception/tunnel/custom.py",
+    "interception/tunnel/prime.py",
+    "judge.py",
+    "judges/__init__.py",
+    "judges/reference.py",
+    "judges/rubric.py",
+    "legacy.py",
+    "mcp/__init__.py",
+    "mcp/launch.py",
+    "mcp/server.py",
+    "mcp/toolset.py",
+    "rollout.py",
+    "runtimes/__init__.py",
+    "runtimes/base.py",
+    "runtimes/docker/__init__.py",
+    "runtimes/docker/egress.py",
+    "runtimes/limiters.py",
+    "runtimes/modal.py",
+    "runtimes/prime.py",
+    "runtimes/subprocess.py",
+    "serve/__init__.py",
+    "serve/client.py",
+    "serve/pool.py",
+    "serve/server.py",
+    "serve/types.py",
+    "session.py",
+    "state.py",
+    "task.py",
+    "taskset.py",
+    "tasksets/__init__.py",
+    "tasksets/harbor/__init__.py",
+    "tasksets/harbor/env.py",
+    "tasksets/harbor/taskset.py",
+    "tasksets/lean/__init__.py",
+    "tasksets/lean/scoring.py",
+    "tasksets/lean/taskset.py",
+    "tasksets/nemo_gym/__init__.py",
+    "tasksets/nemo_gym/response.py",
+    "tasksets/nemo_gym/server.py",
+    "tasksets/nemo_gym/taskset.py",
+    "tasksets/nemo_gym/toolset.py",
+    "tasksets/openenv/__init__.py",
+    "tasksets/openenv/taskset.py",
+    "tasksets/textarena/__init__.py",
+    "tasksets/textarena/taskset.py",
+    "trace.py",
+    "types.py",
+    "utils/__init__.py",
+    "utils/aio.py",
+    "utils/artifacts.py",
+    "utils/compile.py",
+    "utils/decorators.py",
+    "utils/format.py",
+    "utils/generic.py",
+    "utils/git.py",
+    "utils/image.py",
+    "utils/install.py",
+    "utils/interrupt.py",
+    "utils/loaders.py",
+    "utils/logging.py",
+    "utils/memory.py",
+    "utils/platform.py",
+    "utils/retries.py",
+    "utils/score.py",
+    "utils/version.py"
+  ],
+  "verifiers_version": "0.3.0"
+}

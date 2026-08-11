@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "transformer-repair-gym"
+version = "0.1.0"
+description = "A GPU-free RL environment for multi-file transformer debugging, with execution-based grading behind a trusted-comparator boundary"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Rance" }]
+keywords = ["reinforcement-learning", "verifiable-rewards", "program-repair", "transformers"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.2",
+]
+
+[project.optional-dependencies]
+# The v1 runtime cannot be installed on Windows: verifiers.v1 imports fcntl. Everything
+# under `tests_v1/` therefore runs in Linux or in the project's Docker image.
+v1 = ["verifiers>=0.1"]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rance/transformer-repair-gym"
+Source = "https://github.com/rance/transformer-repair-gym"
+
+[tool.hatch.build.targets.wheel]
+packages = ["trgym", "environments"]
+
+[tool.pytest.ini_options]
+# No `testpaths`. Setting it to ["tests"] looked tidy and was a real regression: it
+# dropped `tests_v1` from the default run entirely, so `pytest -q` went from
+# "212 passed, 16 skipped" to "212 passed" and stopped reporting that the v1 suite had
+# been skipped at all. A suite that silently shrinks is worse than one that visibly
+# skips -- the 16 skips on Windows are evidence, not noise.
+markers = [
+    # Registered so `--strict-markers` does not turn a skip into a collection error. The
+    # mark is documentation only -- each test's real gate is an in-body check for a live
+    # daemon and a built image, because a mark cannot tell whether Docker is running.
+    "needs_docker: exercises a real container; self-skips when the sandbox is unavailable",
+]
+
+[tool.ruff]
+line-length = 95
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = [
+    # The candidate template and the probe deliberately duplicate code; that duplication
+    # is the security boundary, not an oversight.
+    "B905",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Generated candidate-facing sources are authored to look like an ordinary small repo,
+# not to satisfy this project's lint profile.
+"trgym/repo_template/**" = ["ALL"]
+"trgym/repo_template_s/**" = ["ALL"]

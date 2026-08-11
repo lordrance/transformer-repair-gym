@@ -1,0 +1,19 @@
+# Official v1 CLI config for a single-task dry run.
+#   validate transformer_repair --only-gold @ environments/transformer_repair/configs/m1_smoke.toml
+#
+# List-valued fields must come from TOML (or JSON); pydantic_config will not build a
+# list from a bare CLI scalar.
+#
+# The v1 docker runtime bind-mounts a host `/tmp/vf-proxy-*` path for its proxy
+# runtime bind-mounts a host `/tmp/vf-proxy-*` path for its proxy listener, which
+# cannot resolve when the CLI itself runs inside a container talking to the host
+# daemon (docker-out-of-docker). The Docker runtime is proven separately and
+# directly by tests_v1/test_v1_migration.py::test_docker_runtime_actually_executes_candidate_code.
+# See FALLBACK_EXECUTION_LOG (G1 / TYPE B).
+
+[taskset]
+id = "transformer_repair"
+task_ids = ["m1_attention_regression"]
+
+[runtime]
+type = "docker"

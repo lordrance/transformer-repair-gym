@@ -1,0 +1,127 @@
+19:35:40    INFO eval config:
+{
+  "env": {
+    "id": "",
+    "taskset": {
+      "id": "transformer_repair",
+      "task": {
+        "judges": [],
+        "workdir": "/workspace/repo",
+        "visible_timeout": 300,
+        "grade_timeout": 600,
+        "use_contract_layer": true
+      },
+      "system_prompt": null,
+      "docker_image": "trgym-v1:latest",
+      "tiers": [
+        "M",
+        "H"
+      ],
+      "task_ids": [
+        "m1_attention_regression"
+      ]
+    },
+    "timeout": {
+      "episode": null,
+      "finalize": null
+    },
+    "retries": {
+      "max_retries": 0,
+      "include": [],
+      "exclude": []
+    },
+    "max_concurrent_agents": 1,
+    "interception": {
+      "type": "elastic",
+      "multiplex": 32
+    },
+    "agent": {
+      "harness": {
+        "id": "bash",
+        "env": {},
+        "forward_env": [],
+        "tool_timeout": 600.0,
+        "disabled_tools": null,
+        "skills": [],
+        "edit": true,
+        "search": false
+      },
+      "runtime": {
+        "allow": [
+          "*"
+        ],
+        "block": [],
+        "type": "docker",
+        "image": "python:3.11-slim",
+        "workdir": "/app",
+        "cpu": null,
+        "memory": null,
+        "gpu": null,
+        "disk": null
+      },
+      "model": null,
+      "client": null,
+      "sampling": null,
+      "max_turns": 14,
+      "max_input_tokens": null,
+      "max_output_tokens": null,
+      "max_total_tokens": null,
+      "timeout": {
+        "setup": null,
+        "rollout": null,
+        "finalize": null,
+        "scoring": null
+      },
+      "retries": {
+        "max_retries": 0,
+        "include": [],
+        "exclude": []
+      }
+    }
+  },
+  "serve": {
+    "pool": {
+      "type": "elastic",
+      "max_workers": null,
+      "multiplex": 128
+    },
+    "address": "tcp://127.0.0.1:5000",
+    "max_concurrent": null
+  },
+  "legacy": {
+    "id": null,
+    "args": {},
+    "extra_env_kwargs": {}
+  },
+  "model": "deepseek-chat",
+  "client": {
+    "base_url": "https://api.deepseek.com/v1",
+    "api_key_var": "DEEPSEEK_API_KEY",
+    "headers": {},
+    "type": "eval"
+  },
+  "sampling": {
+    "temperature": null,
+    "top_p": null,
+    "reasoning_effort": null,
+    "max_tokens": 4096
+  },
+  "num_tasks": null,
+  "num_rollouts": 1,
+  "shuffle": false,
+  "max_concurrent": 128,
+  "verbose": false,
+  "rich": true,
+  "server": false,
+  "push": true,
+  "output_dir": "/work/artifacts/raw/v1_smoke"
+}
+19:35:40    INFO running 1x1 rollouts on deepseek-chat
+19:35:40    INFO results: /work/artifacts/raw/v1_smoke
+19:35:40    INFO rollout start: id=d7ceb7d7ad4f49578e967c50d6630b8f task=0 harness=bash runtime=docker
+19:35:40    INFO interception up: url=http://127.0.0.1:33281
+19:35:40    INFO interception pool: 1 server(s), multiplex=32
+19:35:51    INFO docker: started container d7ceb7d7ad4f49578e967c50d6630b8f (image=trgym-v1:latest)
+19:36:50    INFO rollout done: id=d7ceb7d7ad4f49578e967c50d6630b8f task=0 reward=0.000 turns=14 stop=max_turns
+19:36:50 WARNING --push: no PRIME_API_KEY (set it or run `prime login`); skipping upload
+19:36:50    INFO interception down: url=http://127.0.0.1:33281
