@@ -1,0 +1,35 @@
+only_setup = false
+only_gold = false
+shuffle = false
+max_concurrent = 128
+verbose = false
+rich = true
+
+[taskset]
+id = "transformer_repair"
+docker_image = "trgym-v1:latest"
+tiers = [
+    "M",
+    "H",
+]
+task_ids = [
+    "m1_attention_regression",
+]
+
+[taskset.task]
+judges = []
+workdir = "/workspace/repo"
+visible_timeout = 300
+grade_timeout = 600
+use_contract_layer = true
+
+[runtime]
+allow = [
+    "*",
+]
+block = []
+type = "docker"
+image = "python:3.11-slim"
+workdir = "/app"
+
+[timeout]

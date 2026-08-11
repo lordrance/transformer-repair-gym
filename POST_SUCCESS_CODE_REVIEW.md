@@ -77,6 +77,63 @@ Not a gate failure: the contract's G4 machine checks are file count, relevant-fi
 reference connectivity and `fraction_repo_inspected`, none of which depend on this. Worth
 knowing before anyone cites Tier S as evidence about API contracts.
 
+### A5. The trusted-comparator test is alias-blind
+
+`tests/test_grading_isolation.py::test_trusted_comparator_never_imports_candidate_code_static`
+walks the AST for calls whose function name is literally `RepoModules` and asserts the
+first argument mentions `gold_repo`. A rename evades it:
+
+```python
+from trgym.repo.visible_runtime import RepoModules as _RM
+with _RM(workspace) as cand:   # not matched
+```
+
+Not a live defect — no such alias exists — and the direct form is what a careless change
+would actually produce, so the test covers the realistic case. Recorded because the test
+reads as a general guarantee and is not one. Closing it properly needs import-alias
+resolution, which is more machinery than the risk currently justifies.
+
+### A6. A mutation that does not disable its named defence is worthless
+
+Found while building stage D, and worth stating because it is the failure mode mutation
+testing is *supposed* to prevent and can itself fall into.
+
+The first `trusted_comparator_boundary` case re-added the `/grader` mount and checked
+whether `gold_oracle_import_evasive` leaked. It was killed mid-run once case 1's artifact
+showed that probe returning `leaked=False` under exactly that mutation. The reason is
+structural: mounting the repository does not put `trgym.repo.checks` into the *probe's*
+process, and the R16 probe never imports it, so the object-graph walk finds nothing either
+way. The mutation would have "survived" while disabling nothing.
+
+A survivor caused by a mis-aimed mutation and a survivor caused by an untested defence look
+identical in the output. The case now mutates what the defence actually is — the comparator
+opening the candidate's workspace — and is verified by the test that exists for it.
+
+### A7. `repo_contract_return_types` was dead coverage — fixed
+
+The sharpest finding of stage D, and it is about a check that had been reported as working
+since verifier v2 shipped.
+
+`repo_contract_return_types` and `repo_contract_public_api` were added by v2 to close a
+confirmed hole (VERIFIER_V2_PROTOCOL.md H1: v1 accepted a submission returning a `Tensor`
+where the contract documents `float`). But **no Tier E/M/H/S task plants a return-type
+defect, and no test called either check directly.** Both could have been deleted from the
+codebase and the entire suite would still have been green.
+
+This is R11's shape one level up. R11 was a check that always passed. This is a check that
+was never asked anything — which is harder to notice, because it does not produce a
+suspicious result, it produces no result at all.
+
+Found by aiming a mutation at it and reasoning about what would turn red: nothing would
+have. The contract's instruction for this case is explicit ("if tests stay green they do
+not protect real behaviour and must be fixed"), so `tests/test_contract_checks.py` was
+added — 8 tests that exercise both checks against gold and against four separate contract
+violations. The mutation now turns them red.
+
+Note what this implies about the v2 numbers: G2's replay reports `contract_only_rejections:
+0`, and now there is a second, independent reason to read that as "the contract checks were
+never exercised on that population" rather than as evidence they are permissive.
+
 ---
 
 ## Gates examined and found sound

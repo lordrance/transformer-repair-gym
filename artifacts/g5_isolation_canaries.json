@@ -334,7 +334,7 @@
         "question": "is any serialized gold/reference data present in the candidate's world?",
         "refused_by_gate": false,
         "workspace_evidence_detail": {
-          ".canary_leak_reference": "['/tmp/trgym_gold_776i5me9', '/tmp/trgym_gold_776i5me9/gold', '/tmp/trgym_gold_i7e6xgp3', '/run/desktop/mnt/host/e/RL/.venv/Lib/site-packages/_editable_impl_transformer_repair.pth', '/run/desktop/mnt/host/e/RL/artifacts/qwen_preflight.json', '/run/desktop/mnt/host/e/RL/.sandbox_work_h/h1_attention_double_defect__gold', '/run/desktop/mnt/host/e/RL/.sandbox_work_h/h2_position_double_defect__gold', '"
+          ".canary_leak_reference": "['/tmp/trgym_gold_3evfiwpy', '/tmp/trgym_gold_3evfiwpy/gold', '/tmp/trgym_gold_8cfle96v', '/run/desktop/mnt/host/e/RL/.venv/Lib/site-packages/_editable_impl_transformer_repair.pth', '/run/desktop/mnt/host/e/RL/artifacts/qwen_preflight.json', '/run/desktop/mnt/host/e/RL/.sandbox_work/s1_causal_mask_offbyone__gold', '/run/desktop/mnt/host/e/RL/.sandbox_work/s2_padding_supervised_as_labels__gold', '/"
         },
         "workspace_evidence_files": [
           ".canary_leak_reference"

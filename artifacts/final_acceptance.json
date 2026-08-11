@@ -1,7 +1,7 @@
 {
-  "FLAGSHIP_GPU_FREE_COMPLETE": "NO",
-  "POST_SUCCESS_AUDIT": "NOT REACHED",
-  "READY_FOR_USER_REVIEW_AND_PUSH": "NO",
+  "FLAGSHIP_GPU_FREE_COMPLETE": "YES",
+  "POST_SUCCESS_AUDIT": "PASS",
+  "READY_FOR_USER_REVIEW_AND_PUSH": "YES",
   "gates": [
     {
       "checks": [
@@ -687,11 +687,31 @@
         {
           "check": "fresh-clone log artifact parses",
           "detail": "",
-          "ok": false
+          "ok": true
+        },
+        {
+          "check": "fresh clone exited 0",
+          "detail": "exit=0",
+          "ok": true
+        },
+        {
+          "check": "clone path is not the original tree",
+          "detail": "C:\\Users\\rance\\AppData\\Local\\Temp\\trgym_freshclone_hrvcjkro\\transformer-repair-gym",
+          "ok": true
+        },
+        {
+          "check": "recorded module.__file__ never resolves into the original tree",
+          "detail": "[]",
+          "ok": true
+        },
+        {
+          "check": "README commands were the ones executed",
+          "detail": "",
+          "ok": true
         }
       ],
       "gate": "G7",
-      "status": "FAIL",
+      "status": "PASS",
       "title": "Packaging / CI / fresh clone"
     },
     {
@@ -699,23 +719,143 @@
         {
           "check": "FINAL_FLAGSHIP_RESEARCH_REPORT.md present",
           "detail": "",
-          "ok": false
+          "ok": true
+        },
+        {
+          "check": "RQ1 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "RQ2 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "RQ3 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "RQ4 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "RQ5 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "RQ6 answered",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "canonical metric summary present",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "report metric hash matches the regenerated summary",
+          "detail": "sha256=e3ceaace61321a16\u2026",
+          "ok": true
+        },
+        {
+          "check": "no unevidenced superlatives",
+          "detail": "[]",
+          "ok": true
         }
       ],
       "gate": "G8",
-      "status": "FAIL",
+      "status": "PASS",
       "title": "Final scientific synthesis"
     },
     {
       "checks": [
         {
-          "check": "G0-G8 all PASS before G9 runs",
-          "detail": "G9 is only meaningful after G0-G8 are green",
-          "ok": false
+          "check": "artifact POST_SUCCESS_CODE_REVIEW.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact POST_SUCCESS_RESULT_AUDIT.json",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact POST_SUCCESS_SPOTCHECK.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "artifact POST_SUCCESS_MUTATION_TEST.md",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "result audit parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "every headline metric regenerates exactly",
+          "detail": "[]",
+          "ok": true
+        },
+        {
+          "check": "mutation artifact parses",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "mutation exercised: hidden_oracle_protection",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "mutation exercised: grading_artifact_isolation",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "mutation exercised: return_type_contract",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "mutation exercised: causal_mask",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "mutation exercised: cross_job_state_isolation",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "every mutation turned the suite RED",
+          "detail": "survived=[]",
+          "ok": true
+        },
+        {
+          "check": "all mutations restored",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "post-restore suite green",
+          "detail": "",
+          "ok": true
+        },
+        {
+          "check": "code review records a disposition for every finding",
+          "detail": "an unresolved finding must reopen a gate",
+          "ok": true
         }
       ],
       "gate": "G9",
-      "status": "FAIL",
+      "status": "PASS",
       "title": "Post-success red team"
     }
   ]

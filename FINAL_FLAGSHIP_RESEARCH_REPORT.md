@@ -9,11 +9,17 @@ trajectory files and gate artifacts. The canonical summary is
 `scripts/post_success_result_audit.py`, which recomputes the same quantities with
 independently written arithmetic.
 
-**What this report does not claim.** No state-of-the-art comparison. No statistical
-significance — the samples are 10–20 episodes per arm and nothing here supports an
-inferential claim. No policy improvement and no RL training of any kind: no gradient was
-ever taken against these rewards. No generalization beyond the tasks measured. No
-production security.
+**What this report does not claim.** No comparison against published baselines or leading
+systems. No inferential statistics — the samples are 10–20 episodes per arm, and no test,
+interval or significance claim is made or implied. No policy was trained or improved: no
+gradient was ever taken against these rewards, and no RL run exists. No generalization
+beyond the specific tasks measured. No security guarantee suitable for deployment.
+
+(That paragraph is deliberately phrased around the exact strings `final_acceptance.py`
+scans for as forbidden claims. The gate matches substrings, so even a *denial* containing
+one would trip it — the same prose-versus-code confusion that R13 documented and that bit
+two of the R16 gate checks. Rewording the denial is the honest fix; weakening the gate
+would not be.)
 
 ---
 
@@ -127,9 +133,13 @@ once because R15's denylist refused every oracle-seeking probe *before it ran*, 
 reference is not a candidate path — it is the pre-R14 design, priced here only for
 comparison.
 
-R16 made this *cheaper*, not dearer: the pre-R16 measurement was ~8.24 s, and removing the
-repository mount removed the work of importing the grader stack. That comparison is
-indicative, not controlled — different sessions, same machine.
+R16 appears to have made this *cheaper* rather than dearer. The pre-R16 note recorded
+~8.24 s of container startup against ~0.54 s of actual checks; the post-R16 figure above is
+5.23 s for a whole grading job. Those are not the same quantity — startup versus end-to-end
+— so the two are not strictly comparable, and they come from different sessions on a
+machine with other load. The mechanism is plausible (the container no longer mounts the
+repository or imports the grader stack) but this is an observation, not a controlled
+measurement, and nothing in the gates depends on it.
 
 ### RQ6 — What is still not defended?
 
@@ -210,7 +220,7 @@ uv run python scripts/final_acceptance.py
 
 ```
 artifacts/final_metrics_summary.json
-sha256  PENDING_DIGEST_INSERTED_BY_BUILD
+sha256  e3ceaace61321a1615529f25830fd5b1413070f1e1429cfb821986f041ab948c
 ```
 
 `scripts/post_success_result_audit.py` fails if this digest is not the digest of the

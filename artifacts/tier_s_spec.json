@@ -270,10 +270,10 @@
   },
   "verifier": {
     "candidate_probe_sha256": "45ee47a36720845829880030edeb702b6233b6993039157bb38eb06399da1ab5",
-    "grading_sha256": "8d50df1e7d1b90b8b9c6f245a5dc1c43364620b69d69283912036a97bc63eee8",
+    "grading_sha256": "4142d55fc486c493e557ec559d54d9e15babf0b437483e837af0597d43b440f4",
     "n_forgeable_predicates": 19,
-    "obs_protocol_sha256": "cf7f7fce17cd01628c6835bd7c3b723426cae316a38da05d77b57f9fc02b4e4f",
-    "predicates_sha256": "1bd1f68aaa4ba4cdfaeb675e7efc1e582f35693429636eb6e86348455261ee86",
-    "sandbox_sha256": "60b4cdee717a192facf0ae83a0a9e67b0fcb3445f8817bbcd950234d6d735316"
+    "obs_protocol_sha256": "2cea266f015c9f4a5389d4c312edf611e3181f390d0c9e7a3c97b026b4c7e961",
+    "predicates_sha256": "179e5b654695fd7592bd056d0f4d8bfb5ffd36d86569652e3d82a4183b2e7604",
+    "sandbox_sha256": "d28d6b1dcda53456b78acd1b56d09217c0643274761e8ed96512ef4cff30802b"
   }
 }

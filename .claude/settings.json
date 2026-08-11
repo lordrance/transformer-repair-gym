@@ -21,7 +21,13 @@
       "Bash(./.venv/Scripts/python.exe scripts/tier_s_recompute_patch_metrics.py)",
       "Bash(./.venv/Scripts/python.exe scripts/final_acceptance.py)",
       "Bash(./.venv/Scripts/python.exe scripts/fresh_clone_repro.py)",
-      "Bash(./.venv/Scripts/python.exe scripts/post_success_spotcheck.py)"
+      "Bash(./.venv/Scripts/python.exe scripts/post_success_spotcheck.py)",
+      "Bash(docker ps *)",
+      "Read(//c/Users/rance/AppData/Local/Temp/**)",
+      "Bash(grep -E \"artifacts/|\\\\.md$|\\\\.csv$\")",
+      "Bash(./.venv/Scripts/python.exe scripts/post_success_mutation_test.py --keep-going)",
+      "Bash(awk '{print $6, $7}')",
+      "Bash(awk '{print $6,$7}')"
     ]
   }
 }

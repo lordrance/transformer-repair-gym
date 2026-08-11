@@ -72,12 +72,22 @@ CASES: list[Case] = [
     ),
     Case(
         name="trusted_comparator_boundary",
-        path="trgym/harness/sandbox.py",
-        find='            "-v", f"{staging}:/probe:ro",',
-        replace='            "-v", f"{staging}:/probe:ro",\n'
-                '            "-v", f"{REPO_ROOT}:/grader:ro",',
-        defence="gold is unreachable from candidate code by import or object graph (R16)",
-        verify="canary:gold_oracle_import_evasive",
+        # First attempt at this case re-added the /grader mount and checked
+        # `gold_oracle_import_evasive`. It would have SURVIVED, and for an uninteresting
+        # reason: mounting the repo does not put `trgym.repo.checks` into the *probe's*
+        # process, and the R16 probe never imports it, so the object-graph walk finds
+        # nothing either way. That mutation did not disable the defence it was named for.
+        #
+        # The real defence on this boundary is that the trusted comparator -- which holds
+        # gold -- never imports candidate code. Opening the candidate's workspace with
+        # `RepoModules` is exactly the R14 defect reintroduced from the other side.
+        path="trgym/repo/predicates.py",
+        find="    want_all = _gold_logits(task_id, state, ids_list)",
+        replace="    with RepoModules(ws):\n"
+                "        pass\n"
+                "    want_all = _gold_logits(task_id, state, ids_list)",
+        defence="the trusted comparator never imports candidate code (R16)",
+        verify="pytest:tests/test_grading_isolation.py",
     ),
     # ------------------------------------------------------------------ R15
     Case(
@@ -108,7 +118,13 @@ CASES: list[Case] = [
         find="        if type(loss) is not float:  # noqa: E721 - exact type is the contract",
         replace="        if False:  # noqa: E721 - exact type is the contract",
         defence="accumulate_gradients must return exactly float, not a subclass",
-        verify="pytest:tests/test_repo_tasks.py",
+        # Verified against tests/test_contract_checks.py, which exists because of this
+        # case. The original target was tests/test_repo_tasks.py and the mutant would have
+        # SURVIVED: no task plants a return-type defect and no test called the check, so
+        # `repo_contract_return_types` could have been deleted outright with the suite
+        # still green. Dead coverage, found exactly the way mutation testing is meant to
+        # find it.
+        verify="pytest:tests/test_contract_checks.py",
     ),
     Case(
         name="sandboxed_predicate_enforcement",
@@ -223,7 +239,13 @@ def main() -> int:
 
     for case in cases:
         path = ROOT / case.path
-        original = path.read_text(encoding="utf-8")
+        # Bytes, not text. `read_text`/`write_text` round-trip through universal newlines,
+        # so on Windows a "restore" rewrites every LF as CRLF. The file is semantically
+        # identical and its SHA-256 is not -- which silently invalidated
+        # `v1_runtime_evidence.json`'s `grading_sha256` and flipped G1 to FAIL on a
+        # line-ending change. The staleness guard was right; the harness was wrong.
+        original_bytes = path.read_bytes()
+        original = original_bytes.decode("utf-8")
         occurrences = original.count(case.find)
         row: dict = {
             "mutation": case.name,
@@ -246,11 +268,15 @@ def main() -> int:
         print(f"\n=== {case.name} ===\n  disabling: {case.defence}")
         started = time.perf_counter()
         try:
-            path.write_text(original.replace(case.find, case.replace), encoding="utf-8")
+            path.write_bytes(
+                original.replace(case.find, case.replace).encode("utf-8")
+            )
             outcome = verify_went_red(case)
         finally:
-            path.write_text(original, encoding="utf-8")
-            restored = path.read_text(encoding="utf-8") == original
+            path.write_bytes(original_bytes)
+            # Byte equality, so "restored" means the file is indistinguishable from
+            # before -- including to anything that hashes it.
+            restored = path.read_bytes() == original_bytes
             all_restored = all_restored and restored
 
         row.update(outcome)
@@ -266,6 +292,24 @@ def main() -> int:
     survived = [r["mutation"] for r in results if not r.get("tests_went_red")
                 and not r.get("went_red")]
     print("\n=== restoring and re-running clean ===")
+    # The canary and freeze cases rewrite `artifacts/g5_isolation_canaries.json` and
+    # `artifacts/tier_s_spec.json` with MUTANT results. Leaving those on disk would hand
+    # G4 and G5 a contaminated artifact that reports leaks and a failed freeze, so the
+    # clean state has to be regenerated, not assumed.
+    regenerated = {}
+    kinds = {c.verify.split(":", 1)[0] for c in cases}
+    if "canary" in kinds:
+        code_c, _ = run(DOCKER_PREAMBLE + ["python", "scripts/g5_isolation_canaries.py"])
+        art = json.loads((ROOT / "artifacts" / "g5_isolation_canaries.json").read_text())
+        leaked = ((art.get("summary") or {}).get("sandboxed_container") or {}).get("n_leaked")
+        regenerated["canaries_clean_n_leaked"] = leaked
+        print(f"  canaries regenerated clean: n_leaked={leaked}")
+    if "freeze" in kinds:
+        code_f, _ = run(DOCKER_PREAMBLE + ["python", "scripts/tier_s_freeze.py"])
+        art = json.loads((ROOT / "artifacts" / "tier_s_spec.json").read_text())
+        regenerated["freeze_clean_frozen"] = art.get("frozen")
+        print(f"  freeze regenerated clean: frozen={art.get('frozen')}")
+
     code, tail = run([PY, "-m", "pytest", "-q"])
     post_ok = code == 0
     print(tail[-400:])
@@ -278,6 +322,11 @@ def main() -> int:
         "survived": survived,
         "all_restored": all_restored,
         "post_restore_tests_pass": post_ok,
+        "post_restore_artifacts": regenerated,
+        "artifacts_clean_after_restore": (
+            regenerated.get("canaries_clean_n_leaked") in (0, None)
+            and regenerated.get("freeze_clean_frozen") in (True, None)
+        ),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")

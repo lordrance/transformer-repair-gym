@@ -615,3 +615,79 @@ S therefore needs either a `template` field threaded through `RepoTaskSpec`/`bui
 or a separate Tier S gold builder. That is surgery on the grading core which currently
 passes G1 and G5 on measured evidence — writing it unverified risks more than it saves,
 so it is left as an explicit decision for a session that can actually run the tests.
+
+---
+
+## Session 7 — G4 and G7 close. 8/10.
+
+Auto-mode was replaced with acceptEdits, which cleared the TYPE B command block. Work
+resumed from the previous RESUME HERE.
+
+### G4 — Tier S localization (PASS)
+
+`build_tier_s_template.py` executed for the first time. It wrote **48** files, not the 43
+the previous session predicted — which is why that number was labelled unverified.
+
+Freeze preflight (`scripts/tier_s_freeze.py`, before any paid call): 48 files, **89 import
+edges, 0 orphans**, only relevant files differ, gold PASSES and no-op FAILS on all three
+tasks. `frozen=true`.
+
+The anti-padding check is a graph traversal and it earned its place immediately: its first
+run flagged `_util/seeding.py` as an orphan, which turned out to be **two** bugs — the
+resolver mishandled relative imports inside a package `__init__.py` (resolving
+`from .seeding import …` to `tinygpt.seeding`), and `seeded_generator` genuinely was
+imported-but-never-called while `_data/batching.py` hand-rolled the same generator. Edge
+count went 64 → 89 after the fix.
+
+12 precommitted trajectories, `deepseek-chat`, 24 turns:
+
+```
+relevant file located     12/12      fraction of repo read: mean 0.181, max 0.271
+full fix                   9/12      structural ceiling 0.5 (1 tool call per turn)
+naive (visible) pass      12/12      naive false positives 3/12
+```
+
+Localization is not the bottleneck at 48 files. **s3 is the informative failure**: all four
+episodes opened `_optim/schedule.py` and three still failed — two repaired `_train/loop.py`
+instead, because "first step does nothing, LR curve shifted by one" is equally consistent
+with a `scheduler.step()`/`optimizer.step()` ordering bug. Opening the right file is not
+reading it correctly.
+
+**R17, found after the run and fixed without re-running.** `repo_fingerprint` hashed only
+`tinygpt/*.py`, so every Tier S subpackage edit was invisible: the first pass reported
+`edited_a_relevant_file 0/12` beside `full fix 9/12`, an impossible pair, and that
+contradiction is what exposed it. Rewards were never affected — they come from real
+grading. The patch metrics were recomputed from the graded workspaces, which still existed,
+spending **zero** trajectories, with originals kept in `*_ORIGINAL_BUGGY` fields.
+
+Budget: **24 / 30** (10 G3 + 12 G4 + 2 v1 smokes).
+
+### G7 — packaging and fresh clone (PASS)
+
+`git init` + two commits, MIT LICENSE (Rance), CITATION.cff, pyproject.toml, `uv.lock`,
+CI workflow, FINAL_TEST_RUN.log.
+
+**The fresh clone found a real dependency bug.** First run: `build_sandbox` failed, nine
+tests failed, all with `Numpy is not available`. `numpy` was never declared — the original
+`.venv` was built with `--system-site-packages` and inherited it from the system
+interpreter, so everything worked locally and only broke in a clean environment. Declared
+in `pyproject.toml`; the re-run passes end to end.
+
+The clone check interrogates the clone's own interpreter for each module's `__file__` and
+strips `PYTHONPATH`/`PYTHONHOME`/`VIRTUAL_ENV` from the child environment. All four `trgym`
+modules resolve inside the clone; none resolve back into `E:\RL`.
+
+`environments.transformer_repair` cannot import on Windows (`verifiers.v1` → `fcntl`) and
+is recorded as `platform_limited` rather than counted as a packaging defect.
+
+### Also this session
+
+- `tests/test_check_surfaces_agree.py` (28 tests). R16 left **two** implementations of
+  every check — `checks.py` (in-process) and `predicates.py` (what production grades
+  with) — and nothing forced them to agree. Found while building the mutation cases: a
+  mutation aimed at the return-type predicate would have survived because
+  `test_repo_tasks.py` never reaches it.
+- `POST_SUCCESS_CODE_REVIEW.md`: **G2's verifier v2 is unexercised.** `v1_v2_disagreements
+  == 0` across 89 replayed trajectories — v2 never once decided differently from v1. The
+  gate passes its frozen criterion (`v2_FPR <= v1_FPR`) legitimately, but no report may
+  describe v2 as an improvement, and none does.
