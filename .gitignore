@@ -3,25 +3,66 @@
 .venv/
 venv/
 env/
+ENV/
 
 # Byte-code and caches
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
+build/
+dist/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
 
-# Per-run scratch. These are disposable workspaces created by the harness and the
-# sandbox; they are outputs of a run, not inputs to one.
+# Credentials. Nothing in this project reads a key from a file -- `DEEPSEEK_API_KEY` is
+# taken from the shell environment on purpose -- so any .env appearing here is a mistake.
+.env
+.env.*
+*.pem
+*.key
+!**/repo_template*/**/*.key
+secrets.*
+credentials.*
+.netrc
+
+# Agent / IDE / editor local state. Machine-specific paths and session data; useful
+# locally, meaningless and mildly identifying in a public repository.
+.claude/
+.cursor/
+.idea/
+.vscode/
+*.swp
+*~
+
+# Per-run scratch. Disposable workspaces created by the harness and the sandbox: outputs
+# of a run, not inputs to one, and all regenerable.
 .sandbox_work*/
 .tier_s_work*/
 trgym_gold_*/
 trgym_probe_*/
+trgym_freshclone_*/
+outputs/
+*.log
+!FINAL_TEST_RUN.log
 
-# Generated candidate templates are committed on purpose (they are task definitions,
-# and G0 hashes them), so they are NOT listed here.
+# Model / dataset caches
+.cache/
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+
+# Generated candidate templates ARE committed on purpose: they are task definitions and
+# G0 hashes them. Canonical evidence under artifacts/ is likewise committed, because the
+# reported numbers are derived from it. Neither is listed above.
 
 # OS noise
 Thumbs.db
 .DS_Store
+desktop.ini

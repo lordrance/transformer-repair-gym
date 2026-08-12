@@ -1,39 +1,76 @@
-# Transformer ML-Engineering RL Environments & Reward Integrity
+# transformer-repair-gym
 
-A 15-task reinforcement-learning environment in which a model must **diagnose and
-repair real Transformer training-code defects**, plus the audit machinery to answer
-the question that comes before training:
+**An evaluation environment for LLM code repair, built to answer the question that comes
+before "what score did the model get?" — can the grader be trusted?**
 
-> Can this reward be trusted, or does it just look like it can?
+A model is given a small transformer training repository with a planted defect, a
+user-style symptom report, and no indication of which file is wrong. It must localize and
+fix the defect. The interesting engineering is not the tasks; it is keeping the *answer key*
+away from the thing being graded, which took three attempts to get right.
 
-**Status: `PUBLIC_READY_LOCAL = YES`.** Not published. GPU RL training is an
-optional future phase and was **not** performed — there are no checkpoints, no
-training curves, and no improvement metrics in this repository.
+> No RL training was performed. No gradient was ever taken against these rewards. This is
+> an evaluation environment and a verifier-integrity study, not a training result.
 
 ---
 
-## Why it matters
+## Why grader integrity is the bottleneck
 
-RL for code is bottlenecked on environments; environments are bottlenecked on
-verifiers. The 2026 literature makes that quantitative: **28.5 %** of sampled
-SWE-bench Verified tasks accept a Docker-verified *incorrect* patch, and models
-score **+14.14 pp** higher on exploitable tasks than robust ones
-([arXiv:2606.16062](https://arxiv.org/abs/2606.16062)). A pass rate on an unaudited
-verifier is not a capability measurement.
+Grade a code-repair task by running the tests the candidate can see, and you measure
+whether the visible suite passes — not whether the bug is fixed. The gap is where reward
+hacking lives, and it is large:
 
-So this project measures the verifier, not just the model.
+**Across 72 episodes, the visible suite passed 72 times. The hidden suite passed 51.**
+Twenty-one episodes scored a perfect 1.0 without fixing the defect — **including episodes
+with an empty diff**, where the model changed nothing at all.
 
-## Headline findings
+Any pass rate reported on an unaudited verifier is measuring the verifier.
 
-| finding | evidence |
+## Architecture: the candidate never sees the answer key
+
+```
+   ┌─────────────────────────┐                      ┌──────────────────────────────┐
+   │   CANDIDATE CONTAINER   │   validated          │     TRUSTED COMPARATOR       │
+   │                         │   observations       │                              │
+   │  • candidate's repo     │ ───────────────────► │  • gold reference repo       │
+   │  • standalone probe     │   (nonced, typed,    │  • hidden checks             │
+   │  • public task inputs   │    size-bounded,     │  • all pass/fail predicates  │
+   │                         │    no pickle)        │                              │
+   │  NO gold. NO oracle.    │                      │  never imports candidate code│
+   │  NO template. NO repo.  │ ◄─── public inputs ─ │                              │
+   └─────────────────────────┘      only            └──────────────────────────────┘
+        --network=none                                    runs after the container exits
+        --cap-drop=ALL                                    decides the verdict here
+        --read-only, uid 10001
+```
+
+The candidate computes **observations** — its own logits, its own loss values — and returns
+them. It never returns a verdict, because a verdict computed inside the candidate's process
+is a verdict the candidate can forge.
+
+Getting here took three iterations, and the first two *measured clean while being wrong*:
+
+| | what was believed | what was actually true |
+|---|---|---|
+| **R14** | grading is isolated | grading imported candidate code into the process holding gold |
+| **R15** | the container is the boundary | inside it, candidate code could set `ATOL = 1e9` and pass a broken tree |
+| **R16** | a pattern denylist stops oracle access | the whole repo was mounted at `/grader`; `open('/grader/trgym/repo/checks.py')` was enough |
+
+R16's fix is structural rather than defensive: remove the oracle from the room.
+
+## Measured results
+
+| result | number |
 |---|---|
-| **A weak verifier gets worse as tasks get harder.** Naive false-positive rate on real rollouts climbs **0.10 → 0.20 → 0.60** with difficulty, while the hardened verifier holds at **0.00 FPR / 0.00 FNR** across all 50 trajectories | §11 of the report |
-| **The naive verifier accepts 9/9 constructed non-fixes** — including three that never touch the bug — at a 69 % disagreement rate with hardened | `VERIFIER_FUZZ_AUDIT.md` |
-| **A measured difficulty gradient**: 4 too-easy, 4 in-band, 2 too-hard across ten repo-level tasks, from one redesign round | `DIFFICULTY_DISTRIBUTION.md` |
-| **Zero natural reward hacking in 50 trajectories** — reported as *not observed under this distribution*, not as "secure" | §11 |
-| **Trajectory shape carries no signal about outcome.** Success and failure read 10.5 files each, identical to one decimal | `TRAJECTORY_EFFICIENCY.md` |
-| **With AdamW, gradient-magnitude bugs do not produce NaN.** Three candidate tasks were measured and rejected because of it; omitting `zero_grad` made the loss *better* than gold | `REAL_BUG_EVIDENCE.md` F6 |
-| **Our own independent audit oracle was blind to a whole task family** and produced two wrong labels before being caught. Fixing it *lowered* our headline number | `PROTOCOL_CHANGELOG.md` R3 |
+| Visible-only grading accepts non-fixes | **21 / 72** episodes scored 1.0 without repairing the defect, incl. empty diffs |
+| Candidate-container isolation | **0 / 17** probes leaked, **17 / 17 executed**; unsafe control still leaks **12 / 17** |
+| Mutation testing of the verifier itself | **8 / 8** deliberate breakages turned the right check RED; **0 survivors** |
+| Repo-scale localization (48-file package) | defect file located **12 / 12**, repaired **9 / 12**, while reading **≤ 27 %** of the repo |
+| Clean-room reproducibility | fresh `git clone` + lockfile install reproduces every result; no module resolves back into the original tree |
+
+`17 / 17 executed` is load-bearing. Three earlier versions of the isolation suite reported
+clean containment while measuring nothing at all — once because the package could not import
+on the host, once because the "unsafe" control was secretly calling the safe grader, and once
+because a denylist refused every probe *before it ran*, so "contained" meant "never happened".
 
 ## Architecture
 
@@ -55,6 +92,15 @@ Three tiers, as stepping stones inside the same bug families
 | **E** | 5 | one file, location and failing property both disclosed |
 | **M** | 5 | 8-module package, location withheld, symptom-only, multi-turn |
 | **H** | 5 | 2–3 **interacting** defects — fixing one is not enough |
+| **S** | 3 | **48-file** package; the eight public modules are facades and the defect sits 3–4 levels beneath the one the symptom names |
+
+Tier S exists to separate *localization* from *repair*. With one tool call per turn and a
+24-turn budget, reading all 48 files is impossible by construction (ceiling: 0.5 of the
+repo). Observed: the model read a mean of 18 % and found the right file every time — so at
+this scale, localization is not the bottleneck. The failures are more interesting: on
+`s3_warmup_offbyone` all four episodes opened the correct file and three still failed, two
+of them repairing the training loop instead of the scheduler. Opening the right file is not
+the same as reading it correctly.
 
 ## An example task
 
@@ -90,23 +136,46 @@ The load-bearing design decision is that **the gold repo is never mounted**. Pha
 file; no static gate catches it. It fails only because the oracle is unreachable.
 *An oracle the candidate can reach is not an oracle.*
 
+## What this is, and what it is not
+
+**Controlled and synthetic.** The repository is a scale model of ML-engineering debugging,
+not a research codebase. Defects are *planted* — derived from real documented bugs
+(`REAL_BUG_EVIDENCE.md`) but injected, not naturally occurring. This is not SWE-bench: no
+real pull requests, no real issue threads.
+
+**Measured.** Every number above is regenerated from raw trajectories and artifacts by
+`scripts/build_final_metrics_summary.py`, whose output digest is pinned in the research
+report and re-verified by an independently written recomputation.
+
+**Not claimed.** No comparison against published systems or leading agents. No inferential
+statistics — samples are 10–20 episodes per arm and no test or interval is reported. No
+policy was trained or improved. No generalization beyond these tasks. No security guarantee
+suitable for deployment.
+
 ## Limitations
 
-- Measures **RL environment readiness**, not RL training effectiveness. No policy
-  was trained.
-- n = 4 episodes per task. No p-values, no significance claims, no SOTA claims.
-- Every difficulty number is difficulty **at a 14-turn budget**; 39 of 40 episodes
-  ended on budget exhaustion rather than by the model's choice.
-- Both models are DeepSeek. A shared idiosyncrasy would look like a task property.
-- **Known open gap:** the Tier M/H hardened suite has no L1 return-type check, so a
-  semantically-correct contract violation passes. Documented as verification
-  horizon item H1 rather than quietly patched mid-measurement.
-- The 8-module repo is a scale model of ML-engineering debugging, not a research
-  codebase.
+- **No RL.** Despite the domain, no policy was trained. This measures environment and
+  verifier readiness.
+- **Small n.** 10–20 episodes per arm; Tier S is n = 4 per task. The s1/s2 versus s3 split
+  (8/8 against 1/4) is large and deliberately uninterpreted.
+- **One model family.** All trajectories are DeepSeek. A shared idiosyncrasy would look
+  like a task property.
+- **19 of 23 predicates are forgeable.** Moving verdicts to the trusted comparator stops a
+  candidate *deciding* its result; it does not make an untrusted process's self-report
+  true. Only the four gold-backed checks are unforgeable. See `predicates.FORGEABLE` and
+  `SECURITY_MODEL.md`.
+- **Verifier v2 is unexercised on the replay population.** `v1_v2_disagreements == 0`
+  across 89 replayed trajectories: the hardened checks exist, but that data never triggers
+  them. It is *not* evidence that v2 reduces false positives, and nothing here says it is.
+- **One Tier S symptom names its subsystem.** `s1` mentions the team "refactored the
+  attention internals", which narrows the search space. Noticed after the task was frozen
+  and disclosed rather than retuned.
+- Budget-bound difficulty: most episodes end on budget exhaustion, not by the model
+  choosing to stop.
 
 Six known miss-classes are enumerated in
-[`VERIFIER_QUALITY_MATRIX.md`](VERIFIER_QUALITY_MATRIX.md). There is no claim
-anywhere that the reward is sound.
+[`VERIFIER_QUALITY_MATRIX.md`](VERIFIER_QUALITY_MATRIX.md). There is no claim anywhere that
+the reward is sound.
 
 ## Reproduce
 

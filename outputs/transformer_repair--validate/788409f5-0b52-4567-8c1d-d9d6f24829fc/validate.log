@@ -1,4 +1,0 @@
-22:55:30    INFO validating 1/1 task(s) from transformer_repair on the docker runtime (gold+setup)
-22:55:30    INFO results: outputs/transformer_repair--validate/788409f5-0b52-4567-8c1d-d9d6f24829fc
-22:55:31    INFO docker: started container validate-gold-0-7219a5e6 (image=trgym-v1:latest)
-22:55:35    INFO docker: started container validate-setup-0-cdde6d51 (image=trgym-v1:latest)
