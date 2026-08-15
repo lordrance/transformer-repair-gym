@@ -92,6 +92,13 @@ jobs:
           print("\n".join(problems) if problems else "canaries clean and non-vacuous")
           sys.exit(1 if problems else 0)
           PY
+      - name: Build the v1 runtime image
+        # tests_v1 drives the official verifiers.v1 DockerRuntime, which starts a
+        # container from `trgym-v1:latest`. Without this the runtime tries to PULL that
+        # tag from Docker Hub and fails with "pull access denied" -- it is a local image,
+        # not a published one.
+        run: docker build -f docker/Dockerfile.v1 -t trgym-v1:latest docker
+
       - name: tests_v1 through the official v1 runtime
         # These are skipped everywhere else (Windows cannot import fcntl). This is the
         # only job that exercises the real verifiers.v1 path.
