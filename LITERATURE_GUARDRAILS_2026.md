@@ -180,7 +180,7 @@ document was written: **one 10-turn episode consumed 52,328 prompt tokens** for
    context. → `MAX_OUTPUT_CHARS`.
 3. Record turns / reads / runs / patches / tokens / cost per trajectory and ask
    whether harder tasks need *more investigation* or merely *more tokens*. →
-   `TRAJECTORY_EFFICIENCY.md`.
+   `docs/history/TRAJECTORY_EFFICIENCY.md`.
 
 ---
 
@@ -228,5 +228,5 @@ session measures **RL environment readiness**, not RL training effectiveness.
 | G4.1 four alignment gates | `scripts/source_alignment_audit.py`, `SOURCE_ALIGNMENT_AUDIT.csv` |
 | G5.1 re-validation every run | `tests/` (task audits run in CI path) |
 | G6.1 task cap, G6.2 stepping stones | `TASK_CHAINS.md`, task registry |
-| G7.1–7.3 budgets and cost accounting | `trgym/harness/tools.py`, `TRAJECTORY_EFFICIENCY.md` |
+| G7.1–7.3 budgets and cost accounting | `trgym/harness/tools.py`, `docs/history/TRAJECTORY_EFFICIENCY.md` |
 | anti-p-hacking | `PROTOCOL_CHANGELOG.md`, versioned task sets |

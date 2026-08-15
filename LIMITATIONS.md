@@ -96,5 +96,5 @@ macOS, on native Linux without Docker Desktop, or on ARM.
 ## 10. What was left unfinished
 
 Tracked live in `FINAL_WORKLOG.md`; at the time of writing G1, G4, G5, G7, G8 and G9 are not
-closed. `FINAL_FLAGSHIP_ACCEPTANCE_REPORT.md` carries the computed gate state, and
+closed. `docs/history/FINAL_FLAGSHIP_ACCEPTANCE_REPORT.md` carries the computed gate state, and
 `scripts/final_acceptance.py` recomputes it from artifacts rather than from any of this prose.

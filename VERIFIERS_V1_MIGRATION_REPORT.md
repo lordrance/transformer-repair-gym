@@ -18,7 +18,7 @@ actually exercised."*
 
 ## The finding that reshaped the plan
 
-`G1_MIGRATION_DESIGN.md` — written before reading the installed source — argued the
+`docs/history/G1_MIGRATION_DESIGN.md` — written before reading the installed source — argued the
 migration was a **polarity inversion**. The reasoning was that `Harness.launch` receives an
 `endpoint` and a `secret` and returns a `ProgramResult`, and that the package ships an `ACP`
 class with `mcp_urls`; so v1 launches the agent *inside* the runtime and has it dial out,

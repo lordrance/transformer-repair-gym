@@ -93,6 +93,6 @@ indiscriminate `docker system prune` would have destroyed those, so nothing was 
 | `artifacts/` (6.3 MB) | every headline number is regenerated from it |
 | `artifacts/frozen_phase1/` | G0 hashes these; removing them fails evidence preservation |
 | `artifacts/g5_isolation_canaries.PRE_R15_FIX.json` | substantiates the R15 narrative in `PROTOCOL_CHANGELOG.md` — evidence of a documented failure, not clutter |
-| `artifacts/claude_permission_diagnosis.json` | referenced by `FALLBACK_EXECUTION_LOG.md`; removing it would leave a dangling citation |
+| `artifacts/claude_permission_diagnosis.json` | referenced by `docs/history/FALLBACK_EXECUTION_LOG.md`; removing it would leave a dangling citation |
 | `trgym/repo_template/`, `trgym/repo_template_s/` | these *are* the task definitions, not build output |
 | historical phase reports | cited by the final report and the changelog |

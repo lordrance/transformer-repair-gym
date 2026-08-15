@@ -128,7 +128,7 @@ If G9 finds a defect: the affected gate flips to FAIL, the defect is fixed, and
 | **F** research hypothesis fails | 24 turns still fail; Tier S all 0/4 | **not an engineering failure.** Keep the negative result. Never tune tasks, prompts, sample selection or success definitions to fix it |
 
 Every Plan A failure and the fallback taken is recorded in
-`FALLBACK_EXECUTION_LOG.md`. "Needs user input" is not a permitted response
+`docs/history/FALLBACK_EXECUTION_LOG.md`. "Needs user input" is not a permitted response
 except for the four blockers below.
 
 ## The only permitted stopping blockers

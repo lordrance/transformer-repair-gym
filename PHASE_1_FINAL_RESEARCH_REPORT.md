@@ -319,7 +319,7 @@ from M to H, so the added difficulty is being paid in search, which is the inten
 
 ## 13. Trajectory analysis (RQ4)
 
-Full detail in [`TRAJECTORY_EFFICIENCY.md`](TRAJECTORY_EFFICIENCY.md).
+Full detail in [`TRAJECTORY_EFFICIENCY.md`](docs/history/TRAJECTORY_EFFICIENCY.md).
 
 | | Tier M | Tier H |
 |---|---|---|
@@ -504,7 +504,7 @@ $env:TRGYM_WORK='.sandbox_work'; $env:TRGYM_TAG='tier_m'
 [`VERIFIER_QUALITY_MATRIX.md`](VERIFIER_QUALITY_MATRIX.md) | three axes + 6-item verification horizon |
 [`DIFFICULTY_DISTRIBUTION.md`](DIFFICULTY_DISTRIBUTION.md) | per-task difficulty, all tiers |
 [`TASK_CHAINS.md`](TASK_CHAINS.md) | E→M→H stepping stones, what each tier adds |
-[`TRAJECTORY_EFFICIENCY.md`](TRAJECTORY_EFFICIENCY.md) | RQ4, five findings |
+[`TRAJECTORY_EFFICIENCY.md`](docs/history/TRAJECTORY_EFFICIENCY.md) | RQ4, five findings |
 [`SANDBOX_DESIGN.md`](SANDBOX_DESIGN.md) | threat model, container config, limitations |
 `TIER_M_REAL_MODEL_AUDIT.csv`, `TIER_H_REAL_MODEL_AUDIT.csv`, `TIER_M_CONFIRMATORY_PRO_REAL_MODEL_AUDIT.csv` | per-trajectory labels |
 `artifacts/*.jsonl` | full trajectories: every tool call, observation, patch, token count |

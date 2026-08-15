@@ -21,7 +21,7 @@ Content search across the full working tree.
 
 Five key-shaped matches were inspected individually and are all **documentation
 placeholders** — `"sk-..."`, `"<key>"`, `"<rotated key>"` — in
-`PHASE_0_FEASIBILITY_REPORT.md`, `PHASE_1_GPU_FREE_REPORT.md`,
+`PHASE_0_FEASIBILITY_REPORT.md`, `docs/history/PHASE_1_GPU_FREE_REPORT.md`,
 `scripts/run_deepseek_repo_eval.py` and `scripts/run_api_baseline.py`.
 
 By design nothing in this project reads a credential from a file. `DEEPSEEK_API_KEY` is

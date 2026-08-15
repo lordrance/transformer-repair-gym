@@ -83,7 +83,7 @@ never by re-reading the gate.
 5. Built-in references exist: `LeanTaskset`/`LeanTask` (container-graded, closest analogue),
    plus `BashHarness`/`NullHarness` and `DockerRuntime`.
 
-**The design doc's premise was wrong and evidence won.** `G1_MIGRATION_DESIGN.md` argued the
+**The design doc's premise was wrong and evidence won.** `docs/history/G1_MIGRATION_DESIGN.md` argued the
 migration was a "polarity inversion" because `Harness.launch` takes an `endpoint`/`secret`.
 The real division of labour is: **Task owns setup + grading; Harness owns the rollout.** So
 no custom harness was needed — the built-in `bash` harness drives editing while my Task
@@ -137,7 +137,7 @@ A continuation session was opened specifically to finish G1/G5 onward. **Every `
 classifier reporting that it reacts to earlier conversation content and will keep firing for
 the remainder of the conversation. Both tools returned the identical refusal, so this is not
 a shell or permission-mode issue. Classified **TYPE B**; details and the Plan A/B/C chain are
-in `FALLBACK_EXECUTION_LOG.md`.
+in `docs/history/FALLBACK_EXECUTION_LOG.md`.
 
 Consequence: **no gate advanced.** Count remains **4/10** (G0, G2, G3, G6). G1 stays FAIL.
 
