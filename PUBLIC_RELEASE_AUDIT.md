@@ -150,6 +150,20 @@ every time rather than once in a while.
 - [x] Repository URLs point at the authenticated account
 - [x] Remote created (private) and pushed
 - [x] Remote tree verified: 0 ignored paths, 0 personal addresses in commit metadata
-- [x] CI green on all five jobs
-- [ ] Remote fresh-clone reproduction
-- [ ] Visibility flipped to public
+- [x] CI green on all five jobs (ubuntu + windows × py3.11/3.12, plus sandboxed)
+- [x] Remote clone verified: cloned from GitHub, release tree present, no `.venv`,
+      `.claude`, `outputs` or `.env`
+- [x] Licence detected as MIT by GitHub's own endpoint
+- [x] `v0.1.0` (pre-enhancement baseline) and `v0.2.0` tags pushed; release published
+- [x] Visibility flipped to **public** only after the above
+
+### One limitation of this release's verification
+
+The clean-room *execution* check (`uv sync` + full suite inside a clone) was last run
+locally before v0.2 and is recorded in `artifacts/fresh_clone_run.json`. For v0.2 itself the
+equivalent evidence is CI: five jobs that start from `actions/checkout` of the pushed
+commit on machines that have never seen the development tree, install from the committed
+lockfile, and run the host suite, the isolation canaries, `tests_v1` through the official v1
+runtime, the Inspect smoke and the acceptance gate. That is a stronger independence
+guarantee than a local clone, but it is not the same artifact, and the distinction is worth
+stating rather than blurring.
