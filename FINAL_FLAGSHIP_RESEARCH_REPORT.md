@@ -220,7 +220,7 @@ uv run python scripts/final_acceptance.py
 
 ```
 artifacts/final_metrics_summary.json
-sha256  6b569b6291ae92fe6c305837f2eafbd35b2d6b40b93aa3ff5301313fa0dddbd6
+sha256  7f003f7ae0f28aafd92739cedbfc99b7aaad2dfb72d887cf28957f58d25550ef
 ```
 
 A reader-facing subset of the same data — the figures quoted in `README.md` and

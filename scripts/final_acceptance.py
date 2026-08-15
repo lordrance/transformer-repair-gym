@@ -74,6 +74,22 @@ def exists(rel: str) -> bool:
     return (ROOT / rel).exists()
 
 
+def _content_sha256(path: Path) -> str:
+    """Line-ending independent content hash.
+
+    Deliberately inlined rather than imported: this gate must run in a bare environment
+    with nothing but the standard library, so it does not depend on `trgym`. It MUST stay
+    byte-for-byte equivalent to `trgym.provenance.content_sha256`, and
+    `tests/test_provenance_hashing.py` fails if the two ever disagree.
+
+    Hashing raw bytes made these gates platform-dependent: Git stores LF, a Windows
+    checkout materialises CRLF, and a digest pinned on one OS then failed on the other for
+    a file that had not changed -- G1 reporting "stale evidence" about evidence that was
+    current, and G8 reporting a report/summary mismatch that did not exist.
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 # --------------------------------------------------------------------------- #
 # Static inspection helpers
 # --------------------------------------------------------------------------- #
@@ -333,9 +349,9 @@ def gate_g1() -> GateResult:
                  ev.get("gold_reward") == 1.0 and ev.get("buggy_reward") == 0.0,
                  f"gold={ev.get('gold_reward')} buggy={ev.get('buggy_reward')}")
         g.record("evidence is for this grading.py (hash match)",
-                 ev.get("grading_sha256") == hashlib.sha256(
-                     (ROOT / "environments" / "transformer_repair" / "grading.py").read_bytes()
-                 ).hexdigest() if grading.exists() else False,
+                 ev.get("grading_sha256") == _content_sha256(
+                     ROOT / "environments" / "transformer_repair" / "grading.py"
+                 ) if grading.exists() else False,
                  "stale evidence must not close the gate")
 
     if sys.platform != "win32":
@@ -586,7 +602,7 @@ def gate_g8() -> GateResult:
     # The report must pin the hash of the generated summary, and it must match.
     summary_path = ROOT / "artifacts" / "final_metrics_summary.json"
     if g.record("canonical metric summary present", summary_path.exists()):
-        digest = hashlib.sha256(summary_path.read_bytes()).hexdigest()
+        digest = _content_sha256(summary_path)
         g.record("report metric hash matches the regenerated summary",
                  digest in text, f"sha256={digest[:16]}…")
 

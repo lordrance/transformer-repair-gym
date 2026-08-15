@@ -40,7 +40,12 @@ TASK_ID = "m1_attention_regression"
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    # Line-ending independent: this digest is re-checked by final_acceptance G1 on
+    # whatever platform happens to run it, and raw-byte hashing made a Windows-pinned
+    # value mismatch on Linux CI for a file that had not changed. See trgym/provenance.py.
+    from trgym.provenance import content_sha256
+
+    return content_sha256(path)
 
 
 def collect() -> dict:

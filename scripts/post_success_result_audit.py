@@ -16,11 +16,12 @@ Run: python scripts/post_success_result_audit.py
 
 from __future__ import annotations
 
-import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 OUT = ROOT / "POST_SUCCESS_RESULT_AUDIT.json"
 SUMMARY = ROOT / "artifacts" / "final_metrics_summary.json"
 REPORT = ROOT / "FINAL_FLAGSHIP_RESEARCH_REPORT.md"
@@ -110,7 +111,9 @@ def main() -> int:
                 mismatches.append(f"{family}.{key}: recomputed={want} summary={got}")
 
     # The report must pin the digest of the summary as it exists on disk.
-    digest = hashlib.sha256(SUMMARY.read_bytes()).hexdigest()
+    from trgym.provenance import content_sha256
+
+    digest = content_sha256(SUMMARY)
     report_present = REPORT.exists()
     digest_in_report = report_present and digest in REPORT.read_text(encoding="utf-8")
     if report_present and not digest_in_report:

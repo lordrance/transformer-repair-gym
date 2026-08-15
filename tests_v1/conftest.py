@@ -17,17 +17,23 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-# `verifiers` is the optional `v1` extra. On Windows these tests skip anyway, because
-# `verifiers.v1` imports `fcntl` -- so the missing-dependency path was never exercised
-# locally and only appeared on Linux CI, where fcntl exists, the skip did not fire, and
-# every fixture raised ModuleNotFoundError as a collection ERROR rather than a skip.
+# `verifiers` is the optional `v1` extra, and these tests are meaningless without it.
 #
-# A missing OPTIONAL dependency must skip, not fail. Skipping at module scope also keeps
-# the omission visible in the pytest summary instead of silently shrinking the suite.
-pytest.importorskip(
-    "verifiers",
-    reason="optional 'v1' extra is not installed; `uv sync --extra v1` (Linux only)",
-)
+# `pytest.importorskip` does NOT work here: raising `Skipped` while a conftest is being
+# *loaded* is a hard error, because pytest has nothing to attach the skip to. That was the
+# first attempt and it broke collection on every platform, including the ones that had
+# been green. `collect_ignore` is the supported mechanism for "do not collect this
+# directory", and it is evaluated at exactly the right moment.
+#
+# On Windows the tests skip for an unrelated reason (`verifiers.v1` imports `fcntl`), which
+# is why the missing-dependency path went unnoticed locally and only surfaced on Linux CI.
+collect_ignore: list[str] = []
+try:  # noqa: SIM105
+    import verifiers  # noqa: F401
+except ImportError:
+    # Ignore every test module in this directory; the suite reports the reduced count
+    # rather than erroring, and the reason is stated here rather than being a mystery.
+    collect_ignore = [str(p.name) for p in Path(__file__).parent.glob("test_*.py")]
 
 TASK_ID = "m1_attention_regression"
 

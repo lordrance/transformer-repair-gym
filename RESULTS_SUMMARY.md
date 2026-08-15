@@ -3,7 +3,7 @@
 Every figure below is regenerated from raw trajectories and gate artifacts by
 `scripts/build_final_metrics_summary.py`. Canonical file:
 `artifacts/final_metrics_summary.json`, sha256
-`6b569b6291ae92fe6c305837f2eafbd35b2d6b40b93aa3ff5301313fa0dddbd6`, independently
+`7f003f7ae0f28aafd92739cedbfc99b7aaad2dfb72d887cf28957f58d25550ef`, independently
 recomputed with separate arithmetic by `scripts/post_success_result_audit.py` (45 values,
 0 mismatches). A reader-facing subset is generated at
 `artifacts/public_results_summary.json`.

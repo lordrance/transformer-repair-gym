@@ -52,10 +52,14 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
+        # The v1 extra is installed here and nowhere else. `verifiers.v1` imports fcntl,
+        # so it is Linux-only, and the acceptance gate's G1 checks load a taskset through
+        # the official runtime *live*. Without it that check reports ModuleNotFoundError
+        # and the gate cannot legitimately pass in CI.
         run: |
           python -m pip install --upgrade pip
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-          python -m pip install -e ".[dev]"
+          python -m pip install -e ".[dev,inspect,v1]"
       - name: Build the grading sandbox image
         run: python scripts/build_sandbox.py
       - name: Isolation canaries
@@ -88,11 +92,15 @@ jobs:
           print("\n".join(problems) if problems else "canaries clean and non-vacuous")
           sys.exit(1 if problems else 0)
           PY
+      - name: tests_v1 through the official v1 runtime
+        # These are skipped everywhere else (Windows cannot import fcntl). This is the
+        # only job that exercises the real verifiers.v1 path.
+        run: python -m pytest tests_v1/ -q
+
       - name: Inspect adapter smoke (deterministic, no model call)
         # Both directions. `mockllm` needs no credentials; gold must score 1.0 and the
         # planted defect 0.0, because a scorer that cannot fail is not a scorer.
         run: |
-          python -m pip install -e ".[inspect]"
           python -m inspect_ai eval inspect_adapter/transformer_repair_inspect.py \
             --model mockllm/model --log-dir /tmp/inspect_ci
           python -m inspect_ai eval inspect_adapter/transformer_repair_inspect.py \

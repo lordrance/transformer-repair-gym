@@ -301,7 +301,9 @@ def main() -> int:
     OUT.write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    digest = hashlib.sha256(OUT.read_bytes()).hexdigest()
+    from trgym.provenance import content_sha256
+
+    digest = content_sha256(OUT)
 
     # A reader-facing subset: the handful of numbers the README and RESULTS_SUMMARY
     # quote, in one small file, so a reviewer can diff the claims against the data
