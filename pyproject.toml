@@ -36,6 +36,10 @@ dependencies = [
 # The v1 runtime cannot be installed on Windows: verifiers.v1 imports fcntl. Everything
 # under `tests_v1/` therefore runs in Linux or in the project's Docker image.
 v1 = ["verifiers>=0.1"]
+# UK AISI Inspect. Optional on purpose: the native environment remains the source of
+# truth and must stay runnable without it. The adapter under `inspect_adapter/` reuses
+# the same tasks and the same trusted-comparator verifier rather than reimplementing them.
+inspect = ["inspect-ai>=0.3.250"]
 dev = [
     "pytest>=8.0",
 ]

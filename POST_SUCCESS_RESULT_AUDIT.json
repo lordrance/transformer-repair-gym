@@ -10,7 +10,7 @@
   "n_values_checked": 45,
   "report_pins_current_digest": true,
   "report_present": true,
-  "summary_sha256": "e3ceaace61321a1615529f25830fd5b1413070f1e1429cfb821986f041ab948c",
+  "summary_sha256": "6b569b6291ae92fe6c305837f2eafbd35b2d6b40b93aa3ff5301313fa0dddbd6",
   "values_checked": [
     "g5.n_leaked",
     "g5.n_payloads_witnessed",

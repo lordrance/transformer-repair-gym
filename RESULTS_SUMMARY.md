@@ -3,9 +3,10 @@
 Every figure below is regenerated from raw trajectories and gate artifacts by
 `scripts/build_final_metrics_summary.py`. Canonical file:
 `artifacts/final_metrics_summary.json`, sha256
-`e3ceaace61321a1615529f25830fd5b1413070f1e1429cfb821986f041ab948c`, independently
+`6b569b6291ae92fe6c305837f2eafbd35b2d6b40b93aa3ff5301313fa0dddbd6`, independently
 recomputed with separate arithmetic by `scripts/post_success_result_audit.py` (45 values,
-0 mismatches).
+0 mismatches). A reader-facing subset is generated at
+`artifacts/public_results_summary.json`.
 
 ---
 
@@ -89,7 +90,64 @@ This check earned its place: its first run failed because `numpy` had never been
 a dependency — the original virtualenv was built with `--system-site-packages` and inherited
 it, so everything worked locally and nine tests failed in a clean environment.
 
-## 7. Budget
+## 7. v0.2 — what the hardened verifier actually rejects
+
+G2's ordinary replay shows `v1_v2_disagreements == 0` across 89 real trajectories: agents
+essentially never produce a semantically-correct tree that violates the documented
+interface, so the contract layer is never exercised. A targeted adversarial population was
+constructed to separate the two verifiers.
+
+```
+ordinary replay, v1/v2 disagreements       0 / 89
+adversarial replay, v1 accepted           10 / 11
+adversarial replay, v2 rejected           11 / 11
+distinguishing (v1 accept, v2 reject)     10 / 11
+pre-registered expectations met           all
+```
+
+Controls behaved correctly: unmodified gold accepted by both; a real causal-mask defect
+rejected by both. The one non-distinguishing case was *predicted* to also break v1, and did.
+
+**This is not a base rate.** All 11 cases were built specifically to separate the verifiers.
+It says what v2 rejects, not how often such violations occur. See
+`VERIFIER_ADVERSARIAL_REPLAY.md`.
+
+## 8. v0.2 — forgeable predicate surface reduced
+
+| | before | after |
+|---|---|---|
+| forgeable | 19 / 23 | **14 / 23** |
+| gold-anchored (cannot be faked) | 4 / 23 | **9 / 23** |
+
+Five checks were converted by moving their fixture generation to the trusted side, so the
+trusted process can recompute gold's answer and require a match:
+`repo_padding_keys_masked`, `repo_rope_relative_property`, `repo_rope_norm_preserved`,
+`repo_visible_single_token_attention`, `repo_visible_rope_position_zero`.
+
+Sound only because these are pure functions with a unique correct answer. The
+training-dynamics checks were deliberately **not** converted: a buggy candidate's loss curve
+is supposed to diverge from gold's, so anchoring them to gold would be wrong rather than
+stricter. The two sets must partition the predicate space, and a test fails if a new check
+is added unclassified.
+
+## 9. v0.2 — Inspect compatibility
+
+A thin adapter exposes the native tasks through UK AISI Inspect's dataset/solver/scorer
+interface. It defines no checks of its own and grades through the same R16 trusted
+comparator with `fallback=False`, so an Inspect run cannot score more permissively than the
+native harness.
+
+```
+inspect eval inspect_adapter/transformer_repair_inspect.py --model mockllm/model
+    -> accuracy 1.000   (gold)
+inspect eval ... -T mode=noop --model mockllm/model
+    -> accuracy 0.000   (planted defect)
+```
+
+Deterministic, no API key, no model call. Both directions are checked because a scorer that
+cannot fail is not a scorer. Eight drift tests pin the adapter to the native suite.
+
+## 10. Budget
 
 24 / 30 precommitted trajectories (10 turn-budget ablation, 12 Tier S, 2 runtime smokes).
 Lifetime spend across all phases: 112 trajectories, **$1.2986**. No GPU training.

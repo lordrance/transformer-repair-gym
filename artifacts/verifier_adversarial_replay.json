@@ -1,0 +1,322 @@
+{
+  "adversarial": {
+    "by_category": {
+      "public_api": {
+        "n": 4,
+        "v1_accept": 3,
+        "v2_reject": 4
+      },
+      "return_type": {
+        "n": 7,
+        "v1_accept": 7,
+        "v2_reject": 7
+      }
+    },
+    "distinguishing": 10,
+    "n_cases": 11,
+    "not_distinguishing": [
+      "public_api_method_signature"
+    ],
+    "v1_accepted": 10,
+    "v2_rejected": 11
+  },
+  "all_expectations_met": true,
+  "cases": [
+    {
+      "applied": true,
+      "case": "accum_returns_tensor",
+      "category": "return_type",
+      "detail": "accumulate_gradients returns Tensor, not a Python float; the documented contract is exactly float",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/train.py",
+      "intent": "accumulate_gradients returns Tensor; contract documents exactly float. This is verbatim the v1 hole VERIFIER_V2_PROTOCOL.md H1 was written for.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "accum_returns_numpy_scalar",
+      "category": "return_type",
+      "detail": "accumulate_gradients returns float64, not a Python float; the documented contract is exactly float",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/train.py",
+      "intent": "numpy.float64 subclasses float, so isinstance() accepts it and json.dumps later refuses it. Only an exact-type check catches this.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "history_loss_numpy",
+      "category": "return_type",
+      "detail": "train()['final_loss'] is float64, not a Python float",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/train.py",
+      "intent": "train() history must be a list of Python float; numpy scalars break serialisation downstream.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "final_loss_numpy",
+      "category": "return_type",
+      "detail": "train()['final_loss'] is float64, not a Python float",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/train.py",
+      "intent": "final_loss is documented as a Python float.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "loss_sum_returns_list",
+      "category": "return_type",
+      "detail": "loss_sum must return a (loss_sum, n_tokens) 2-tuple",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/model.py",
+      "intent": "A list unpacks exactly like a 2-tuple at every call site, so nothing semantic notices. The contract says tuple.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "n_supervised_returns_tensor",
+      "category": "return_type",
+      "detail": "Batch.n_supervised is Tensor, not int",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/data.py",
+      "intent": "Batch.n_supervised documented as int; a 0-d Tensor behaves like one everywhere except the interface.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "scheduler_missing_get_last_lr",
+      "category": "return_type",
+      "detail": "scheduler is missing callable get_last_lr()",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/optim.py",
+      "intent": "A scheduler shim that steps correctly but drops get_last_lr(). Training runs fine; the documented surface is incomplete.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_return_types"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "public_api_extra_param",
+      "category": "public_api",
+      "detail": "tinygpt/optim.py: make_optimizer signature changed -- reference(model: torch.nn.Module, cfg: Config) vs (model: torch.nn.Module, cfg: Config, lr: float | None=None)",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/optim.py",
+      "intent": "A defaulted extra parameter is source-compatible for every caller and still changes the public signature.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_public_api"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_public_api"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "public_api_objective_signature",
+      "category": "public_api",
+      "detail": "tinygpt/model.py: shifted_cross_entropy_sum signature changed -- reference(logits: torch.Tensor, labels: torch.Tensor, ignore_index: int) vs (logits: torch.Tensor, labels: torch.Tensor, ignore_index: int, reduction: str=",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/model.py",
+      "intent": "Same trick on the objective's public signature.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_public_api"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_public_api"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "public_api_norm_default",
+      "category": "public_api",
+      "detail": "tinygpt/norm.py: rms_norm signature changed -- reference(x: torch.Tensor, weight: torch.Tensor, eps: float) vs (x: torch.Tensor, weight: torch.Tensor, eps: float=1e-06)",
+      "distinguishing": true,
+      "expected_v1_accept": true,
+      "expected_v2_accept": false,
+      "file": "tinygpt/norm.py",
+      "intent": "Adding a default value changes the signature without changing behaviour.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_contract_public_api"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_public_api"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "public_api_method_signature",
+      "category": "public_api",
+      "detail": "TypeError: TinyGPT.loss_sum() takes 1 positional argument but 4 were given",
+      "distinguishing": false,
+      "expected_v1_accept": false,
+      "expected_v2_accept": false,
+      "file": "tinygpt/model.py",
+      "intent": "Making a documented positional parameter keyword-only.",
+      "matched_expectation": true,
+      "v1_accept": false,
+      "v1_failed_checks": [
+        "repo_training_converges"
+      ],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_training_converges",
+        "repo_contract_return_types",
+        "repo_contract_public_api"
+      ],
+      "v2_rejected_by": [
+        "repo_contract_return_types",
+        "repo_contract_public_api"
+      ]
+    },
+    {
+      "applied": true,
+      "case": "control_gold",
+      "category": "control",
+      "detail": "",
+      "distinguishing": false,
+      "expected_v1_accept": true,
+      "expected_v2_accept": true,
+      "file": "tinygpt/train.py",
+      "intent": "Unmodified gold. Both verifiers must ACCEPT or the harness is broken.",
+      "matched_expectation": true,
+      "v1_accept": true,
+      "v1_failed_checks": [],
+      "v2_accept": true,
+      "v2_failed_checks": [],
+      "v2_rejected_by": []
+    },
+    {
+      "applied": true,
+      "case": "control_semantic_defect",
+      "category": "control",
+      "detail": "changing token 1 of a length-5 sequence moved earlier positions by 5.136e-01: the model can see the future",
+      "distinguishing": false,
+      "expected_v1_accept": false,
+      "expected_v2_accept": false,
+      "file": "tinygpt/attention.py",
+      "intent": "A real causal-mask defect. Both must REJECT: v1 is not blind, it is narrow.",
+      "matched_expectation": true,
+      "v1_accept": false,
+      "v1_failed_checks": [
+        "repo_strict_causality",
+        "repo_matches_gold_logits"
+      ],
+      "v2_accept": false,
+      "v2_failed_checks": [
+        "repo_strict_causality",
+        "repo_matches_gold_logits"
+      ],
+      "v2_rejected_by": []
+    }
+  ],
+  "controls": {
+    "control_gold": {
+      "as_expected": true,
+      "v1_accept": true,
+      "v2_accept": true
+    },
+    "control_semantic_defect": {
+      "as_expected": true,
+      "v1_accept": false,
+      "v2_accept": false
+    }
+  },
+  "ordinary_replay": {
+    "population": 90,
+    "replayed": 89,
+    "v1_FP_rate": 0.2778,
+    "v1_v2_disagreements": 0,
+    "v2_FP_rate": 0.2778
+  },
+  "task": "m1_attention_regression"
+}

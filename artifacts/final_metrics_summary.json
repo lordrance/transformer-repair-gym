@@ -126,6 +126,46 @@
       "n_samples": 32,
       "submission_level_fp_count": 0,
       "submission_level_fp_rate": 0.0
+    },
+    "cross_model_smoke": {
+      "new_spend_usd": 0.0,
+      "providers_configured": 1,
+      "reason": "only one provider is configured on this machine, so there is nothing to compare against",
+      "status": "SKIPPED"
+    },
+    "v02a_adversarial_replay": {
+      "adversarial_cases": 11,
+      "adversarial_v1_accepted": 10,
+      "adversarial_v2_rejected": 11,
+      "all_expectations_met": true,
+      "caveat": "constructed population; the distinguishing rate is a property of the construction and is NOT a base rate for real trajectories",
+      "controls_behaved": true,
+      "distinguishing": 10,
+      "ordinary_v1_v2_disagreements": 0
+    },
+    "v02b_forgeable_surface": {
+      "forgeable_before_v02b": 19,
+      "gold_anchored_before_v02b": 4,
+      "n_forgeable": 14,
+      "n_gold_anchored": 9,
+      "n_predicates": 23,
+      "partition_exact": true,
+      "still_forgeable": [
+        "repo_clipping_is_effective",
+        "repo_contract_return_types",
+        "repo_grad_accum_matches_full_batch",
+        "repo_gradients_reach_optimizer",
+        "repo_no_pad_probability_mass",
+        "repo_padding_does_not_change_loss",
+        "repo_padding_mask_reaches_model",
+        "repo_strict_causality",
+        "repo_training_converges",
+        "repo_training_stays_finite",
+        "repo_visible_loss_is_finite",
+        "repo_visible_short_train_runs",
+        "repo_visible_smoke",
+        "repo_weight_decay_excludes_gains"
+      ]
     }
   },
   "manifest_crosscheck": {

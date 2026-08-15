@@ -1,0 +1,23 @@
+{
+  "status": "SKIPPED",
+  "reason": "only one provider is configured on this machine, so there is nothing to compare against",
+  "method": "presence of provider environment variables was checked by NAME only; no value was read, printed, or logged",
+  "providers_checked": [
+    "DEEPSEEK_API_KEY",
+    "OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "GOOGLE_API_KEY",
+    "GEMINI_API_KEY",
+    "MISTRAL_API_KEY",
+    "TOGETHER_API_KEY",
+    "GROQ_API_KEY",
+    "OPENROUTER_API_KEY"
+  ],
+  "providers_configured": 1,
+  "providers_configured_names": ["DEEPSEEK_API_KEY"],
+  "minimum_required_for_comparison": 2,
+  "new_spend_incurred_usd": 0.0,
+  "spend_ceiling_usd": 3.0,
+  "blocking": false,
+  "note": "This was defined as optional and non-blocking. Every model result in this project is therefore DeepSeek-only, which is already recorded as a limitation in README.md and FINAL_FLAGSHIP_RESEARCH_REPORT.md: a shared idiosyncrasy of one model family would be indistinguishable from a property of the tasks. Adding a second provider is the cheapest single improvement to the strength of the difficulty numbers."
+}

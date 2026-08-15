@@ -18,9 +18,14 @@ from __future__ import annotations
 import hashlib
 import json
 import statistics
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+# `python scripts/foo.py` puts `scripts/` on sys.path, not the repo root, so `trgym` is
+# not importable without this. Its absence silently emptied the v0.2-B block below,
+# because the import sat inside a bare `except Exception: pass`.
+sys.path.insert(0, str(ROOT))
 OUT = ROOT / "artifacts" / "final_metrics_summary.json"
 
 
@@ -188,6 +193,62 @@ def main() -> int:
             "orphan_files": sum(len(t.get("orphan_files") or []) for t in (spec.get("tasks") or [])),
         }
 
+    # ---- v0.2-A: adversarial verifier replay
+    adv = load_json("artifacts/verifier_adversarial_replay.json") or {}
+    if adv:
+        a = adv.get("adversarial") or {}
+        summary["gates"]["v02a_adversarial_replay"] = {
+            "ordinary_v1_v2_disagreements": (adv.get("ordinary_replay") or {}).get(
+                "v1_v2_disagreements"
+            ),
+            "adversarial_cases": a.get("n_cases"),
+            "adversarial_v1_accepted": a.get("v1_accepted"),
+            "adversarial_v2_rejected": a.get("v2_rejected"),
+            "distinguishing": a.get("distinguishing"),
+            "controls_behaved": all(
+                c.get("as_expected") for c in (adv.get("controls") or {}).values()
+            ),
+            "all_expectations_met": adv.get("all_expectations_met"),
+            "caveat": (
+                "constructed population; the distinguishing rate is a property of the "
+                "construction and is NOT a base rate for real trajectories"
+            ),
+        }
+
+    # ---- v0.2-B: forgeable surface
+    # `ImportError` only. The first version caught bare `Exception`, which turned a
+    # missing sys.path entry into a silently absent section -- the summary looked fine
+    # and simply had no v0.2-B block in it. A summary that quietly omits a result is
+    # worse than one that fails, so anything other than "torch is not installed" now
+    # propagates.
+    try:
+        from trgym.repo import predicates as _pred
+    except ImportError as exc:
+        summary["gates"]["v02b_forgeable_surface"] = {"unavailable": str(exc)[:200]}
+    else:
+        summary["gates"]["v02b_forgeable_surface"] = {
+            "n_predicates": len(_pred.PREDICATES),
+            "n_forgeable": len(_pred.FORGEABLE),
+            "n_gold_anchored": len(_pred.GOLD_ANCHORED),
+            "forgeable_before_v02b": 19,
+            "gold_anchored_before_v02b": 4,
+            "partition_exact": (
+                not (_pred.FORGEABLE & _pred.GOLD_ANCHORED)
+                and _pred.FORGEABLE | _pred.GOLD_ANCHORED == set(_pred.PREDICATES)
+            ),
+            "still_forgeable": sorted(_pred.FORGEABLE),
+        }
+
+    # ---- optional cross-model comparison
+    xmodel = load_json("artifacts/cross_model_smoke.json") or {}
+    if xmodel:
+        summary["gates"]["cross_model_smoke"] = {
+            "status": xmodel.get("status"),
+            "reason": xmodel.get("reason"),
+            "providers_configured": xmodel.get("providers_configured"),
+            "new_spend_usd": xmodel.get("new_spend_incurred_usd"),
+        }
+
     # ---- Paid ledger
     spend = load_json("artifacts/total_spend.json") or {}
     contract_rows = sum(
@@ -241,6 +302,39 @@ def main() -> int:
         json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     digest = hashlib.sha256(OUT.read_bytes()).hexdigest()
+
+    # A reader-facing subset: the handful of numbers the README and RESULTS_SUMMARY
+    # quote, in one small file, so a reviewer can diff the claims against the data
+    # without reading the full summary. Derived from `summary`, never hand-maintained.
+    fam = summary["families"]
+    g = summary["gates"]
+    public = {
+        "headline": {
+            "episodes_total": sum(f["n"] for f in fam.values()),
+            "visible_suite_passed": sum(f["naive_pass"] for f in fam.values()),
+            "hidden_suite_passed": sum(f["hardened_pass"] for f in fam.values()),
+            "scored_1_0_without_repairing": sum(
+                f["naive_pass"] - f["hardened_pass"] for f in fam.values()
+            ),
+        },
+        "isolation": g.get("G5_isolation"),
+        "throughput": g.get("G5_throughput"),
+        "tier_s_localization": {
+            k: fam.get("tier_s", {}).get(k)
+            for k in ("n", "n_files_in_repo", "located_relevant_file", "full_fix",
+                      "mean_fraction_repo_inspected", "max_fraction_repo_inspected",
+                      "every_episode_inspected_less_than_all")
+        },
+        "adversarial_replay": g.get("v02a_adversarial_replay"),
+        "forgeable_surface": g.get("v02b_forgeable_surface"),
+        "cross_model_smoke": g.get("cross_model_smoke"),
+        "budget": summary["budget"],
+        "manifest_crosscheck_agrees": summary["manifest_crosscheck"]["agrees"],
+        "provenance": "generated by scripts/build_final_metrics_summary.py",
+    }
+    (ROOT / "artifacts" / "public_results_summary.json").write_text(
+        json.dumps(public, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     print(json.dumps(summary, indent=2, sort_keys=True)[:2600])
     print(f"\nfamilies: {sorted(summary['families'])}")

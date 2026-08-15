@@ -68,25 +68,58 @@ def test_each_check_is_reachable_from_both_surfaces(name: str) -> None:
     assert name in predicates.PREDICATES, f"{name} missing from predicates.PREDICATES"
 
 
-def test_gold_dependent_predicates_are_declared_unforgeable() -> None:
-    """A predicate whose ground truth is gold must not be listed as forgeable.
+def test_every_predicate_is_classified_exactly_once() -> None:
+    """`FORGEABLE` and `GOLD_ANCHORED` must partition the predicate set.
 
-    `FORGEABLE` is quoted in SECURITY_MODEL.md as the set an untrusted process could lie
-    its way through. Putting a gold-comparison check in it would understate the guarantee;
-    leaving a candidate-internal check out of it would overstate it, which is worse.
+    Both sets are quoted in SECURITY_MODEL.md. An unclassified predicate makes that
+    document incomplete; a doubly-classified one makes it contradictory. Overstating the
+    guarantee is the worse direction, so this fails loudly either way.
     """
-    gold_backed = {
+    both = sorted(predicates.FORGEABLE & predicates.GOLD_ANCHORED)
+    assert not both, f"checks claimed as both forgeable and gold-anchored: {both}"
+
+    classified = predicates.FORGEABLE | predicates.GOLD_ANCHORED
+    unclassified = sorted(set(predicates.PREDICATES) - classified)
+    assert not unclassified, (
+        f"unclassified predicates: {unclassified}. Every check must be declared either "
+        "forgeable or gold-anchored, or SECURITY_MODEL.md's claim is incomplete."
+    )
+    stale = sorted(classified - set(predicates.PREDICATES))
+    assert not stale, f"classified names that are not predicates: {stale}"
+
+
+def test_the_four_original_gold_checks_remain_anchored() -> None:
+    """The checks that were unforgeable before v0.2-B must not have regressed."""
+    original = {
         "repo_matches_gold_logits",
         "repo_supervised_token_count",
         "repo_lr_schedule_matches_gold",
         "repo_contract_public_api",
     }
-    wrongly_forgeable = sorted(gold_backed & predicates.FORGEABLE)
-    assert not wrongly_forgeable, (
-        f"gold-backed checks marked forgeable: {wrongly_forgeable}"
-    )
-    uncovered = sorted(set(predicates.PREDICATES) - predicates.FORGEABLE - gold_backed)
-    assert not uncovered, (
-        f"checks that are neither gold-backed nor declared forgeable: {uncovered}. "
-        "Every predicate must be classified, or SECURITY_MODEL.md's claim is incomplete."
-    )
+    lost = sorted(original - predicates.GOLD_ANCHORED)
+    assert not lost, f"previously gold-backed checks are no longer anchored: {lost}"
+
+
+def test_v02b_conversions_are_anchored_and_have_a_gold_fixture() -> None:
+    """The five checks v0.2-B converted must be anchored AND actually compare to gold.
+
+    Declaring a check gold-anchored without the predicate consulting gold would be a
+    documentation claim rather than a defence -- exactly the failure R15's denylist and
+    the dead contract checks both represented.
+    """
+    import inspect
+
+    converted = {
+        "repo_padding_keys_masked": "_pred_padding_keys_masked",
+        "repo_rope_relative_property": "_pred_rope_relative",
+        "repo_rope_norm_preserved": "_pred_rope_norm",
+        "repo_visible_single_token_attention": "_visible_single",
+        "repo_visible_rope_position_zero": "_visible_rope0",
+    }
+    for check, fn_name in converted.items():
+        assert check in predicates.GOLD_ANCHORED, f"{check} is not declared anchored"
+        assert check not in predicates.FORGEABLE, f"{check} is still declared forgeable"
+        src = inspect.getsource(getattr(predicates, fn_name))
+        assert "_gold_pure_outputs" in src, (
+            f"{fn_name} claims to be gold-anchored but never consults gold"
+        )

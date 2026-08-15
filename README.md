@@ -160,13 +160,19 @@ suitable for deployment.
   (8/8 against 1/4) is large and deliberately uninterpreted.
 - **One model family.** All trajectories are DeepSeek. A shared idiosyncrasy would look
   like a task property.
-- **19 of 23 predicates are forgeable.** Moving verdicts to the trusted comparator stops a
-  candidate *deciding* its result; it does not make an untrusted process's self-report
-  true. Only the four gold-backed checks are unforgeable. See `predicates.FORGEABLE` and
-  `SECURITY_MODEL.md`.
-- **Verifier v2 is unexercised on the replay population.** `v1_v2_disagreements == 0`
-  across 89 replayed trajectories: the hardened checks exist, but that data never triggers
-  them. It is *not* evidence that v2 reduces false positives, and nothing here says it is.
+- **14 of 23 predicates are forgeable** (reduced from 19 in v0.2). Moving verdicts to the
+  trusted comparator stops a candidate *deciding* its result; it does not make an untrusted
+  process's self-report true. Nine checks are now anchored to gold and cannot be faked. The
+  remainder are training-dynamics checks, which cannot be anchored: a buggy candidate's loss
+  curve is *supposed* to differ from gold's. See `predicates.FORGEABLE` /
+  `predicates.GOLD_ANCHORED` and `SECURITY_MODEL.md`.
+- **Verifier v2 does not change any decision on real trajectories.**
+  `v1_v2_disagreements == 0` across 89 replayed rollouts — agents essentially never produce
+  a semantically-correct tree that violates the documented interface. Targeted adversarial
+  replay shows what v2 *does* reject when the population contains such cases (10 of 11
+  constructed violations), but that rate is a property of the construction and is **not** a
+  base rate. v2 still may not be described as reducing false positives on real data. See
+  [`VERIFIER_ADVERSARIAL_REPLAY.md`](VERIFIER_ADVERSARIAL_REPLAY.md).
 - **One Tier S symptom names its subsystem.** `s1` mentions the team "refactored the
   attention internals", which narrows the search space. Noticed after the task was frozen
   and disclosed rather than retuned.

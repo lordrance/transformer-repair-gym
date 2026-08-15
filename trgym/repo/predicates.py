@@ -70,17 +70,38 @@ CHECK_GROUP: dict[str, str] = {
 }
 
 FORGEABLE = {
-    "repo_strict_causality", "repo_padding_keys_masked", "repo_rope_relative_property",
-    "repo_rope_norm_preserved", "repo_padding_does_not_change_loss",
+    "repo_strict_causality", "repo_padding_does_not_change_loss",
     "repo_no_pad_probability_mass", "repo_training_stays_finite",
     "repo_training_converges", "repo_weight_decay_excludes_gains",
     "repo_clipping_is_effective", "repo_gradients_reach_optimizer",
     "repo_grad_accum_matches_full_batch", "repo_contract_return_types",
     "repo_padding_mask_reaches_model", "repo_visible_smoke",
-    "repo_visible_loss_is_finite", "repo_visible_single_token_attention",
-    "repo_visible_rope_position_zero", "repo_visible_short_train_runs",
+    "repo_visible_loss_is_finite", "repo_visible_short_train_runs",
 }
-"""Checks whose ground truth is entirely internal to the candidate."""
+"""Checks whose ground truth is entirely internal to the candidate.
+
+v0.2-B moved five out of this set by anchoring them to gold on a trusted-supplied fixture:
+`repo_padding_keys_masked`, `repo_rope_relative_property`, `repo_rope_norm_preserved`,
+`repo_visible_single_token_attention`, `repo_visible_rope_position_zero`. Each is a pure
+function with a unique correct answer, so requiring a match to gold cannot fail a
+legitimately-different implementation — and a candidate cannot fabricate the answer,
+because it does not have gold.
+
+What remains here is what genuinely cannot be converted. The training-dynamics checks
+(convergence, clipping, gradient flow, accumulation) describe the candidate's own
+trajectory, which is *supposed* to diverge from gold's when the candidate is buggy;
+comparing them to gold would be wrong, not stricter. `repo_contract_return_types` reports
+Python types that only running the candidate can observe. See SECURITY_MODEL.md.
+"""
+
+GOLD_ANCHORED = {
+    "repo_matches_gold_logits", "repo_supervised_token_count",
+    "repo_lr_schedule_matches_gold", "repo_contract_public_api",
+    "repo_padding_keys_masked", "repo_rope_relative_property",
+    "repo_rope_norm_preserved", "repo_visible_single_token_attention",
+    "repo_visible_rope_position_zero",
+}
+"""Checks a candidate cannot pass by fabricating its own numbers."""
 
 
 def groups_for(names) -> list[str]:
@@ -99,23 +120,62 @@ def groups_for(names) -> list[str]:
 def build_inputs(task_id: str, groups) -> dict:
     """The minimum public inputs the candidate needs. Nothing gold-derived.
 
-    Only `gold_logits` needs anything: the token ids for the logits comparison are drawn
-    against the reference vocabulary size, so the trusted side draws them and hands them
-    over. They are uniform random ints -- they carry no information about gold's
-    *implementation*, which is the thing being protected. Drawing them here rather than
-    in the container also stops a candidate choosing inputs that flatter it.
+    Everything here is uniform random noise or a token id: it carries no information about
+    gold's *implementation*, which is the thing being protected. Drawing the fixtures on
+    this side rather than in the container has a second purpose beyond determinism -- it
+    stops a candidate choosing inputs that flatter it, and it is what makes the gold
+    cross-checks in v0.2-B possible, because the trusted side can only recompute gold's
+    answer for inputs it knows.
     """
     from trgym.repo.obs_protocol import encode_tensor
 
-    if "gold_logits" not in groups:
-        return {}
+    inputs: dict = {}
 
-    cfg = _gold_config(task_id)
-    ids = [
-        torch.randint(1, cfg.vocab_size, (b, s), generator=_seeded(s * 31 + b))
-        for b, s in HIDDEN_SHAPES
-    ]
-    return {"gold_logit_ids": [encode_tensor(t) for t in ids]}
+    if "gold_logits" in groups:
+        cfg = _gold_config(task_id)
+        ids = [
+            torch.randint(1, cfg.vocab_size, (b, s), generator=_seeded(s * 31 + b))
+            for b, s in HIDDEN_SHAPES
+        ]
+        inputs["gold_logit_ids"] = [encode_tensor(t) for t in ids]
+
+    if "padding_keys_masked" in groups:
+        q, k, v, v2, pad = _masking_fixture()
+        inputs["mask_q"] = encode_tensor(q)
+        inputs["mask_k"] = encode_tensor(k)
+        inputs["mask_v"] = encode_tensor(v)
+        inputs["mask_v2"] = encode_tensor(v2)
+        inputs["mask_pad"] = encode_tensor(pad)
+
+    if "rope_relative" in groups:
+        q, k = _rope_fixture()
+        inputs["rope_q"] = encode_tensor(q)
+        inputs["rope_k"] = encode_tensor(k)
+
+    return inputs
+
+
+# --------------------------------------------------------------------------- #
+# Trusted-side fixtures, shared by `build_inputs` and the gold cross-checks so the
+# two cannot drift. Both sides must draw byte-identical tensors or every comparison
+# below is meaningless.
+# --------------------------------------------------------------------------- #
+def _masking_fixture():
+    b, h, s, hd = 2, 2, 9, 8
+    g = _seeded(13)
+    q, k, v = (torch.randn(b, h, s, hd, generator=g) for _ in range(3))
+    pad = torch.ones(b, s, dtype=torch.bool)
+    pad[:, 6:] = False
+    v2 = v.clone()
+    v2[:, :, 6:] = torch.randn(b, h, 3, hd, generator=g) * 50.0
+    return q, k, v, v2, pad
+
+
+def _rope_fixture():
+    g = _seeded(19)
+    q = torch.randn(1, 1, 1, 16, generator=g)
+    k = torch.randn(1, 1, 1, 16, generator=g)
+    return q, k
 
 
 # --------------------------------------------------------------------------- #
@@ -159,6 +219,57 @@ def _gold_supervised_counts(task_id: str, seeds) -> list[int]:
     with RepoModules(gold_repo(task_id)) as gold:
         cfg = gold.config.Config()
         return [int(gold.data.make_batches(cfg, 1, seed=s)[0].n_supervised) for s in seeds]
+
+
+def _gold_pure_outputs(task_id: str) -> dict:
+    """Gold's answers for the pure-function fixtures. v0.2-B.
+
+    These five checks used to be decided from quantities the candidate reported about
+    itself, which an untrusted process can simply fabricate. They are now *also* compared
+    against gold's output on the identical trusted-supplied input.
+
+    The conversion is only sound because these are pure functions with a unique correct
+    answer: `build_rope_cache(4, 16, 10000)` has exactly one right value, so requiring a
+    match cannot fail a legitimately-different-but-correct implementation. The same
+    argument does NOT hold for the training-dynamics checks, which is why they are left
+    forgeable rather than converted.
+
+    Nothing computed here ever enters the candidate container.
+    """
+    from trgym.repo.checks import gold_repo
+    from trgym.repo.visible_runtime import RepoModules
+
+    q, k, v, v2, pad = _masking_fixture()
+    rq, rk = _rope_fixture()
+
+    with RepoModules(gold_repo(task_id)) as gold:
+        cos40, sin40 = gold.positional.build_rope_cache(40, 16, 10000.0)
+        cos16, sin16 = gold.positional.build_rope_cache(16, 16, 10000.0)
+        cos4, sin4 = gold.positional.build_rope_cache(4, 16, 10000.0)
+
+        def dot(m: int, n: int) -> float:
+            qm, _ = gold.positional.apply_rope(rq, rq, cos40[m : m + 1], sin40[m : m + 1])
+            kn, _ = gold.positional.apply_rope(rk, rk, cos40[n : n + 1], sin40[n : n + 1])
+            return float((qm * kn).sum())
+
+        qn = torch.randn(2, 3, 16, 16, generator=_seeded(17))
+        q_rot, _ = gold.positional.apply_rope(qn, qn, cos16, sin16)
+
+        single_q = torch.randn(1, 1, 1, 16, generator=_seeded(11))
+
+        return {
+            "cos0": cos4[0],
+            "sin0": sin4[0],
+            "rope_dots": [[dot(9, 4), dot(14, 9)], [dot(20, 3), dot(33, 16)]],
+            "q_rot": q_rot,
+            "mask_out1": gold.attention.causal_attention(q, k, v, pad),
+            "mask_out2": gold.attention.causal_attention(q, k, v2, pad),
+            "single_out": gold.attention.causal_attention(single_q, single_q, single_q),
+        }
+
+
+def _agrees(got, want, *, atol: float = 1e-5, rtol: float = 1e-4) -> bool:
+    return bool(torch.allclose(got, want, atol=atol, rtol=rtol))
 
 
 def _gold_lr_trace(task_id: str, steps: int) -> list[float]:
@@ -233,6 +344,13 @@ def _pred_padding_keys_masked(obs, task_id, ws):
     out2 = _get(obs, "padding_keys_masked", "out2")
     if not torch.allclose(out1[:, :, :6], out2[:, :, :6], atol=ATOL, rtol=RTOL):
         raise CheckFailure("padded key positions still influence unpadded outputs")
+    # v0.2-B: the property above is a self-report until it is anchored to gold. The
+    # fixture was supplied by this side, so gold's answer is computable here.
+    want = _gold_pure_outputs(task_id)
+    if not (_agrees(out1, want["mask_out1"]) and _agrees(out2, want["mask_out2"])):
+        raise CheckFailure(
+            "attention output does not match the reference on the supplied fixture"
+        )
 
 
 def _pred_rope_relative(obs, task_id, ws):
@@ -244,6 +362,13 @@ def _pred_rope_relative(obs, task_id, ws):
                 f"not translation invariant: <q@{first[0]},k@{first[1]}>={a:.5f} vs "
                 f"<q@{second[0]},k@{second[1]}>={b:.5f} at the same distance"
             )
+    want = _gold_pure_outputs(task_id)["rope_dots"]
+    for (ga, gb), (a, b) in zip(want, dots):
+        if abs(a - ga) > 1e-4 * max(1.0, abs(ga)) or abs(b - gb) > 1e-4 * max(1.0, abs(gb)):
+            raise CheckFailure(
+                f"RoPE inner products do not match the reference: got ({a:.5f}, {b:.5f}), "
+                f"reference ({ga:.5f}, {gb:.5f})"
+            )
 
 
 def _pred_rope_norm(obs, task_id, ws):
@@ -251,6 +376,9 @@ def _pred_rope_norm(obs, task_id, ws):
     after = _get(obs, "rope_norm", "q_rot_norm")
     if not torch.allclose(before, after, atol=1e-5):
         raise CheckFailure("RoPE must be norm-preserving")
+    q_rot = _get(obs, "rope_norm", "q_rot")
+    if not _agrees(q_rot, _gold_pure_outputs(task_id)["q_rot"]):
+        raise CheckFailure("rotated tensor does not match the reference")
 
 
 def _pred_supervised_token_count(obs, task_id, ws):
@@ -533,8 +661,8 @@ PREDICATES: dict[str, Callable] = {
     "repo_contract_public_api": _pred_contract_public_api,
     "repo_visible_smoke": lambda obs, t, ws: _visible_smoke(obs),
     "repo_visible_loss_is_finite": lambda obs, t, ws: _visible_loss(obs),
-    "repo_visible_single_token_attention": lambda obs, t, ws: _visible_single(obs),
-    "repo_visible_rope_position_zero": lambda obs, t, ws: _visible_rope0(obs),
+    "repo_visible_single_token_attention": lambda obs, t, ws: _visible_single(obs, t),
+    "repo_visible_rope_position_zero": lambda obs, t, ws: _visible_rope0(obs, t),
     "repo_visible_short_train_runs": lambda obs, t, ws: _visible_short(obs),
 }
 
@@ -555,20 +683,26 @@ def _visible_loss(obs):
         raise CheckFailure("loss is not a finite number over a positive token count")
 
 
-def _visible_single(obs):
+def _visible_single(obs, task_id):
     q = _get(obs, "visible_single_token_attention", "q")
     out = _get(obs, "visible_single_token_attention", "out")
     if not torch.allclose(out, q, atol=1e-6):
         raise CheckFailure("attention over a single token must return that token's value")
+    if not _agrees(out, _gold_pure_outputs(task_id)["single_out"], atol=1e-6):
+        raise CheckFailure("single-token attention does not match the reference")
 
 
-def _visible_rope0(obs):
+def _visible_rope0(obs, task_id):
     cos0 = _get(obs, "visible_rope_position_zero", "cos0")
     sin0 = _get(obs, "visible_rope_position_zero", "sin0")
     if not torch.allclose(cos0, torch.ones(16), atol=1e-6):
         raise CheckFailure("cos at position 0 must be all ones")
     if not torch.allclose(sin0, torch.zeros(16), atol=1e-6):
         raise CheckFailure("sin at position 0 must be all zeros")
+    want = _gold_pure_outputs(task_id)
+    if not (_agrees(cos0, want["cos0"], atol=1e-6)
+            and _agrees(sin0, want["sin0"], atol=1e-6)):
+        raise CheckFailure("RoPE cache at position 0 does not match the reference")
 
 
 def _visible_short(obs):

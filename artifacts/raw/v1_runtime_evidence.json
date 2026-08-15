@@ -1,10 +1,11 @@
 {
   "buggy_failed_checks": [
     "repo_matches_gold_logits",
+    "repo_padding_keys_masked",
     "repo_strict_causality"
   ],
   "buggy_reward": 0.0,
-  "generated_utc": "2026-08-11T22:53:49Z",
+  "generated_utc": "2026-08-12T08:11:27Z",
   "gold_checks": {
     "checks": {
       "repo_contract_public_api": true,
@@ -18,7 +19,7 @@
     "n_passed": 6,
     "n_total": 6
   },
-  "gold_grade_seconds": 7.178,
+  "gold_grade_seconds": 8.635,
   "gold_reward": 1.0,
   "grading_backend": "sandboxed container (grade_workspace default)",
   "grading_sha256": "4142d55fc486c493e557ec559d54d9e15babf0b437483e837af0597d43b440f4",
@@ -44,10 +45,10 @@
   "tests_v1_exit_code": 0,
   "tests_v1_failed": 0,
   "tests_v1_passed": 16,
-  "tests_v1_tail": "................                                                         [100%]\n16 passed in 79.56s (0:01:19)\n",
+  "tests_v1_tail": "................                                                         [100%]\n16 passed in 61.76s (0:01:01)\n",
   "v1_import_ok": true,
   "validate_exit_code": 0,
-  "validate_tail": "taskset  transformer_repair  \u00b7  docker runtime\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 1/1 \u00b7 6s \u00b7 valid 1 \u00b7 invalid 0 \u00b7 error 0 \u00b7     \n                                timeout 0                                       \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[valid  ] task name=m1_attention_regression                           valid \u00b7 6sresults: outputs/transformer_repair--validate/788409f5-0b52-4567-8c1d-d9d6f24829fc\n{\n  \"checks\": {\n    \"gold\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    },\n    \"setup\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    }\n  },\n  \"mode\": \"all\",\n  \"outcomes\": {\n    \"error\": 0,\n    \"invalid\": 0,\n    \"missing\": 0,\n    \"timeout\": 0,\n    \"valid\": 1\n  },\n  \"owed\": 0,\n  \"recorded\": 1,\n  \"terminal\": 1,\n  \"total\": 1,\n  \"valid_rate\": 1.0\n}\n",
+  "validate_tail": "taskset  transformer_repair  \u00b7  docker runtime\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 1/1 \u00b7 6s \u00b7 valid 1 \u00b7 invalid 0 \u00b7 error 0 \u00b7     \n                                timeout 0                                       \n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[valid  ] task name=m1_attention_regression                           valid \u00b7 6sresults: outputs/transformer_repair--validate/3cdf3e4c-d2cd-44ea-96ab-e117b430045a\n{\n  \"checks\": {\n    \"gold\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    },\n    \"setup\": {\n      \"error\": 0,\n      \"invalid\": 0,\n      \"missing\": 0,\n      \"timeout\": 0,\n      \"valid\": 1\n    }\n  },\n  \"mode\": \"all\",\n  \"outcomes\": {\n    \"error\": 0,\n    \"invalid\": 0,\n    \"missing\": 0,\n    \"timeout\": 0,\n    \"valid\": 1\n  },\n  \"owed\": 0,\n  \"recorded\": 1,\n  \"terminal\": 1,\n  \"total\": 1,\n  \"valid_rate\": 1.0\n}\n",
   "validate_valid_rate": 1.0,
   "verifiers_version": "0.3.0"
 }

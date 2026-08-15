@@ -193,26 +193,22 @@ def obs_strict_causality(ws, inputs):
 
 @group("padding_keys_masked")
 def obs_padding_keys_masked(ws, inputs):
+    # The fixture is supplied by the trusted side (v0.2-B). Generating it here would make
+    # gold's answer uncomputable out there, which is what left this check forgeable.
+    q, k = dec(inputs["mask_q"]), dec(inputs["mask_k"])
+    v, v2, pad = dec(inputs["mask_v"]), dec(inputs["mask_v2"]), dec(inputs["mask_pad"])
     with RepoModules(ws) as cand:
-        b, h, s, hd = 2, 2, 9, 8
-        g = _seeded(13)
-        q, k, v = (torch.randn(b, h, s, hd, generator=g) for _ in range(3))
-        pad = torch.ones(b, s, dtype=torch.bool)
-        pad[:, 6:] = False
-        out1 = cand.attention.causal_attention(q, k, v, pad)
-        v2 = v.clone()
-        v2[:, :, 6:] = torch.randn(b, h, 3, hd, generator=g) * 50.0
-        out2 = cand.attention.causal_attention(q, k, v2, pad)
-        return {"out1": out1, "out2": out2}
+        return {
+            "out1": cand.attention.causal_attention(q, k, v, pad),
+            "out2": cand.attention.causal_attention(q, k, v2, pad),
+        }
 
 
 @group("rope_relative")
 def obs_rope_relative(ws, inputs):
+    q, k = dec(inputs["rope_q"]), dec(inputs["rope_k"])
     with RepoModules(ws) as cand:
         cos, sin = cand.positional.build_rope_cache(40, 16, 10000.0)
-        g = _seeded(19)
-        q = torch.randn(1, 1, 1, 16, generator=g)
-        k = torch.randn(1, 1, 1, 16, generator=g)
 
         def dot(m, n):
             qm, _ = cand.positional.apply_rope(q, q, cos[m : m + 1], sin[m : m + 1])
@@ -232,7 +228,9 @@ def obs_rope_norm(ws, inputs):
         cos, sin = cand.positional.build_rope_cache(16, 16, 10000.0)
         q = torch.randn(2, 3, 16, 16, generator=_seeded(17))
         q_rot, _ = cand.positional.apply_rope(q, q, cos, sin)
-        return {"q_norm": q.norm(dim=-1), "q_rot_norm": q_rot.norm(dim=-1)}
+        # `q_rot` itself is returned, not only its norm: the trusted side compares the
+        # rotated tensor against gold's, which a norm alone cannot support (v0.2-B).
+        return {"q_norm": q.norm(dim=-1), "q_rot_norm": q_rot.norm(dim=-1), "q_rot": q_rot}
 
 
 @group("supervised_token_count")

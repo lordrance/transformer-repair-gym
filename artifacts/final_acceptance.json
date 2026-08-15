@@ -758,7 +758,7 @@
         },
         {
           "check": "report metric hash matches the regenerated summary",
-          "detail": "sha256=e3ceaace61321a16\u2026",
+          "detail": "sha256=6b569b6291ae92fe\u2026",
           "ok": true
         },
         {

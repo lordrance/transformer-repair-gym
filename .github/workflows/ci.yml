@@ -85,6 +85,19 @@ jobs:
           print("\n".join(problems) if problems else "canaries clean and non-vacuous")
           sys.exit(1 if problems else 0)
           PY
+      - name: Inspect adapter smoke (deterministic, no model call)
+        # Both directions. `mockllm` needs no credentials; gold must score 1.0 and the
+        # planted defect 0.0, because a scorer that cannot fail is not a scorer.
+        run: |
+          python -m pip install -e ".[inspect]"
+          python -m inspect_ai eval inspect_adapter/transformer_repair_inspect.py \
+            --model mockllm/model --log-dir /tmp/inspect_ci
+          python -m inspect_ai eval inspect_adapter/transformer_repair_inspect.py \
+            -T mode=noop --model mockllm/model --log-dir /tmp/inspect_ci
+
+      - name: Adversarial verifier replay
+        run: python scripts/verifier_adversarial_replay.py
+
       - name: Acceptance gate
         # Never `|| true`. A gate whose failure is swallowed is decoration.
         run: python scripts/final_acceptance.py

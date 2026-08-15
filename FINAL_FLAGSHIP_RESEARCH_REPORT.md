@@ -220,8 +220,13 @@ uv run python scripts/final_acceptance.py
 
 ```
 artifacts/final_metrics_summary.json
-sha256  e3ceaace61321a1615529f25830fd5b1413070f1e1429cfb821986f041ab948c
+sha256  6b569b6291ae92fe6c305837f2eafbd35b2d6b40b93aa3ff5301313fa0dddbd6
 ```
+
+A reader-facing subset of the same data — the figures quoted in `README.md` and
+`RESULTS_SUMMARY.md`, in one small file — is generated alongside it at
+`artifacts/public_results_summary.json`. Both come from the same script; neither is
+maintained by hand.
 
 `scripts/post_success_result_audit.py` fails if this digest is not the digest of the
 summary on disk, so a report that drifts from its data cannot pass G9 stage B.

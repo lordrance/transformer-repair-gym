@@ -197,23 +197,34 @@ functions for what their docstrings said.
 
 Stated plainly, because a security document that only lists strengths is marketing.
 
-- **Candidate-internal predicates are forgeable (R16).** This is the important limitation of
-  the new architecture and it is not hidden. Moving predicates into the trusted process
-  stops the candidate *deciding* its verdict; it does not stop the candidate lying about the
-  numbers it reports. A submission that fabricates its own gradient norms passes
-  `repo_gradients_reach_optimizer`. The full list is `predicates.FORGEABLE` — 19 of the 23
-  checks.
+- **Candidate-internal predicates are forgeable.** This is the important limitation of the
+  architecture and it is not hidden. Moving predicates into the trusted process stops the
+  candidate *deciding* its verdict; it does not stop it lying about the numbers it reports.
+  A submission that fabricates its own gradient norms passes
+  `repo_gradients_reach_optimizer`.
 
-  What is **not** forgeable is any predicate whose ground truth is gold:
-  `repo_matches_gold_logits`, `repo_supervised_token_count`, `repo_lr_schedule_matches_gold`
-  and `repo_contract_public_api`. The candidate cannot know the value it would have to
-  claim, because gold is absent from the container it ran in — and `repo_contract_public_api`
-  never asks the candidate anything at all, since the trusted side reads the submitted
-  sources itself and compares ASTs.
+  **v0.2-B reduced this from 19 of 23 to 14 of 23.** Five checks were converted by anchoring
+  them to gold on a *trusted-supplied* fixture: `repo_padding_keys_masked`,
+  `repo_rope_relative_property`, `repo_rope_norm_preserved`,
+  `repo_visible_single_token_attention`, `repo_visible_rope_position_zero`. The trusted side
+  now draws the inputs, so it can recompute gold's answer and require a match — and a
+  candidate cannot fabricate that answer, because it does not have gold.
 
-  The honest summary: R16 makes the *oracle* unreachable, which is what the task's integrity
-  depends on. It does not make an untrusted process's self-report trustworthy, and nothing
-  short of re-deriving every quantity from gold would.
+  The conversion is only legitimate because these are **pure functions with a unique correct
+  answer**: `build_rope_cache(4, 16, 10000)` has exactly one right value, so demanding a
+  match cannot fail a legitimately-different-but-correct implementation. That argument does
+  *not* hold for the training-dynamics checks — a buggy candidate's loss curve is *supposed*
+  to diverge from gold's, so comparing them to gold would be wrong rather than stricter.
+  Those are left forgeable deliberately rather than converted to look better.
+
+  Authoritative sets: `predicates.GOLD_ANCHORED` (9) and `predicates.FORGEABLE` (14). They
+  must partition the predicate set exactly;
+  `tests/test_check_surfaces_agree.py::test_every_predicate_is_classified_exactly_once`
+  fails if a check is added without being classified, or is claimed as both.
+
+  The honest summary: the *oracle* is unreachable, which is what the task's integrity
+  depends on, and rather more of the verdict is now anchored to it than before. What remains
+  is that an untrusted process's self-report about its own internals is still a self-report.
 - **This is not a hostile-multi-tenant sandbox.** The Docker configuration raises the cost
   of escape; it is not a claim of resistance to a determined attacker with a kernel exploit.
   The threat model is a reward-seeking policy, not an adversary.
