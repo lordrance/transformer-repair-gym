@@ -436,7 +436,11 @@ def check_repo_grad_accum_matches_full_batch(ws: Path, task_id: str) -> None:
     October-2024 bug; it is invisible with uniform padding and wrong the moment
     micro-batches carry different token counts, which this data always does.
     """
-    with RepoModules(ws) as cand, RepoModules(gold_repo(task_id)) as gold:
+    # No gold handle: the ground truth here is computed below from the candidate's own
+    # model, not from the reference. The unused `RepoModules(gold_repo(task_id)) as gold`
+    # that used to sit here built the gold tree on every call for nothing -- flagged by
+    # hand while decomposing the checks for R16, and independently by ruff as F841.
+    with RepoModules(ws) as cand:
         cfg = cand.config.Config()
         torch.manual_seed(cfg.seed)
         model = cand.model.TinyGPT(cfg)

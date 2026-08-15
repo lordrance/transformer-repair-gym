@@ -92,7 +92,6 @@ def test_untrusted_path_uses_the_sandbox_with_no_fallback_static() -> None:
     `fallback=True` silently degrades to an in-process run when Docker is missing, which
     would reintroduce the defect on exactly the machines least able to notice.
     """
-    src = GRADING_PY.read_text(encoding="utf-8")
     tree = _module_ast(GRADING_PY)
     fn = _function(tree, "grade_workspace")
 

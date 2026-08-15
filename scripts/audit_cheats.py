@@ -45,7 +45,9 @@ def main() -> int:
 
             naive_rewards_it = result.naive_reward >= 1.0
             hardened_rejects_it = result.hardened_reward < 1.0
-            passed = naive_rewards_it and hardened_rejects_it and gate_ok
+            # `ok` deliberately does NOT require `naive_rewards_it`: the audit asks whether
+            # the hardened verifier rejects the exploit, not whether the naive one was
+            # fooled by it. A cheat both verifiers reject is still a pass.
             ok = ok and hardened_rejects_it and gate_ok
 
             if not naive_rewards_it:

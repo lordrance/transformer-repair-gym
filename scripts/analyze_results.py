@@ -74,7 +74,6 @@ def analyse(audit_path: Path, label: str, prices=PRICE_FLASH) -> dict:
     n = len(rows)
     full_rows = [r for r in rows if r["label"] == "FULL_FIX"]
     genuine = [r for r in rows if r["label"] in ("FULL_FIX", "SEMANTIC_FIX")]
-    not_genuine = [r for r in rows if r["label"] not in ("FULL_FIX", "SEMANTIC_FIX")]
 
     naive_pass = [r for r in rows if r["naive_reward"] >= 1.0]
     hard_pass = [r for r in rows if r["hardened_reward"] >= 1.0]

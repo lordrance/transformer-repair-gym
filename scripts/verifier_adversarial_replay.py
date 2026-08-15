@@ -276,7 +276,7 @@ def main() -> int:
               f"v2={'A' if r['v2_accept'] else 'R'}  {mark}")
         if r.get("v2_rejected_by"):
             print(f"    rejected by: {r['v2_rejected_by']}")
-    print(f"\n* = outcome differed from the pre-registered expectation")
+    print("\n* = outcome differed from the pre-registered expectation")
     print(f"wrote {OUT.relative_to(ROOT).as_posix()}")
     return 0
 

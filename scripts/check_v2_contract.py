@@ -1,6 +1,6 @@
 ﻿import sys, tempfile
 from pathlib import Path
-sys.path.insert(0, r"e:\RL")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from trgym.repo.build import build_gold, build_repo
 from trgym.repo.checks import run_repo_checks
 from trgym.repo.verifier_v2 import CONTRACT_CHECKS

@@ -1,7 +1,13 @@
 """Build the sandbox image and verify it grades a task under real isolation."""
 import shutil, sys
 from pathlib import Path
-sys.path.insert(0, r"e:\RL")
+
+# Derived, not hardcoded. This used to be the literal string `e:\RL`, which worked on the
+# machine it was written on and produced `.../e:\RL/.sandbox_selftest/g:/workspace:rw` on
+# Linux -- an invalid Docker mount spec ("too many colons"). Nothing local caught it,
+# because locally the constant happened to be correct; CI on ubuntu did.
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 from trgym.harness import sandbox
 from trgym.repo.build import build_gold, build_repo
 from trgym.tasks.repo_specs import get_repo_task
@@ -18,7 +24,7 @@ print("image present:", sandbox.image_exists())
 # Docker Desktop cannot bind-mount from %LOCALAPPDATA%\Temp, so the scratch area
 # lives under the repo. It must NOT be an evidence directory: this script rmtree's
 # it, and using .sandbox_work here destroyed Tier M's 20 graded workspaces.
-work = Path(r"e:\RL") / ".sandbox_selftest"   # NEVER an evidence dir; see PROTOCOL_CHANGELOG R5
+work = ROOT / ".sandbox_selftest"   # NEVER an evidence dir; see PROTOCOL_CHANGELOG R5
 if work.exists(): shutil.rmtree(work)
 work.mkdir(parents=True)
 

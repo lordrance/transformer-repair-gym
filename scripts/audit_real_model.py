@@ -149,7 +149,6 @@ def probe_train_loop(module, support) -> tuple[float, list[str]]:
     notes: list[str] = []
     passed = total = 0
     rng = random.Random(PROBE_SEED)
-    g = torch.Generator().manual_seed(PROBE_SEED)
 
     for _ in range(10):
         total += 1

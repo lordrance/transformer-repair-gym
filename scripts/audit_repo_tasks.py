@@ -1,7 +1,7 @@
 ﻿"""Quick discrimination check for the 5 repo-level medium tasks."""
 import sys, tempfile
 from pathlib import Path
-sys.path.insert(0, r"e:\RL")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from trgym.repo.build import build_repo, build_gold, changed_files
 from trgym.repo.checks import run_repo_checks
 from trgym.tasks.repo_specs import REPO_TASKS
