@@ -13,7 +13,7 @@ authors:
   - name: "Rance"
 license: MIT
 type: software
-repository-code: "https://github.com/rance/transformer-repair-gym"
+repository-code: "https://github.com/lordrance/transformer-repair-gym"
 keywords:
   - reinforcement learning
   - verifiable rewards

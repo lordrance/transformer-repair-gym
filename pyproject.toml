@@ -45,8 +45,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rance/transformer-repair-gym"
-Source = "https://github.com/rance/transformer-repair-gym"
+Homepage = "https://github.com/lordrance/transformer-repair-gym"
+Source = "https://github.com/lordrance/transformer-repair-gym"
 
 [tool.hatch.build.targets.wheel]
 packages = ["trgym", "environments"]
