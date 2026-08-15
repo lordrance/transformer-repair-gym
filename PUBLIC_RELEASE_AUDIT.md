@@ -103,7 +103,27 @@ mutation suite      8/8 RED, 0 survivors, all restored
 result audit        45 values recomputed independently, 0 mismatches
 ```
 
-## 8. Release checklist
+## 8. CI, and one observed flake
+
+All five jobs are green on the release commit: host suite on {ubuntu, windows} ×
+{py3.11, py3.12}, and a sandboxed job that builds both images and runs the isolation
+canaries, `tests_v1` through the official v1 runtime, the Inspect smoke in both
+directions, the adversarial verifier replay, and the acceptance gate.
+
+**Recorded rather than glossed over:** on one run,
+`tests/test_harness.py::test_a_policy_that_fixes_the_bug_passes_the_hidden_suite` failed on
+windows/py3.11 only — `repo_strict_causality` and `repo_matches_gold_logits` still failing
+after a patch that had applied successfully — while the same commit passed on the other
+three matrix entries and locally. A rerun of the identical commit passed.
+
+So it is non-deterministic, not a regression, and its frequency is unmeasured (one
+occurrence). It is a *test* flake, not a grading-path flake: the isolation canaries, the
+Tier S freeze, and the gold/no-op separation were all stable across every run. Still, a
+grading-adjacent test that is not reproducible is a real if minor defect, and chasing it
+belongs in a follow-up rather than in a release commit. Do not treat a single green run of
+this test as proof it is deterministic.
+
+## 9. Release checklist
 
 - [x] Secret scan clean
 - [x] No `.env` present
@@ -114,7 +134,8 @@ result audit        45 values recomputed independently, 0 mismatches
 - [x] No oversized or binary junk
 - [x] Acceptance re-verified after v0.2 enhancements
 - [x] Repository URLs point at the authenticated account
-- [ ] Remote created and pushed
+- [x] Remote created (private) and pushed
+- [x] Remote tree verified: 0 ignored paths, 0 personal addresses in commit metadata
+- [x] CI green on all five jobs
 - [ ] Remote fresh-clone reproduction
-- [ ] CI green
 - [ ] Visibility flipped to public
