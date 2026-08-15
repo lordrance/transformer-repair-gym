@@ -621,6 +621,26 @@ def run_canary(canary: Canary, grader) -> dict:
 # --------------------------------------------------------------------------- #
 # The two graders under test
 # --------------------------------------------------------------------------- #
+def _grade_workspace():
+    """Load `grading.py` by path, without importing its package.
+
+    `environments/transformer_repair/__init__.py` pulls in `task.py` -> `verifiers.v1`,
+    which is the optional `v1` extra. Requiring it here made this suite unrunnable
+    wherever that extra is absent -- on CI every probe failed to execute and the run
+    reported a clean-but-vacuous 0 leaks, which is precisely the false clean this file
+    exists to prevent. `grading.py` itself has no v1 dependency.
+
+    This loads the same module and calls the same function; only the import path differs.
+    """
+    import importlib.util
+
+    path = ROOT / "environments" / "transformer_repair" / "grading.py"
+    spec = importlib.util.spec_from_file_location("_trgym_grading_canary", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.grade_workspace
+
+
 def grade_in_process(ws: Path, task_id: str):
     """The pre-R14 path: import the candidate in the grading process.
 
@@ -630,9 +650,7 @@ def grade_in_process(ws: Path, task_id: str):
     from trgym.repo.verifier_v2 import v2_checks
     from trgym.tasks.repo_specs import get_repo_task
 
-    from environments.transformer_repair.grading import grade_workspace
-
-    return grade_workspace(
+    return _grade_workspace()(
         ws, task_id, v2_checks(get_repo_task(task_id)), allow_in_process=True
     )
 
@@ -642,9 +660,7 @@ def grade_sandboxed(ws: Path, task_id: str):
     from trgym.repo.verifier_v2 import v2_checks
     from trgym.tasks.repo_specs import get_repo_task
 
-    from environments.transformer_repair.grading import grade_workspace
-
-    return grade_workspace(ws, task_id, v2_checks(get_repo_task(task_id)))
+    return _grade_workspace()(ws, task_id, v2_checks(get_repo_task(task_id)))
 
 
 def main() -> int:

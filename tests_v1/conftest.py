@@ -17,6 +17,18 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+# `verifiers` is the optional `v1` extra. On Windows these tests skip anyway, because
+# `verifiers.v1` imports `fcntl` -- so the missing-dependency path was never exercised
+# locally and only appeared on Linux CI, where fcntl exists, the skip did not fire, and
+# every fixture raised ModuleNotFoundError as a collection ERROR rather than a skip.
+#
+# A missing OPTIONAL dependency must skip, not fail. Skipping at module scope also keeps
+# the omission visible in the pytest summary instead of silently shrinking the suite.
+pytest.importorskip(
+    "verifiers",
+    reason="optional 'v1' extra is not installed; `uv sync --extra v1` (Linux only)",
+)
+
 TASK_ID = "m1_attention_regression"
 
 
