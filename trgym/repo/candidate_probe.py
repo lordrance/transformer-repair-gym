@@ -31,6 +31,7 @@ import importlib
 import itertools
 import json
 import math
+import shutil
 import sys
 from pathlib import Path
 
@@ -108,6 +109,13 @@ class RepoModules:
         sys.path.insert(0, str(self.root))
         for name in [n for n in sys.modules if n == "tinygpt" or n.startswith("tinygpt.")]:
             del sys.modules[name]
+        # Delete cached bytecode before importing. `invalidate_caches()` resets finder
+        # caches; whether a .pyc is reused is decided by the source (mtime, size) pair in
+        # its header. A candidate edit that keeps the file the same size and lands in the
+        # same mtime second would silently run the OLD code -- grading a correct repair as
+        # broken. Mirrors trgym/repo/visible_runtime.py::_purge_bytecode.
+        for cache in self.root.rglob("__pycache__"):
+            shutil.rmtree(cache, ignore_errors=True)
         importlib.invalidate_caches()
         self.pkg = importlib.import_module("tinygpt")
         self.config = importlib.import_module("tinygpt.config")

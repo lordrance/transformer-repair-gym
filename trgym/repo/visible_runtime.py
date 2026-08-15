@@ -20,6 +20,7 @@ from __future__ import annotations
 import importlib
 import itertools
 import math
+import shutil
 import sys
 from pathlib import Path
 
@@ -36,6 +37,30 @@ class CheckFailure(AssertionError):
     """A graded check failed. The message is surfaced to the trace."""
 
 
+def _purge_bytecode(root: Path) -> None:
+    """Delete `__pycache__` under `root` before importing from it.
+
+    `importlib.invalidate_caches()` is not enough, and the difference is a real grading
+    defect rather than a tidiness concern. `invalidate_caches` resets the *finder* caches;
+    whether a cached `.pyc` is reused is decided separately, by comparing the source
+    mtime-and-size pair recorded in the `.pyc` header.
+
+    A candidate patch that changes `tril(diagonal=1)` to `tril(diagonal=0)` leaves the file
+    **exactly the same size**. If it lands in the same mtime second as the write that
+    preceded it -- routine on a fast machine, and mtime granularity varies by filesystem --
+    Python considers the cached bytecode current and silently runs the OLD code. The repair
+    is then graded as if it had never been applied.
+
+    That is a false negative against a correct submission, which is the worst direction for
+    this project's error budget: it makes a working fix look broken. It surfaced as
+    `test_a_policy_that_fixes_the_bug_passes_the_hidden_suite` failing intermittently on CI
+    -- first on windows/py3.11, then on both ubuntu jobs -- while passing locally, which is
+    exactly the signature of an mtime-resolution race.
+    """
+    for cache in root.rglob("__pycache__"):
+        shutil.rmtree(cache, ignore_errors=True)
+
+
 class RepoModules:
     """Import `tinygpt` from a specific directory under a unique alias."""
 
@@ -49,6 +74,7 @@ class RepoModules:
         sys.path.insert(0, str(self.root))
         for name in [n for n in sys.modules if n == "tinygpt" or n.startswith("tinygpt.")]:
             del sys.modules[name]
+        _purge_bytecode(self.root)
         importlib.invalidate_caches()
         try:
             self.pkg = importlib.import_module("tinygpt")

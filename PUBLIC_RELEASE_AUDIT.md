@@ -110,18 +110,32 @@ All five jobs are green on the release commit: host suite on {ubuntu, windows} �
 canaries, `tests_v1` through the official v1 runtime, the Inspect smoke in both
 directions, the adversarial verifier replay, and the acceptance gate.
 
-**Recorded rather than glossed over:** on one run,
-`tests/test_harness.py::test_a_policy_that_fixes_the_bug_passes_the_hidden_suite` failed on
-windows/py3.11 only — `repo_strict_causality` and `repo_matches_gold_logits` still failing
-after a patch that had applied successfully — while the same commit passed on the other
-three matrix entries and locally. A rerun of the identical commit passed.
+**An intermittent CI failure turned out to be a real grading defect (R18).** It is recorded
+here in full, including the fact that the first diagnosis was wrong.
 
-So it is non-deterministic, not a regression, and its frequency is unmeasured (one
-occurrence). It is a *test* flake, not a grading-path flake: the isolation canaries, the
-Tier S freeze, and the gold/no-op separation were all stable across every run. Still, a
-grading-adjacent test that is not reproducible is a real if minor defect, and chasing it
-belongs in a follow-up rather than in a release commit. Do not treat a single green run of
-this test as proof it is deterministic.
+`tests/test_harness.py::test_a_policy_that_fixes_the_bug_passes_the_hidden_suite` failed on
+windows/py3.11, passed on a rerun of the identical commit, and was written up as a flake.
+It then failed again on **both** ubuntu jobs. Three occurrences across platforms is not a
+flake, and the "rerun went green" evidence had been given more weight than it deserved.
+
+Root cause: `RepoModules` cleared `sys.modules` and called `importlib.invalidate_caches()`
+before importing a candidate tree, which resets *finder* caches but does not decide whether
+a cached `__pycache__/*.pyc` is reused. Python decides that by comparing the source's
+(mtime, size) against the pair in the `.pyc` header. The repair in these tasks — for
+example `tril(diagonal=1)` → `tril(diagonal=0)` — leaves the file **exactly the same
+size**, so if it lands in the same mtime second as the preceding write, the old bytecode
+runs and the patch is invisible.
+
+The consequence is worse than a flaky test: **a correct repair could be graded as still
+broken.** A false negative against a working submission, in the grading path itself. The
+telling detail was that `repo_strict_causality`, which never consults gold, was among the
+failures — the candidate's own code was not what executed.
+
+Fixed by purging `__pycache__` under the tree on entry, in both `RepoModules`
+implementations (`trgym/repo/visible_runtime.py` and the probe's copy inside the candidate
+container). `tests/test_bytecode_staleness.py` forces the collision deterministically —
+pinning mtime and asserting a same-size repair is graded as fixed — so a regression fails
+every time rather than once in a while.
 
 ## 9. Release checklist
 
