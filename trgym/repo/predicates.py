@@ -19,6 +19,7 @@ Two properties are worth stating precisely, because the difference matters:
 from __future__ import annotations
 
 import ast
+import functools
 import math
 from pathlib import Path
 from typing import Any, Callable
@@ -221,6 +222,7 @@ def _gold_supervised_counts(task_id: str, seeds) -> list[int]:
         return [int(gold.data.make_batches(cfg, 1, seed=s)[0].n_supervised) for s in seeds]
 
 
+@functools.lru_cache(maxsize=4)
 def _gold_pure_outputs(task_id: str) -> dict:
     """Gold's answers for the pure-function fixtures. v0.2-B.
 
@@ -235,6 +237,12 @@ def _gold_pure_outputs(task_id: str) -> dict:
     forgeable rather than converted.
 
     Nothing computed here ever enters the candidate container.
+
+    Cached because five predicates consult it. Without the cache a single grading job
+    rebuilt gold, re-entered `RepoModules` and recomputed every fixture five times over --
+    pure waste on the critical path, and enough of it to make the G5 throughput figure
+    drift away from what the code actually does. The result depends only on `task_id` and
+    on gold, which is immutable within a process, so caching cannot mask a change.
     """
     from trgym.repo.checks import gold_repo
     from trgym.repo.visible_runtime import RepoModules

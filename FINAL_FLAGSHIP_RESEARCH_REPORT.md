@@ -125,21 +125,26 @@ once because R15's denylist refused every oracle-seeking probe *before it ran*, 
 
 | phase | mean | p50 | p95 | failures |
 |---|---|---|---|---|
-| cold | 5.325 s | 5.434 s | 5.789 s | 0 |
-| final | 5.229 s | 5.260 s | 5.586 s | 0 |
-| in-process reference | 0.645 s | 0.627 s | 0.714 s | 0 |
+| cold | 7.384 s | 7.245 s | 8.543 s | 0 |
+| final | 6.948 s | 7.028 s | 7.815 s | 0 |
+| in-process reference | 0.668 s | 0.629 s | 0.749 s | 0 |
 
-**8.1×**, or 4.58 s per grading job, across 90 jobs with zero failures. The in-process
+**10.4×**, or 6.28 s per grading job, across 90 jobs with zero failures. The in-process
 reference is not a candidate path — it is the pre-R14 design, priced here only for
 comparison.
 
-R16 appears to have made this *cheaper* rather than dearer. The pre-R16 note recorded
-~8.24 s of container startup against ~0.54 s of actual checks; the post-R16 figure above is
-5.23 s for a whole grading job. Those are not the same quantity — startup versus end-to-end
-— so the two are not strictly comparable, and they come from different sessions on a
-machine with other load. The mechanism is plausible (the container no longer mounts the
-repository or imports the grader stack) but this is an observation, not a controlled
-measurement, and nothing in the gates depends on it.
+**v0.2-B cost 1.7 s per job and the number was re-measured rather than inherited.** Before
+those five checks were anchored to gold, the same benchmark reported 5.23 s. Keeping the
+old figure would have meant publishing a measurement that no longer described the code, so
+it was re-run. Part of the increase was waste and was removed: `_gold_pure_outputs` is now
+cached, having previously rebuilt gold and re-entered `RepoModules` once per predicate,
+five times per grading job.
+
+An earlier draft of this section suggested R16 had made grading *cheaper*, comparing the
+post-R16 end-to-end figure against a pre-R16 note about container startup. Those are
+different quantities and the comparison should not have been drawn; it is withdrawn. What
+can be said is narrow and measured: the boundary costs 10.4× the unisolated reference, and
+nothing in this project is throughput-bound at 7 s per job.
 
 ### RQ6 — What is still not defended?
 
@@ -220,7 +225,7 @@ uv run python scripts/final_acceptance.py
 
 ```
 artifacts/final_metrics_summary.json
-sha256  7f003f7ae0f28aafd92739cedbfc99b7aaad2dfb72d887cf28957f58d25550ef
+sha256  07e069a6843d24087484ebdca40c4a9fe04dfd26914114452c67c6a89013227e
 ```
 
 A reader-facing subset of the same data — the figures quoted in `README.md` and

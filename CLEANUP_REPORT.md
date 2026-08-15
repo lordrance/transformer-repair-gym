@@ -17,6 +17,21 @@ it stays, because `scripts/build_final_metrics_summary.py` regenerates every hea
 from exactly those files. Deleting them to tidy the tree would leave the README quoting
 numbers nothing in the repository can reproduce.
 
+## Second pass — redundancy found by audit
+
+| what | count | why it was safe |
+|---|---|---|
+| `artifacts/frozen_phase1/` bare-name copies | **52** | Leftovers from the *pre-R7* flat-name freeze — the scheme that overwrote its own evidence. The current script writes only content-addressed `<name>.<sha12>` names, and **every** `frozen_copy` in `FROZEN_PHASE1_MANIFEST.json` carries the hash suffix, so none of these was referenced. Verified by re-running the gate afterwards: G0 still PASS. |
+| `artifacts/raw/v1_study/src_*.py` | **10** | Verbatim third-party `verifiers` source, dumped during the G1 migration. Regenerable via `docker/study_v1.py`, which `VERIFIERS_VERSION_SNAPSHOT.md` already documents, and read by no gate. Removing it also fixes a licence inaccuracy — see `PUBLIC_RELEASE_AUDIT.md` §5. |
+
+The derived notes in that directory (`v1_study.json`, `v1_tree.txt`) are this project's own
+work and are cited by the G1 findings, so they stay.
+
+**Scripts were examined and kept.** Many are one-off audit tools that nothing imports, which
+looks like dead code until you notice they generated committed evidence. Under the rule
+below they are reproducibility tooling: deleting `fuzz_verifier.py` would leave
+`VERIFIER_FUZZ_AUDIT.md` unreproducible. Unused ≠ redundant.
+
 ## Removed from Git tracking (kept on disk locally)
 
 | path | reason |

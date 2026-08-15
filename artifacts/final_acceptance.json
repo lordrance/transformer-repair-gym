@@ -562,32 +562,32 @@
         },
         {
           "check": "cold.mean_s recorded",
-          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 9.3984, 'mean_s': 7.3838, 'min_s': 5.3484, 'n': 30, 'n_failures': 0, 'p50_s': 7.2449, 'p95_s': 8.5432, 'percentile_method': 'nearest-rank', 'stdev_s': 1.0677}",
           "ok": true
         },
         {
           "check": "cold.p50_s recorded",
-          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 9.3984, 'mean_s': 7.3838, 'min_s': 5.3484, 'n': 30, 'n_failures': 0, 'p50_s': 7.2449, 'p95_s': 8.5432, 'percentile_method': 'nearest-rank', 'stdev_s': 1.0677}",
           "ok": true
         },
         {
           "check": "cold.p95_s recorded",
-          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.9777, 'mean_s': 5.3251, 'min_s': 4.5955, 'n': 30, 'n_failures': 0, 'p50_s': 5.4335, 'p95_s': 5.7893, 'percentile_method': 'nearest-rank', 'stdev_s': 0.3798}",
+          "detail": "cold={'backends_observed': ['docker'], 'failures': [], 'max_s': 9.3984, 'mean_s': 7.3838, 'min_s': 5.3484, 'n': 30, 'n_failures': 0, 'p50_s': 7.2449, 'p95_s': 8.5432, 'percentile_method': 'nearest-rank', 'stdev_s': 1.0677}",
           "ok": true
         },
         {
           "check": "final.mean_s recorded",
-          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 7.9878, 'mean_s': 6.9481, 'min_s': 5.4639, 'n': 30, 'n_failures': 0, 'p50_s': 7.0276, 'p95_s': 7.8151, 'percentile_method': 'nearest-rank', 'stdev_s': 0.6899}",
           "ok": true
         },
         {
           "check": "final.p50_s recorded",
-          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 7.9878, 'mean_s': 6.9481, 'min_s': 5.4639, 'n': 30, 'n_failures': 0, 'p50_s': 7.0276, 'p95_s': 7.8151, 'percentile_method': 'nearest-rank', 'stdev_s': 0.6899}",
           "ok": true
         },
         {
           "check": "final.p95_s recorded",
-          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 5.8317, 'mean_s': 5.2285, 'min_s': 4.6639, 'n': 30, 'n_failures': 0, 'p50_s': 5.2599, 'p95_s': 5.5862, 'percentile_method': 'nearest-rank', 'stdev_s': 0.293}",
+          "detail": "final={'backends_observed': ['docker'], 'failures': [], 'max_s': 7.9878, 'mean_s': 6.9481, 'min_s': 5.4639, 'n': 30, 'n_failures': 0, 'p50_s': 7.0276, 'p95_s': 7.8151, 'percentile_method': 'nearest-rank', 'stdev_s': 0.6899}",
           "ok": true
         }
       ],
@@ -758,7 +758,7 @@
         },
         {
           "check": "report metric hash matches the regenerated summary",
-          "detail": "sha256=7f003f7ae0f28aaf\u2026",
+          "detail": "sha256=07e069a6843d2408\u2026",
           "ok": true
         },
         {

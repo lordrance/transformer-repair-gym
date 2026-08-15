@@ -82,8 +82,19 @@ evidence, not clutter.
 
 MIT, `LICENSE` at the repository root, copyright Rance. `pyproject.toml` declares
 `license = { file = "LICENSE" }` and the MIT classifier. `CITATION.cff` declares `license:
-MIT`. No vendored third-party source is redistributed; dependencies are declared, not
-bundled.
+MIT`. Dependencies are declared, not bundled.
+
+**A correction.** An earlier version of this section asserted that no third-party source
+was redistributed. That was false when written: `artifacts/raw/v1_study/src_*.py` held ten
+files of verbatim `verifiers` library source, dumped during the G1 migration to answer API
+questions from the real implementation rather than by guessing. Publishing another
+project's code in an MIT repository without its licence is a genuine problem, however small
+the excerpt.
+
+Those files are removed. Nothing depended on them: `VERIFIERS_VERSION_SNAPSHOT.md` already
+documents `docker/study_v1.py` as the way to regenerate them, and no gate reads them. The
+derived notes that *are* this project's own work — `v1_study.json` and `v1_tree.txt` —
+remain, because the G1 findings cite them.
 
 ## 6. Large files — PASS
 

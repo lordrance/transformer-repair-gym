@@ -4,15 +4,15 @@
       "docker"
     ],
     "failures": [],
-    "max_s": 5.9777,
-    "mean_s": 5.3251,
-    "min_s": 4.5955,
+    "max_s": 9.3984,
+    "mean_s": 7.3838,
+    "min_s": 5.3484,
     "n": 30,
     "n_failures": 0,
-    "p50_s": 5.4335,
-    "p95_s": 5.7893,
+    "p50_s": 7.2449,
+    "p95_s": 8.5432,
     "percentile_method": "nearest-rank",
-    "stdev_s": 0.3798
+    "stdev_s": 1.0677
   },
   "decision": {
     "contract_option": "B",
@@ -23,37 +23,37 @@
       "docker"
     ],
     "failures": [],
-    "max_s": 5.8317,
-    "mean_s": 5.2285,
-    "min_s": 4.6639,
+    "max_s": 7.9878,
+    "mean_s": 6.9481,
+    "min_s": 5.4639,
     "n": 30,
     "n_failures": 0,
-    "p50_s": 5.2599,
-    "p95_s": 5.5862,
+    "p50_s": 7.0276,
+    "p95_s": 7.8151,
     "percentile_method": "nearest-rank",
-    "stdev_s": 0.293
+    "stdev_s": 0.6899
   },
   "in_process_reference": {
     "backends_observed": [
       "in_process"
     ],
     "failures": [],
-    "max_s": 1.2533,
-    "mean_s": 0.6452,
-    "min_s": 0.5232,
+    "max_s": 1.5357,
+    "mean_s": 0.6675,
+    "min_s": 0.5344,
     "n": 30,
     "n_failures": 0,
-    "p50_s": 0.6266,
-    "p95_s": 0.7138,
+    "p50_s": 0.6293,
+    "p95_s": 0.7487,
     "percentile_method": "nearest-rank",
-    "stdev_s": 0.1227
+    "stdev_s": 0.1742
   },
   "isolation_evidence": "artifacts/g5_isolation_canaries.json",
   "n_checks_per_job": 6,
   "n_jobs": 30,
   "overhead": {
-    "isolation_overhead_ratio": 8.1,
-    "isolation_overhead_s": 4.5833,
+    "isolation_overhead_ratio": 10.41,
+    "isolation_overhead_s": 6.2806,
     "note": "the measured price of R14's inbound boundary, per grading job"
   },
   "task_id": "m1_attention_regression"

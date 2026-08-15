@@ -56,9 +56,9 @@ the decoder than as container probes.
 
 | phase | mean | p50 | p95 | min | max | stdev | failures |
 |---|---|---|---|---|---|---|---|
-| cold | 5.3251 s | 5.4335 s | 5.7893 s | 4.5955 s | 5.9777 s | 0.3798 | 0 |
-| final | 5.2285 s | 5.2599 s | 5.5862 s | 4.6639 s | 5.8317 s | 0.2930 | 0 |
-| in-process *(reference only)* | 0.6452 s | 0.6266 s | 0.7138 s | 0.5232 s | 1.2533 s | 0.1227 | 0 |
+| cold | 7.3838 s | 7.2449 s | 8.5432 s | 5.3484 s | 9.3984 s | 1.0677 | 0 |
+| final | 6.9481 s | 7.0276 s | 7.8151 s | 5.4639 s | 7.9878 s | 0.6899 | 0 |
+| in-process *(reference only)* | 0.6675 s | 0.6293 s | 0.7487 s | 0.5344 s | 1.5357 s | 0.1742 | 0 |
 
 Percentiles by nearest-rank. **0 failures in 90 jobs.**
 
@@ -68,9 +68,16 @@ cross-job isolation probes.
 
 ### The price of isolation
 
-**4.58 s per job, a factor of 8.1** over the in-process reference. That reference is not a
+**6.28 s per job, a factor of 10.4** over the in-process reference. That reference is not a
 candidate path and never will be: it is the pre-R14 design in which candidate code executes
 in a process holding gold. It appears here only to price the boundary.
+
+These figures were re-measured after v0.2-B. The previous run reported 5.23 s per job, and
+anchoring five checks to gold added **1.7 s**: each now recomputes gold's answer on a
+trusted-supplied fixture. The older number was not left in place, because it described code
+that no longer exists. Some of the increase was avoidable and was removed —
+`_gold_pure_outputs` is cached now, where it had been rebuilding gold and re-entering
+`RepoModules` once per predicate, five times per job.
 
 Worth recording: R16 made this *cheaper*, not dearer. The pre-R16 measurement was ~8.24 s of
 container startup against 0.54 s of checks. The candidate container no longer mounts the
@@ -95,8 +102,8 @@ either. A persistent grader would reintroduce exactly the shared-state surface t
 would have to pass the full canary suite before it could be trusted. None is shipped, so
 there is no custom optimisation to justify or to delete.
 
-8.1× for a boundary that three separate measurement attempts were needed to verify is a
-trade worth making, and 5.2 s is not a number that constrains anything here.
+10.4× for a boundary that three separate measurement attempts were needed to verify is a
+trade worth making, and 7 s is not a number that constrains anything here.
 
 ---
 
